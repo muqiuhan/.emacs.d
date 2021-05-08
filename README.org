@@ -1,0 +1,4 @@
+#+author: Muqiu-Han
+#+title: Autumn Emacs
+
+[[~/.emacs.d/demo.png]]
