@@ -42,27 +42,34 @@
   
   (when *frame-start*
     (cond ((= *frame-start* 1)
-	 ((lambda ()
-	    "设置窗体最大化"
-	    (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-				   '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-	    (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-				   '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))))
+	   ((lambda ()
+	      "设置窗体最大化"
+	      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+				     '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+	      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+				     '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))))
 
-	((= *frame-start* 2)
-	 ((lambda ()
-	    "设置窗体全屏"
-	    (interactive)
-	    (set-frame-parameter nil 'fullscreen
-				 (if (frame-parameter nil 'fullscreen) nil 'fullboth))))))))
+	  ((= *frame-start* 2)
+	   ((lambda ()
+	      "设置窗体全屏"
+	      (interactive)
+	      (set-frame-parameter nil 'fullscreen
+				   (if (frame-parameter nil 'fullscreen) nil 'fullboth))))))))
 
 (defun init-editor ()
   (setq cursor-type *editor-cursor-type*)
+
   (when *editor-line-number*
     (setq linum-format " %d ")
     (global-linum-mode))
+
   (when *editor-high-line*
     (global-hl-line-mode))
+
+  (when *editor-smooth-scrolling*
+    (setq mouse-wheel-scroll-amount '(*editor-smooth-scrolling-size* ((shift) . *editor-smooth-scrolling-shift-size*) ((control) . nil)))
+    (setq mouse-wheel-progressive-speed nil))
+  
   (cond ((= *editor-modeline-style* 1)
 	 (doom-modeline-mode))
 	((= *editor-modeline-style* 2)

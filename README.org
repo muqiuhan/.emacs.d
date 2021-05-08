@@ -1,4 +1,19 @@
 #+author: Muqiu-Han
-#+title: Autumn Emacs
+#+title: Autumn Emacs 0.0.2
 
-[[~/.emacs.d/demo.png]]
+* 更新信息
+  - 美化了org-mode, 可以通过*org-mode-bullets*开关
+  - vterm支持
+  - 默认在C/C++/EmacsLisp/Lisp mode中启用highlight-indent-guides
+    - 默认在EmacsLisp/Lisp mode中启用highlight-parentheses rainbow-delimiters-mode
+  - 平滑滚动
+
+* 安装
+  git clone https://github.com/muqiuhan/.emacs.d ~/.emacs.d --depth=1
+
+* 预览
+  [[./demo/Screenshot_20210508_235455.png]]
+  
+  [[./demo/Screenshot_20210508_235515.png]]
+
+  [[./demo/Screenshot_20210508_235551.png]]

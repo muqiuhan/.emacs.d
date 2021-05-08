@@ -1,4 +1,4 @@
-;; develop/config.el --- Initialize develop.-*- lexical-binding: t -*-
+;; init-vterm.el --- Initialize vterm.	-*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021-2022 Muqiu Han
 
@@ -25,7 +25,8 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/config/develop/")
+(use-package vterm
+  :init
+  (global-set-key (kbd *vterm*) 'vterm))
 
-(require 'init-company)
-(require 'init-org)
+(provide 'init-vterm)

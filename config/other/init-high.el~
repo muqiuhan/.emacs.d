@@ -1,4 +1,4 @@
-;; develop/config.el --- Initialize develop.-*- lexical-binding: t -*-
+;; init-treemacs.el --- Initialize treemacs.	-*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021-2022 Muqiu Han
 
@@ -23,9 +23,32 @@
 ;; Floor, Boston, MA 02110-1301, USA.
 ;;
 
+;;; Commentary:
+;;
+;; Treemacs: A tree layout file explorer.
+;;
+
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/config/develop/")
+(use-package highlight-indent-guides
+  :config
+  (setq highlight-indent-guides-method 'bitmap)
+  (setq highlight-indent-guides-responsive 'top)
+  (setq highlight-indent-guides-delay 0)
+  :hook
+  (c++-mode . highlight-indent-guides-mode)
+  (c-mode . highlight-indent-guides-mode)
+  (lisp-mode . highlight-indent-guides-mode)
+  (emacs-lisp-mode . highlight-indent-guides-mode))
 
-(require 'init-company)
-(require 'init-org)
+(use-package highlight-parentheses
+  :hook
+  (lisp-mode . highlight-indent-guides-mode)
+  (emacs-lisp-mode . highlight-indent-guides-mode))
+
+(use-package rainbow-delimiters
+  :hook
+  (lisp-mode . highlight-indent-guides-mode)
+  (emacs-lisp-mode . highlight-indent-guides-mode))
+
+(provide 'init-high)

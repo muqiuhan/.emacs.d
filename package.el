@@ -16,6 +16,7 @@
 			  'highlight-parentheses
 			  'rainbow-delimiters
 			  'vterm
+			  'org-bullets
 			  'window-numbering
 			  'posframe
 			  'pomidor

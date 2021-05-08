@@ -1,4 +1,4 @@
-;; develop/config.el --- Initialize develop.-*- lexical-binding: t -*-
+;; init-org.el --- Initialize org-*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021-2022 Muqiu Han
 
@@ -25,7 +25,24 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/config/develop/")
+(use-package org
+  :config
+  (setq org-ellipsis " ▼ ")
+  
+  (setq org-todo-keywords
+	'((sequence "未开始(p!)" "进行中(t!)" "阻塞中(s!)" "|" "已完成(d!)" "已取消(a@/!)")))
+  
+  (setq org-todo-keyword-faces
+	'(("未开始" .   (:foreground "red" :weight bold))
+	  ("阻塞中" .   (:foreground "red" :weight bold))
+	  ("进行中" .      (:foreground "orange" :weight bold))
+	  ("已完成" .      (:foreground "green" :weight bold))
+	  ("已取消" .     (:background "gray" :foreground "black"))))
+  :config
+  (use-package org-bullets
+    :config
+    (setq org-bullets-bullet-list '("☯" "☷" "☭" "☰"))
+    :hook
+    (org-mode . org-bullets-mode)))
 
-(require 'init-company)
-(require 'init-org)
+(provide 'init-org)

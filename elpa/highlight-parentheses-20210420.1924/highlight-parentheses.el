@@ -60,7 +60,7 @@
   :group 'faces
   :group 'matching)
 
-
+
 ;;; Custom Variables
 
 (define-obsolete-function-alias
@@ -79,7 +79,7 @@ immediately once set (through the custom interface)."
 (define-obsolete-variable-alias 'hl-paren-colors
   'highlight-parentheses-colors "2.0.0")
 (defcustom highlight-parentheses-colors
-  '("firebrick1" "IndianRed1" "IndianRed3" "IndianRed4")
+  '("firebrick1" "IndianGreen1" "IndianGreen3" "IndianGreen5")
   "List of colors for the highlighted parentheses.
 The list starts with the inside parentheses and moves outwards.
 May also be a function returning a list of colors."

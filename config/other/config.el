@@ -29,3 +29,5 @@
 
 (require 'init-treemacs)
 (require 'init-window-numbering)
+(require 'init-high)
+(require 'init-vterm)
