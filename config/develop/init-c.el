@@ -1,0 +1,74 @@
+;; init-c.el --- Initialize c-*- lexical-binding: t -*-
+
+;; Copyright (C) 2021-2022 Muqiu Han
+
+;; Author: Muqiu Han <muqiu-han@outlook.com>
+;; URL: https://github.com/muqiuhan/.emacs.d
+
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
+;;
+
+;;; Code:
+
+(use-package projectile
+  :hook
+  (c-mode . projectile-mode)
+  (c++-mode . projectile-mode)
+  :bind
+  ([f5] . 'projectile-find-file)
+  :config
+  (setq projectile-enable-caching t))
+
+(cond
+ ((not *lang-c/c++-completion*) (message "no-completion"))
+ ((= 1 *lang-c/c++-completion*)
+  (progn
+    (load "~/.emacs.d/config/develop/nox/nox.el")
+    (use-package nox)
+    (setq nox-completion (list
+			  'c-mode-common-hook
+			  'c-mode-hook
+			  'c++-mode-hook))
+    (dolist (hook nox-completion)
+      (add-hook hook '(lambda () (nox-ensure))))))
+ ((= 2 *lang-c/c++-completion*)
+  (progn
+    (use-package irony
+      :hook
+      ((c++-mode . irony-mode)
+       (c-mode . irony-mode)))
+    (use-package irony-eldoc
+      :hook
+      (irony-mode . irony-eldoc)))))
+
+(when *lang-c/c++-flycheck*
+  (use-package flycheck
+    :config
+    (defface flycheck-error
+      '((((supports :underline (:style wave)))
+	 :underline (:style wave :color "cyan")
+	 :background yellow)
+	 (t
+	  :underline t :inherit error))
+      :package-version '(flycheck . "0.13")
+      :group 'flycheck-faces)
+    :hook
+    (c++-mode . flycheck-mode)
+    (c-mode . flycheck-mode)))
+
+(provide 'init-c)

@@ -271,8 +271,8 @@ i.e. `[语][计] dictionary' => 'dictionary'."
               (goto-char (point-min))
               (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
           (posframe-show buffer-name
-                         :left-fringe 8
-                         :right-fringe 8
+                         :left-fringe 0
+                         :right-fringe 0
                          :internal-border-color (face-foreground 'default)
                          :internal-border-width 1)
           (unwind-protect

@@ -28,6 +28,7 @@
 (add-to-list 'load-path "~/.emacs.d/config/interface/")
 
 (require 'init-dashboard)
+(require 'init-doom-modeline)
 
 (defun init-frame ()
   (set-frame-font *frame-font*)
@@ -69,6 +70,9 @@
   (when *editor-smooth-scrolling*
     (setq mouse-wheel-scroll-amount '(*editor-smooth-scrolling-size* ((shift) . *editor-smooth-scrolling-shift-size*) ((control) . nil)))
     (setq mouse-wheel-progressive-speed nil))
+
+  (when *editor-which-function-mode*
+    (which-function-mode))
   
   (cond ((= *editor-modeline-style* 1)
 	 (doom-modeline-mode))

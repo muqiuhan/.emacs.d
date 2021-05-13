@@ -7,7 +7,11 @@
 (defconst *package-list* (list
 			  'youdao-dictionary
 			  'treemacs
+			  'evil
+			  'irony
+			  'irony-eldoc
 			  'which-key
+			  'netease-music
 			  'use-package
 			  'doom-modeline
 			  'doom-themes
@@ -16,11 +20,16 @@
 			  'highlight-parentheses
 			  'rainbow-delimiters
 			  'vterm
+			  'projectile
+			  'makefile-executor
+			  'treemacs-projectile
 			  'org-bullets
 			  'window-numbering
+			  'ccls
 			  'posframe
 			  'pomidor
-			  'company))
+			  'company
+			  ))
 
 
 (defun init-package ()

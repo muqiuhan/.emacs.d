@@ -1,0 +1,9 @@
+(use-package netease-music
+  :config
+  (setq netease-music-username "18679068002")
+  (setq netease-music-user-password "Muqiu-Han")
+  ;;(setq netease-music-user-id "YOUR-USER-ID")
+  ;;(setq netease-music-api "YOUR-API-ADDRESS")
+  )
+
+(provide 'init-netease-music)
