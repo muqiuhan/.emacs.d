@@ -1,9 +1,8 @@
 #+author: Muqiu-Han
-#+title: Autumn Emacs 0.0.2
+#+title: Autumn Emacs 0.0.3
 
 * 更新信息
-  - C/C++ 语法检查
-  - C/C++ 补全选择 nox / irony
+  - Racket
 
 * 安装
   git clone https://github.com/muqiuhan/.emacs.d ~/.emacs.d --depth=1
