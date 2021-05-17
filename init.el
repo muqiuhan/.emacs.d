@@ -16,10 +16,11 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#3d434d" "#171b24"))
  '(objed-cursor-color "#f28779")
  '(package-selected-packages
-   '(flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
+   '(pdf-view-restore pretty-mode pretty-hydra pdf-tools yasnippet racket-mode flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
  '(pdf-view-midnight-colors (cons "#cbccc6" "#1f2430"))
  '(rustic-ansi-faces
    ["#1f2430" "#f28779" "#bae67e" "#ffd580" "#73d0ff" "#d4bfff" "#5ccfe6" "#cbccc6"])
+ '(safe-local-variable-values '((eval org-content 4)))
  '(vc-annotate-background "#1f2430")
  '(vc-annotate-color-map
    (list

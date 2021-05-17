@@ -1,4 +1,4 @@
-;; init-treemacs.el --- Initialize treemacs.	-*- lexical-binding: t -*-
+;; init-high.el --- Initialize highlight.	-*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021-2022 Muqiu Han
 
@@ -22,13 +22,6 @@
 ;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ;; Floor, Boston, MA 02110-1301, USA.
 ;;
-
-;;; Commentary:
-;;
-;; Treemacs: A tree layout file explorer.
-;;
-
-;;; Code:
 
 (use-package highlight-indent-guides
   :config

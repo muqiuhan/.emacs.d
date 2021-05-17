@@ -32,6 +32,8 @@
 (require 'init-high)
 (require 'init-vterm)
 (require 'init-netease-music)
+(require 'init-pdf)
 (require 'init-youdao-dictionary)
+
 (when *editor-evil*
   (require 'init-evil))

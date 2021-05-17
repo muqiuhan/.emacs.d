@@ -30,5 +30,8 @@
 (require 'init-company)
 (require 'init-org)
 
+(when *lang-enable-racket*
+  (require 'init-racket))
+
 (when *lang-enable-c/c++*
   (require 'init-c))

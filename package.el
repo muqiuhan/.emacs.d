@@ -22,11 +22,14 @@
 			  'vterm
 			  'projectile
 			  'makefile-executor
+			  'yasnippet
+			  'racket-mode
 			  'treemacs-projectile
 			  'org-bullets
 			  'window-numbering
 			  'ccls
 			  'posframe
+			  'pdf-tools
 			  'pomidor
 			  'company
 			  ))

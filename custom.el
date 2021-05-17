@@ -1,10 +1,10 @@
 ;; 启动设置
 (defconst *start-server* nil) ;; 启动打开server
 (defconst *start-package-init* t) ;; 启动初始化包
-(defconst *frame-start* 1) ;; 窗体启动时 (:max 1 :full 2 :nil 默认)
+(defconst *frame-start* 2) ;; 窗体启动时 (:max 1 :full 2 :nil 默认)
 
 ;; 窗体设置
-(defconst *frame-font* "Sarasa Mono Slab K 16") ;; 字体设置
+(defconst *frame-font* "Sarasa Mono Slab K 17") ;; 字体设置
 (defconst *frame-menu-bar* 0) ;; 是否显示菜单栏
 (defconst *frame-tool-bar* 0) ;; 是否显示工具栏
 (defconst *frame-tab-bar* 0) ;; 是否显示标签栏
@@ -12,7 +12,7 @@
 (defconst *frame-battery-mode* 1) ;; 是否显示电池信息
 (defconst *frame-time-mode* 1) ;; 是否显示当前日期信息
 (defconst *frame-size-indication-mode* 1) ;; 大小显示
-(defconst *frame-theme* 'doom-gruvbox) ;; 主题设置
+(defconst *frame-theme* 'doom-dracula) ;; 主题设置
 
 ;; 编辑器设置
 (defconst *editor-evil* nil) ;; 是否使用vim键位
@@ -48,5 +48,9 @@
 ;; nil -> 使用默认的补全
 ;; 1 -> 使用nox补全（轻量级的LSP）
 ;; 2 -> 使用irony补全
-(defconst *lang-c/c++-completion* 1)
+;; 3 -> 使用Lsp补全
+(defconst *lang-c/c++-completion* 3)
 (defconst *lang-c/c++-flycheck* t) ;; 是否打开语法检查
+
+;; Racket
+(defconst *lang-enable-racket* t)

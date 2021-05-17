@@ -28,12 +28,13 @@
 (use-package dashboard
   :ensure t
   :config
-  (dashboard-setup-startup-hook)
   (setq dashboard-banner-logo-title "Autumn Emacs")
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-startup-banner "~/.emacs.d/logo.png")
   (setq dashboard-center-content t)
-  (setq dashboard-show-shortcuts nil))
+  (setq dashboard-show-shortcuts nil)
+  :init
+  (dashboard-setup-startup-hook))
 
 (provide 'init-dashboard)

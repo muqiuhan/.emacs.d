@@ -54,19 +54,12 @@
        (c-mode . irony-mode)))
     (use-package irony-eldoc
       :hook
-      (irony-mode . irony-eldoc)))))
+      (irony-mode . irony-eldoc))))
+ ((= 3 *lang-c/c++-completion*)
+  (lsp)))
 
 (when *lang-c/c++-flycheck*
   (use-package flycheck
-    :config
-    (defface flycheck-error
-      '((((supports :underline (:style wave)))
-	 :underline (:style wave :color "cyan")
-	 :background yellow)
-	 (t
-	  :underline t :inherit error))
-      :package-version '(flycheck . "0.13")
-      :group 'flycheck-faces)
     :hook
     (c++-mode . flycheck-mode)
     (c-mode . flycheck-mode)))

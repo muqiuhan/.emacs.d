@@ -31,7 +31,8 @@
 (require 'init-doom-modeline)
 
 (defun init-frame ()
-  (set-frame-font *frame-font*)
+  (when *frame-font*
+    (set-frame-font *frame-font*))
   (menu-bar-mode *frame-menu-bar*)
   (tab-bar-mode *frame-tab-bar*)
   (tool-bar-mode *frame-tool-bar*)
@@ -58,8 +59,6 @@
 				   (if (frame-parameter nil 'fullscreen) nil 'fullboth))))))))
 
 (defun init-editor ()
-  (setq cursor-type *editor-cursor-type*)
-
   (when *editor-line-number*
     (setq linum-format " %d ")
     (global-linum-mode))
@@ -77,7 +76,8 @@
   (cond ((= *editor-modeline-style* 1)
 	 (doom-modeline-mode))
 	((= *editor-modeline-style* 2)
-	 (powerline-default-theme))))
+	 (powerline-default-theme)))
+  (setq cursor-type *editor-cursor-type*))
 
 (init-frame)
 (init-editor)
