@@ -37,7 +37,6 @@
   :hook
   (racket-mode . prettify-symbols-mode)
   (racket-mode . rainbow-delimiters-mode)
-  (racket-mode . prettify-symbols-mode)
   (racket-mode . highlight-indent-guides-mode)
   (racket-mode . highlight-parentheses-mode))
 

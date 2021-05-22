@@ -64,4 +64,48 @@
     (c++-mode . flycheck-mode)
     (c-mode . flycheck-mode)))
 
+;; 一键编译运行文件，C/C++
+(defun process-c/c++-single-file (language)
+  (let* ((buffer-name (concat "*" (buffer-name) "-compile-and-run*"))
+	 (source-code-file-name (buffer-file-name (current-buffer)))
+	 (target-file-name (string-remove-suffix
+			    (if (string-equal language "c")
+				".c" ".cpp")
+			     source-code-file-name)))
+    (generate-new-buffer buffer-name)
+    (split-window-horizontally)
+    (switch-to-buffer buffer-name)
+    (let ((compile-command
+	   (concat
+	    (if (string-equal language "c")
+		"gcc" "g++")
+	    " -Wall " source-code-file-name " -o " target-file-name))
+	  (insert compile-command))
+      (insert "\n*================ 正在编译 ================*\n")
+      (insert compile-command)
+      (insert "\n*================ 编译结果 ================*\n")
+      (let ((compile-result (shell-command-to-string compile-command)))
+	(if (= 0 (length compile-result))
+	    (insert "编译完成，无错误！")
+	  (insert compile-result))))
+    
+    (insert "\n*================ 运行结果 ================*\n")
+    (let ((run-command target-file-name))
+      (let ((run-result (shell-command-to-string run-command)))
+	(if (= 0 (length run-result))
+	    (insert "无输出！")
+	  (insert run-result))))))
+
+(add-hook 'c-mode-hook '(lambda ()
+			  (interactive)
+			  (local-set-key [f9] '(lambda ()
+						 (interactive)
+						 (process-c/c++-single-file "c")))))
+
+(add-hook 'c++-mode-hook '(lambda ()
+			    (interactive)
+			    (local-set-key [f9] '(lambda ()
+						   (interactive)
+						   (process-c/c++-single-file "c++")))))
+
 (provide 'init-c)

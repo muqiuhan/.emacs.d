@@ -49,7 +49,7 @@
 ;; 1 -> 使用nox补全（轻量级的LSP）
 ;; 2 -> 使用irony补全
 ;; 3 -> 使用Lsp补全
-(defconst *lang-c/c++-completion* 3)
+(defconst *lang-c/c++-completion* 1)
 (defconst *lang-c/c++-flycheck* t) ;; 是否打开语法检查
 
 ;; Racket

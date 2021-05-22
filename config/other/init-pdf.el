@@ -35,21 +35,13 @@
               ("C-s" . isearch-forward))
   :init (setq pdf-annot-activate-created-annotations t)
   :config
-  ;; WORKAROUND: Fix compilation errors on macOS.
-  ;; @see https://github.com/politza/pdf-tools/issues/480
-  (when sys/macp
-    (setenv "PKG_CONFIG_PATH"
-            "/usr/local/lib/pkgconfig:/usr/local/opt/libffi/lib/pkgconfig"))
   (pdf-tools-install t nil t nil)
 
-  ;; Set dark theme
   (defun my-pdf-view-set-midnight-colors ()
-    "Set pdf-view midnight colors."
     (setq pdf-view-midnight-colors
           `(,(face-foreground 'default) . ,(face-background 'default))))
 
   (defun my-pdf-view-set-dark-theme ()
-    "Set pdf-view midnight theme as color theme."
     (my-pdf-view-set-midnight-colors)
     (dolist (buf (buffer-list))
       (with-current-buffer buf
@@ -60,9 +52,6 @@
   (add-hook 'after-load-theme-hook #'my-pdf-view-set-dark-theme)
 
   (with-no-warnings
-    ;; FIXME: Support retina display on MAC
-    ;; @see https://emacs-china.org/t/pdf-tools-mac-retina-display/10243/
-    ;; and https://github.com/politza/pdf-tools/pull/501/
     (setq pdf-view-use-scaling t
           pdf-view-use-imagemagick nil)
 
@@ -158,14 +147,7 @@
                 :width (car size))))
             (pdf-util-scroll-to-edges
              (pdf-util-scale-relative-to-pixel (car edges)))))))
-    (advice-add #'pdf-annot-show-annotation :override #'my-pdf-annot-show-annotation))
-
-  ;; Recover last viewed position
-  (when emacs/>=26p
-    (use-package pdf-view-restore
-      :hook (pdf-view-mode . pdf-view-restore-mode)
-      :init (setq pdf-view-restore-filename
-                  (locate-user-emacs-file ".pdf-view-restore")))))
+    (advice-add #'pdf-annot-show-annotation :override #'my-pdf-annot-show-annotation)))
 
 ;; Epub reader
 (use-package nov

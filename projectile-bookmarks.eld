@@ -1,1 +1,1 @@
-("~/.emacs.d/" "~/workspace/AutumnBuilder/src/")
+("~/workspace/AutumnBuilder/" "~/.emacs.d/" "~/workspace/AutumnBuilder/src/")

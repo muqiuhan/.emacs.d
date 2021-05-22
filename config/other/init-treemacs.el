@@ -39,6 +39,9 @@
          ("C-x t C-t" . treemacs-find-file)
          ("C-x t M-t" . treemacs-find-tag))
   :init
-  (global-set-key (kbd *treemacs*) 'treemacs))
+  (global-set-key (kbd *treemacs*) 'treemacs)
+
+  :config
+  (setq treemacs-width 35))
 
 (provide 'init-treemacs)

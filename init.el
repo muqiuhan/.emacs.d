@@ -16,7 +16,9 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#3d434d" "#171b24"))
  '(objed-cursor-color "#f28779")
  '(package-selected-packages
-   '(pdf-view-restore pretty-mode pretty-hydra pdf-tools yasnippet racket-mode flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
+   '(pretty-mode pretty-hydra yasnippet racket-mode flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
+ '(pdf-view-incompatible-modes
+   '(linum-relative-mode helm-linum-relative-mode nlinum-mode nlinum-hl-mode nlinum-relative-mode yalinum-mode))
  '(pdf-view-midnight-colors (cons "#cbccc6" "#1f2430"))
  '(rustic-ansi-faces
    ["#1f2430" "#f28779" "#bae67e" "#ffd580" "#73d0ff" "#d4bfff" "#5ccfe6" "#cbccc6"])

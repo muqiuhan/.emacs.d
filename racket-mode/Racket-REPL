@@ -1,0 +1,4 @@
+(directory-list)
+(touch (file "demo.txt"))
+(directory-list)
+(file "demo.txt")
