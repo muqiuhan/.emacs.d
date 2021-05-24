@@ -12,7 +12,7 @@
 (defconst *frame-battery-mode* 1) ;; 是否显示电池信息
 (defconst *frame-time-mode* 1) ;; 是否显示当前日期信息
 (defconst *frame-size-indication-mode* 1) ;; 大小显示
-(defconst *frame-theme* 'doom-dracula) ;; 主题设置
+(defconst *frame-theme* 'doom-horizon) ;; 主题设置
 
 ;; 编辑器设置
 (defconst *editor-evil* nil) ;; 是否使用vim键位
@@ -49,7 +49,7 @@
 ;; 1 -> 使用nox补全（轻量级的LSP）
 ;; 2 -> 使用irony补全
 ;; 3 -> 使用Lsp补全
-(defconst *lang-c/c++-completion* 1)
+(defconst *lang-c/c++-completion* 2)
 (defconst *lang-c/c++-flycheck* t) ;; 是否打开语法检查
 
 ;; Racket
