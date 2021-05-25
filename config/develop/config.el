@@ -29,6 +29,7 @@
 
 (require 'init-company)
 (require 'init-org)
+(require 'init-rust)
 
 (when *lang-enable-racket*
   (require 'init-racket))

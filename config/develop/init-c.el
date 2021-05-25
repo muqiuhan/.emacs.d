@@ -56,7 +56,10 @@
       :hook
       (irony-mode . irony-eldoc))))
  ((= 3 *lang-c/c++-completion*)
-  (lsp)))
+  (use-package lsp
+    :hook
+    (c++-mode . lsp-mode)
+    (c-mode . lsp-mode))))
 
 (when *lang-c/c++-flycheck*
   (use-package flycheck

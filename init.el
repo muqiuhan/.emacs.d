@@ -16,7 +16,7 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#3d434d" "#171b24"))
  '(objed-cursor-color "#f28779")
  '(package-selected-packages
-   '(pretty-mode pretty-hydra yasnippet racket-mode flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
+   '(sly-repl-ansi-color sly-quicklisp sly cargo rust-playground rust-auto-use rustic rust-mode pretty-mode pretty-hydra yasnippet racket-mode flycheck irony-eldoc irony netease-music treemacs-projectile projectile makefile-executor ccls org-bullets company pomidor window-numbering vterm rainbow-delimiters highlight-parentheses highlight-indent-guides dashboard doom-themes doom-modeline use-package which-key treemacs youdao-dictionary))
  '(pdf-view-incompatible-modes
    '(linum-relative-mode helm-linum-relative-mode nlinum-mode nlinum-hl-mode nlinum-relative-mode yalinum-mode))
  '(pdf-view-midnight-colors (cons "#cbccc6" "#1f2430"))
@@ -50,4 +50,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(rustic-compilation-column ((t (:inherit compilation-column-number))))
+ '(rustic-compilation-line ((t (:foreground "LimeGreen")))))

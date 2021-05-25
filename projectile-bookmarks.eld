@@ -1,1 +1,1 @@
-("~/.emacs.d/" "~/workspace/C++/AutumnLang/")
+("~/.emacs.d/")

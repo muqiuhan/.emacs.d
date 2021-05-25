@@ -5,10 +5,17 @@
 
 ;; 软件包列表
 (defconst *package-list* (list
+			  'sly
+			  'sly-quicklisp
+			  'sly-repl-ansi-color
 			  'youdao-dictionary
 			  'treemacs
 			  'evil
 			  'irony
+			  'rustic
+			  'rust-auto-use
+			  'rust-playground
+			  'cargo
 			  'irony-eldoc
 			  'which-key
 			  'netease-music
@@ -17,6 +24,7 @@
 			  'doom-themes
 			  'dashboard
 			  'highlight-indent-guides
+			  'rust-mode
 			  'highlight-parentheses
 			  'rainbow-delimiters
 			  'vterm
