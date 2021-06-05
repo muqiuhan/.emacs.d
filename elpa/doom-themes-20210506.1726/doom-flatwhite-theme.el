@@ -83,17 +83,17 @@ determine the exact padding."
    (fg-alt     `(,(car fw-base2) nil "brightblack"  ))
 
    (grey       base3)
-   (red        fw-red-text-sec)
-   (orange     fw-orange-text-sec)
-   (green      fw-green-text-sec)
-   (teal       fw-teal-text-sec)
-   (yellow     fw-orange-text-sec)
-   (blue       fw-blue-text-sec)
-   (dark-blue  fw-blue-text-sec)
-   (magenta    fw-purple-text-sec)
-   (violet     fw-purple-text-sec)  ;; TODO fix these
-   (cyan       fw-teal-text-sec)
-   (dark-cyan  fw-teal-text-sec)
+   (red        fw-red-text)
+   (orange     fw-orange-text)
+   (green      fw-green-text)
+   (teal       fw-teal-text)
+   (yellow     fw-orange-text)
+   (blue       fw-blue-text)
+   (dark-blue  fw-blue-text)
+   (magenta    fw-purple-text)
+   (violet     fw-purple-text)  ;; TODO fix these
+   (cyan       fw-teal-text)
+   (dark-cyan  fw-teal-text)
 
    (fw--light-accent (doom-lighten fw-accent 0.85))
 
@@ -102,7 +102,7 @@ determine the exact padding."
    (vertical-bar   (doom-darken base2 0.1))
    (selection      dark-blue)
    (builtin        magenta)
-   (comments       base3)
+   (comments       green)
    (doc-comments   (doom-darken comments 0.15))
    (constants      violet)
    (functions      magenta)
@@ -222,7 +222,7 @@ determine the exact padding."
 
     ;; company
     (company-tooltip            :inherit 'tooltip)
-    (company-tooltip-annotation            :foreground fw-purple-text-sec )
+    (company-tooltip-annotation            :foreground fw-purple-text-sec)
     (company-tooltip-annotation-selection  :foreground fw-purple-text )
     (company-tooltip-common                :foreground highlight
                                            :distant-foreground base0

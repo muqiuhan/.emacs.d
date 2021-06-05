@@ -25,7 +25,7 @@
 
 (use-package highlight-indent-guides
   :config
-  (setq highlight-indent-guides-method 'block)
+  (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-responsive 'top)
   (setq highlight-indent-guides-delay 0)
   :hook

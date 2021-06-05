@@ -30,6 +30,7 @@
 (require 'init-company)
 (require 'init-org)
 (require 'init-rust)
+(require 'init-rtags)
 
 (when *lang-enable-racket*
   (require 'init-racket))

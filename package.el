@@ -11,6 +11,16 @@
 			  'youdao-dictionary
 			  'treemacs
 			  'evil
+			  'ac-rtags
+			  'helm
+			  'helm-rtags
+			  'rtags
+			  'auto-complete
+			  'lsp-treemacs
+			  'helm-lsp
+			  'helm-xref
+			  'dap-mode
+			  'auto-complete-clang
 			  'irony
 			  'rustic
 			  'rust-auto-use

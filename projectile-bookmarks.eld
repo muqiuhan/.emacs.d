@@ -1,1 +1,1 @@
-("~/.emacs.d/")
+("~/.emacs.d/" "~/AutumnLang/" "~/文档/JavaMultiThreadProgramming/")

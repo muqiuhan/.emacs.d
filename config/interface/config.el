@@ -29,6 +29,7 @@
 
 (require 'init-dashboard)
 (require 'init-doom-modeline)
+(require 'init-font)
 
 (defun init-frame ()
   (when *frame-font*
@@ -38,7 +39,8 @@
   (tool-bar-mode *frame-tool-bar*)
   (set-fringe-style 0)
   (scroll-bar-mode *frame-scroll-bar*)
-  (load-theme *frame-theme* t)
+  (when *frame-theme*
+    (load-theme *frame-theme* t))
   (display-battery-mode *frame-battery-mode*)
   (display-time-mode *frame-time-mode*)
   
@@ -66,6 +68,8 @@
   (when *editor-high-line*
     (global-hl-line-mode))
 
+  
+
   (when *editor-smooth-scrolling*
     (setq mouse-wheel-scroll-amount '(*editor-smooth-scrolling-size* ((shift) . *editor-smooth-scrolling-shift-size*) ((control) . nil)))
     (setq mouse-wheel-progressive-speed nil))
@@ -77,7 +81,8 @@
 	 (doom-modeline-mode))
 	((= *editor-modeline-style* 2)
 	 (powerline-default-theme)))
-  (setq cursor-type *editor-cursor-type*))
+  (setq cursor-type *editor-cursor-type*)
+  (set-cursor-color "black"))
 
 (init-frame)
 (init-editor)

@@ -34,6 +34,9 @@
 (require 'init-netease-music)
 (require 'init-pdf)
 (require 'init-youdao-dictionary)
+(require 'init-helm)
 
 (when *editor-evil*
   (require 'init-evil))
+
+(which-key-mode t)

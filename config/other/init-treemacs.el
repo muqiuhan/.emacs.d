@@ -42,6 +42,7 @@
   (global-set-key (kbd *treemacs*) 'treemacs)
 
   :config
-  (setq treemacs-width 35))
+  (setq treemacs-position *treemacs-position*)
+  (setq treemacs-space-between-root-nodes nil))
 
 (provide 'init-treemacs)

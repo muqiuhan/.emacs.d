@@ -2,7 +2,8 @@
 #+title: Autumn Emacs 0.0.4
 
 * 更新信息
-  - 写了个C/C++一键编译运行当前文件的小插件，f9即可
+  - C/C++补全更新
+  - 美化翻译结果
 
 * 安装
   git clone https://github.com/muqiuhan/.emacs.d ~/.emacs.d --depth=1

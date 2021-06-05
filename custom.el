@@ -1,10 +1,10 @@
 ;; 启动设置
 (defconst *start-server* nil) ;; 启动打开server
 (defconst *start-package-init* t) ;; 启动初始化包
-(defconst *frame-start* 2) ;; 窗体启动时 (:max 1 :full 2 :nil 默认)
+(defconst *frame-start* 1) ;; 窗体启动时 (:max 1 :full 2 :nil 默认)
 
 ;; 窗体设置
-(defconst *frame-font* "Sarasa Mono Slab K 17") ;; 字体设置
+(defconst *frame-font* "Cascadia Code 14") ;; 字体设置
 (defconst *frame-menu-bar* 0) ;; 是否显示菜单栏
 (defconst *frame-tool-bar* 0) ;; 是否显示工具栏
 (defconst *frame-tab-bar* 0) ;; 是否显示标签栏
@@ -12,7 +12,7 @@
 (defconst *frame-battery-mode* 1) ;; 是否显示电池信息
 (defconst *frame-time-mode* 1) ;; 是否显示当前日期信息
 (defconst *frame-size-indication-mode* 1) ;; 大小显示
-(defconst *frame-theme* 'doom-horizon) ;; 主题设置
+(defconst *frame-theme* 'doom-flatwhite) ;; 主题设置
 
 ;; 编辑器设置
 (defconst *editor-evil* nil) ;; 是否使用vim键位
@@ -24,6 +24,7 @@
 (defconst *editor-smooth-scrolling-size* 2) ;; 平滑滚动幅度
 (defconst *editor-smooth-scrolling-shift-size* 4) ;; 加速滚动幅度
 (defconst *editor-which-function-mode* t) ;; 是否在状态栏显示当前所在函数
+(defconst *editor-font-ligatures* t)
 
 ;; 全局快捷键设置
 (defconst *treemacs* "C-x t t") ;; treemacs快捷键
@@ -41,12 +42,15 @@
 ;; org-mode配置
 (defconst *org-mode-bullets* t) ;; 是否打开org-mode美化
 
+;; treemacs配置
+(defconst *treemacs-position* 'right)
+
 ;; 语言配置
 ;; C/C++
 (defconst *lang-enable-c/c++* t) ;; 是否打开C/C++配置
 ;; C/C++的补全方案
 ;; nil -> 使用默认的补全
-;; 1 -> 使用nox补全（轻量级的LSP）
+;; 1 -> 使用auto-complete
 ;; 2 -> 使用irony补全
 ;; 3 -> 使用Lsp补全
 (defconst *lang-c/c++-completion* 3)

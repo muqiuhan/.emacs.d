@@ -25,6 +25,19 @@
 
 ;;; Code:
 
-	
+(defun find-xmake.lua (path)
+  (let ((path-list ()))))
+
+(setq a (split-string (buffer-file-name (current-buffer)) "/"))
+(setq b (list))
+
+(list-threads)
+
+(while a
+  (while a
+    (append b ())))
+
+(defun xmake (command)
+  )
     
 (provide 'init-xmake)
