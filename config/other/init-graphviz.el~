@@ -1,4 +1,4 @@
-;; init-org.el --- Initialize org-*- lexical-binding: t -*-
+;; init-mind-map.el --- Initialize mind-map.	-*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021-2022 Muqiu Han
 
@@ -23,30 +23,22 @@
 ;; Floor, Boston, MA 02110-1301, USA.
 ;;
 
-;;; Code:
-
-(use-package org
-  :config
-  (setq org-ellipsis " ▼ ")
-  
-  (setq org-todo-keywords
-	'((sequence "未开始(p!)" "进行中(t!)" "阻塞中(s!)" "|" "已完成(d!)" "已取消(a@/!)")))
-  
-  (setq org-todo-keyword-faces
-	'(("未开始" .   (:foreground "red" :weight bold))
-	  ("阻塞中" .   (:foreground "red" :weight bold))
-	  ("进行中" .      (:foreground "orange" :weight bold))
-	  ("已完成" .      (:foreground "green" :weight bold))
-	  ("已取消" .     (:background "gray" :foreground "black"))))
-  :config
-  (when *org-mode-bullets*
-    (use-package org-bullets
-    :config
-    (setq org-bullets-bullet-list '("☯" "☷" "☭" "☰"))
-    :hook
-    (org-mode . org-bullets-mode)))
-
+;; This is an Emacs package that creates graphviz directed graphs from
+;; the headings of an org file
+(use-package org-mind-map
+  :init
+  (require 'ox-org)
   :bind
-  ("C-c C-m" . org-mind-map-write))
+  ("C-c C-m" . org-mind-map-write)
+  :ensure t
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
 
-(provide 'init-org)
+(provide 'init-mind-map)

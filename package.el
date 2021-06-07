@@ -9,6 +9,7 @@
 			  'sly-quicklisp
 			  'sly-repl-ansi-color
 			  'youdao-dictionary
+			  'org-mind-map
 			  'treemacs
 			  'evil
 			  'ac-rtags

@@ -145,6 +145,8 @@
                )
               )))
 
+(setq rtags-rdm-binary-name "/usr/bin/rtags")
+
 (provide 'init-rtags)
 
 ;;; init-rtags.el ends here

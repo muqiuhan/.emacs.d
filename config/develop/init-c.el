@@ -98,7 +98,9 @@
   (use-package flycheck
     :hook
     (c++-mode . flycheck-mode)
-    (c-mode . flycheck-mode)))
+    (c-mode . flycheck-mode)
+    )
+  )
 
 ;; 一键编译运行文件，C/C++
 (defun process-c/c++-single-file (language)
