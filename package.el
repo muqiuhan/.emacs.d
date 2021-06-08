@@ -12,6 +12,8 @@
 			  'org-mind-map
 			  'treemacs
 			  'evil
+			  'solaire-mode
+			  'elfeed
 			  'ac-rtags
 			  'helm
 			  'helm-rtags

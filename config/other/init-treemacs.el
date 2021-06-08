@@ -40,6 +40,10 @@
          ("C-x t M-t" . treemacs-find-tag))
   :init
   (global-set-key (kbd *treemacs*) 'treemacs)
+  :hook
+  (treemacs-mode . (lambda ()
+		     (interactive)
+		     (linum-mode 0)))
 
   :config
   (setq treemacs-position *treemacs-position*)

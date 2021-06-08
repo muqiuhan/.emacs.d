@@ -19,9 +19,10 @@
 (defconst *editor-high-line* t) ;; 是否高亮当前行
 (defconst *editor-line-number* t) ;; 是否显示行号
 (defconst *editor-cursor-type* 'block) ;; 鼠标样式
+(defconst *editor-cursor-color* "green") ;; 鼠标颜色
 (defconst *editor-modeline-style* 1) ;; 使用的modeline (:nil default :1 doom-modeline :2 powerline)
 (defconst *editor-smooth-scrolling* t) ;; 是否启用平滑滚动 (摁住shift后加快滚动)
-(defconst *editor-smooth-scrolling-size* 2) ;; 平滑滚动幅度
+(defconst *editor-smooth-scrolling-size* 1) ;; 平滑滚动幅度
 (defconst *editor-smooth-scrolling-shift-size* 4) ;; 加速滚动幅度
 (defconst *editor-which-function-mode* t) ;; 是否在状态栏显示当前所在函数
 (defconst *editor-font-ligatures* t)

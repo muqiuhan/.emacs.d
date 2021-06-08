@@ -22,7 +22,7 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#3f444a"))
  '(objed-cursor-color "#ff6c6b")
  '(package-selected-packages
-   '(ninja-mode meson-mode org-mind-map graphviz-dot-mode helm-xref lsp-treemacs auto-complete-clang auto-complete rtags youdao-dictionary yasnippet window-numbering which-key vterm use-package treemacs-projectile sly-repl-ansi-color sly-quicklisp rustic rust-playground rust-mode rust-auto-use rainbow-delimiters racket-mode pomidor pdf-tools org-bullets netease-music makefile-executor irony-eldoc highlight-parentheses highlight-indent-guides flycheck fira-code-mode evil doom-themes doom-modeline dashboard company ccls cargo))
+   '(pdf-view-restore pdfgrep pretty-mode pretty-hydra use-package-hydra major-mode-hydra elfeed solaire-mode ninja-mode meson-mode org-mind-map graphviz-dot-mode helm-xref lsp-treemacs auto-complete-clang auto-complete rtags youdao-dictionary yasnippet window-numbering which-key vterm use-package treemacs-projectile sly-repl-ansi-color sly-quicklisp rustic rust-playground rust-mode rust-auto-use rainbow-delimiters racket-mode pomidor pdf-tools org-bullets netease-music makefile-executor irony-eldoc highlight-parentheses highlight-indent-guides flycheck fira-code-mode evil doom-themes doom-modeline dashboard company ccls cargo))
  '(pdf-view-midnight-colors (cons "#bbc2cf" "#282c34"))
  '(rustic-ansi-faces
    ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])

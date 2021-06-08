@@ -81,8 +81,12 @@
 	 (doom-modeline-mode))
 	((= *editor-modeline-style* 2)
 	 (powerline-default-theme)))
-  (setq cursor-type *editor-cursor-type*)
-  (set-cursor-color "black"))
+
+  (when *editor-cursor-type*
+    (setq cursor-type *editor-cursor-type*))
+  
+  (when *editor-cursor-color*
+    (set-cursor-color *editor-cursor-color*)))
 
 (init-frame)
 (init-editor)

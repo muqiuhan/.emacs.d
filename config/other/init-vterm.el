@@ -26,6 +26,10 @@
 ;;; Code:
 
 (use-package vterm
+  :hook
+  (vterm-mode . (lambda ()
+		     (interactive)
+		     (linum-mode 0)))
   :init
   (global-set-key (kbd *vterm*) 'vterm))
 
