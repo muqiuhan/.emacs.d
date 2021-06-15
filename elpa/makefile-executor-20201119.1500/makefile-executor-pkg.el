@@ -1,0 +1,2 @@
+;;; Generated package description from makefile-executor.el  -*- no-byte-compile: t -*-
+(define-package "makefile-executor" "20201119.1500" "Commands for conveniently running makefile targets" '((emacs "24.3") (dash "2.11.0") (f "0.11.0") (s "1.10.0")) :commit "d0a34c355fb80a8616ae7ed5eebbda8507aa14ac" :authors '(("Lowe Thiderman" . "lowe.thiderman@gmail.com")) :maintainer '("Lowe Thiderman" . "lowe.thiderman@gmail.com") :keywords '("processes") :url "https://github.com/thiderman/makefile-executor.el")

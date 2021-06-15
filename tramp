@@ -1,0 +1,27 @@
+;; -*- emacs-lisp -*- <21/06/04 15:35:35 /home/muqiu/.emacs.d/tramp>
+;; Tramp connection history.  Don't change this file.
+;; Run `M-x tramp-cleanup-all-connections' instead.
+
+(((tramp-file-name "sudo" "root" nil "muqiu" nil nil nil)
+  ("uname" "Linux 5.10.36-2-MANJARO")
+  ("locale" "LC_ALL=en_US.utf8")
+  ("test" "test")
+  ("remote-path"
+   ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin"))
+  ("pipe-buf" 4096)
+  ("remote-shell" "/bin/sh")
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("file-exists" "test -e")
+  ("~root" "/root")
+  ("case-insensitive" nil)
+  ("readlink" "\\readlink")
+  ("stat" "env QUOTING_STYLE=locale \\stat")
+  ("id" "/bin/id")
+  ("gid-integer" 0)
+  ("gid-string" "root")
+  ("uid-integer" 0)
+  ("bzr" nil)
+  ("git" "\\git")
+  ("hg" nil)))

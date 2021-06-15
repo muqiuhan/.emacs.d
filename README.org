@@ -1,0 +1,16 @@
+#+author: Muqiu-Han
+#+title: Autumn Emacs 0.0.4
+
+* 更新信息
+  - C/C++补全更新
+  - 美化treemacs
+
+* 安装
+  git clone https://github.com/muqiuhan/.emacs.d ~/.emacs.d --depth=1
+
+* 预览
+  [[./demo/Screenshot_20210508_235455.png]]
+  
+  [[./demo/Screenshot_20210508_235515.png]]
+
+  [[./demo/Screenshot_20210508_235551.png]]
