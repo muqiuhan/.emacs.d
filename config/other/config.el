@@ -31,7 +31,7 @@
 (require 'init-window-numbering)
 (require 'init-high)
 (require 'init-vterm)
-(require 'init-netease-music)
+(require 'init-music)
 (require 'init-pdf)
 (require 'init-youdao-dictionary)
 (require 'init-helm)

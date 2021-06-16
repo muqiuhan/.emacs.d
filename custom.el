@@ -4,7 +4,7 @@
 (defconst *frame-start* 1) ;; 窗体启动时 (:max 1 :full 2 :nil 默认)
 
 ;; 窗体设置
-(defconst *frame-font* "JetBrains Mono 14") ;; 字体设置
+(defconst *frame-font* "Sarasa Mono Slab K 15") ;; 字体设置
 (defconst *frame-menu-bar* 0) ;; 是否显示菜单栏
 (defconst *frame-tool-bar* 0) ;; 是否显示工具栏
 (defconst *frame-tab-bar* 0) ;; 是否显示标签栏
@@ -12,13 +12,14 @@
 (defconst *frame-battery-mode* 1) ;; 是否显示电池信息
 (defconst *frame-time-mode* 1) ;; 是否显示当前日期信息
 (defconst *frame-size-indication-mode* 1) ;; 大小显示
-(defconst *frame-theme* 'doom-henna) ;; 主题设置
+(defconst *frame-theme* 'doom-zenburn) ;; 主题设置
+(defconst *frame-opacity* 70) ;; opacity settings
 
 ;; 编辑器设置
-(defconst *editor-evil* t) ;; 是否使用vim键位
+(defconst *editor-evil* nil) ;; 是否使用vim键位
 (defconst *editor-high-line* t) ;; 是否高亮当前行
 (defconst *editor-line-number* t) ;; 是否显示行号
-(defconst *editor-cursor-type* 'block) ;; 鼠标样式
+(defconst *editor-cursor-type* 'bar) ;; 鼠标样式
 (defconst *editor-cursor-color* "green") ;; 鼠标颜色
 (defconst *editor-modeline-style* 1) ;; 使用的modeline (:nil default :1 doom-modeline :2 powerline)
 (defconst *editor-smooth-scrolling* t) ;; 是否启用平滑滚动 (摁住shift后加快滚动)

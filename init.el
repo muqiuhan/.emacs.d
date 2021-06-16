@@ -1,56 +1,632 @@
 (load "~/.emacs.d/custom.el")
 (load "~/.emacs.d/config/config.el")
 
+;; Some sane defaults
+;; Copyright 2020 Nicolas P. Rougier
+;;
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <http://www.gnu.org/licenses/>
+(setq gc-cons-threshold (* 100 1024 1024))
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message t)
+(setq inhibit-startup-message t)
+(setq initial-scratch-message nil)
+(setq initial-major-mode 'org-mode)
+(setq-default indent-tabs-mode nil)
+(setq pop-up-windows nil)
 
-(setq gc-cons-threshold (* 100 1024 1024)
-      read-process-output-max (* 1024 1024))
+(defun custom/kill-this-buffer ()
+  (interactive) (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x k") 'custom/kill-this-buffer)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])
- '(custom-safe-themes
-   '("990e24b406787568c592db2b853aa65ecc2dcd08146c0d22293259d400174e37" "f4876796ef5ee9c82b125a096a590c9891cec31320569fc6ff602ff99ed73dca" "ca70827910547eb99368db50ac94556bbd194b7e8311cfbdbdcad8da65e803be" "c4bdbbd52c8e07112d1bfd00fee22bf0f25e727e95623ecb20c4fa098b74c1bd" "76bfa9318742342233d8b0b42e824130b3a50dcc732866ff8e47366aed69de11" "5379937b99998e0510bd37ae072c7f57e26da7a11e9fb7bced8b94ccc766c804" "f94110b35f558e4c015b2c680f150bf8a19799d775f8352c957d9d1054b0a210" "be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "0fe24de6d37ea5a7724c56f0bb01efcbb3fe999a6e461ec1392f3c3b105cc5ac" "5b809c3eae60da2af8a8cfba4e9e04b4d608cb49584cb5998f6e4a1c87c057c4" "0e2a7e1e632dd38a8e0227d2227cb8849f877dd878afb8219cb6bcdd02068a52" "6c3b5f4391572c4176908bb30eddc1718344b8eaff50e162e36f271f6de015ca" "7a994c16aa550678846e82edc8c9d6a7d39cc6564baaaacc305a3fdc0bd8725f" "4bca89c1004e24981c840d3a32755bf859a6910c65b829d9441814000cf6c3d0" "f180d5a9c4c4cf9702b09e6a9b0ffdce78f90f6c380eb294caf7adfc77459e16" "fce3524887a0994f8b9b047aef9cc4cc017c5a93a5fb1f84d300391fba313743" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" "4f01c1df1d203787560a67c1b295423174fd49934deb5e6789abd1e61dba9552" "7546a14373f1f2da6896830e7a73674ef274b3da313f8a2c4a79842e8a93953e" "6b80b5b0762a814c62ce858e9d72745a05dd5fc66f821a1c5023b4f2a76bc910" "aaa4c36ce00e572784d424554dcc9641c82d1155370770e231e10c649b59a074" "7b3d184d2955990e4df1162aeff6bfb4e1c3e822368f0359e15e2974235d9fa8" "54cf3f8314ce89c4d7e20ae52f7ff0739efb458f4326a2ca075bf34bc0b4f499" "fd22c8c803f2dac71db953b93df6560b6b058cb931ac12f688def67f08c10640" "3c2f28c6ba2ad7373ea4c43f28fcf2eed14818ec9f0659b1c97d4e89c99e091e" "8f5a7a9a3c510ef9cbb88e600c0b4c53cdcdb502cfe3eb50040b7e13c6f4e78e" "2cdc13ef8c76a22daa0f46370011f54e79bae00d5736340a5ddfe656a767fddf" "730a87ed3dc2bf318f3ea3626ce21fb054cd3a1471dcd59c81a4071df02cb601" "c83c095dd01cde64b631fb0fe5980587deec3834dc55144a6e78ff91ebc80b19" "7d708f0168f54b90fc91692811263c995bebb9f68b8b7525d0e2200da9bc903c" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "79278310dd6cacf2d2f491063c4ab8b129fee2a498e4c25912ddaa6c3c5b621e" "1623aa627fecd5877246f48199b8e2856647c99c6acdab506173f9bb8b0a41ac" "95d0ed21bb0e919be7687a25ad59a1c2c8df78cbe98c9e369d44e65bfd65b167" "2c49d6ac8c0bf19648c9d2eabec9b246d46cb94d83713eaae4f26b49a8183fc4" "d5a878172795c45441efcd84b20a14f553e7e96366a163f742b95d65a3f55d71" "cae81b048b8bccb7308cdcb4a91e085b3c959401e74a0f125e7c5b173b916bf9" "01cf34eca93938925143f402c2e6141f03abb341f27d1c2dba3d50af9357ce70" "0685ffa6c9f1324721659a9cd5a8931f4bb64efae9ce43a3dba3801e9412b4d8" "ff3c57a5049010a76de8949ddb629d29e2ced42b06098e046def291989a4104a" "56d10d2b60685d112dd54f4ba68a173c102eacc2a6048d417998249085383da1" "4a8d4375d90a7051115db94ed40e9abb2c0766e80e228ecad60e06b3b397acab" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "3df5335c36b40e417fec0392532c1b82b79114a05d5ade62cfe3de63a59bc5c6" default))
- '(fci-rule-color "#5B6268")
- '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#51afef"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#98be65"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#3f444a"))
- '(objed-cursor-color "#ff6c6b")
- '(package-selected-packages
-   '(pdf-view-restore pdfgrep pretty-mode pretty-hydra use-package-hydra major-mode-hydra elfeed solaire-mode ninja-mode meson-mode org-mind-map graphviz-dot-mode helm-xref lsp-treemacs auto-complete-clang auto-complete rtags youdao-dictionary yasnippet window-numbering which-key vterm use-package treemacs-projectile sly-repl-ansi-color sly-quicklisp rustic rust-playground rust-mode rust-auto-use rainbow-delimiters racket-mode pomidor pdf-tools org-bullets netease-music makefile-executor irony-eldoc highlight-parentheses highlight-indent-guides flycheck fira-code-mode evil doom-themes doom-modeline dashboard company ccls cargo))
- '(pdf-view-midnight-colors (cons "#bbc2cf" "#282c34"))
- '(rustic-ansi-faces
-   ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])
- '(vc-annotate-background "#282c34")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#98be65")
-    (cons 40 "#b4be6c")
-    (cons 60 "#d0be73")
-    (cons 80 "#ECBE7B")
-    (cons 100 "#e6ab6a")
-    (cons 120 "#e09859")
-    (cons 140 "#da8548")
-    (cons 160 "#d38079")
-    (cons 180 "#cc7cab")
-    (cons 200 "#c678dd")
-    (cons 220 "#d974b7")
-    (cons 240 "#ec7091")
-    (cons 260 "#ff6c6b")
-    (cons 280 "#cf6162")
-    (cons 300 "#9f585a")
-    (cons 320 "#6f4e52")
-    (cons 340 "#5B6268")
-    (cons 360 "#5B6268")))
- '(vc-annotate-very-old-color nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
+(save-place-mode 1)
+
+;; -------------------------------------------------------------------
+;; A very minimal but elegant and consistent theme
+;; Copyright 2020 Nicolas P. Rougier
+;; -------------------------------------------------------------------
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <http://www.gnu.org/licenses/>
+;; -------------------------------------------------------------------
+
+
+;; Only necessary for the splash screen mockup
+;; -------------------------------------------------------------------
+(with-eval-after-load 'org
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+  (setq org-hide-emphasis-markers t)
+  (setq org-confirm-elisp-link-function nil)
+  (setq org-link-frame-setup '((file . find-file))))
+;; -------------------------------------------------------------------
+
+
+;; Font and frame size
+(setq default-frame-alist
+      (append (list '(width  . 72) '(height . 40)
+                    '(vertical-scroll-bars . nil)
+                    '(internal-border-width . 24)
+                    '(font . "Sarasa Mono Slab K 15"))))
+(set-frame-parameter (selected-frame)
+                     'internal-border-width 24)
+
+;; Line spacing, can be 0 for code and 1 or 2 for text
+(setq-default line-spacing 0)
+
+;; Underline line at descent position, not baseline position
+(setq x-underline-at-descent-line t)
+
+;; No ugly button for checkboxes
+(setq widget-image-enable nil)
+
+;; No sound
+(setq visible-bell t)
+(setq ring-bell-function 'ignore)
+
+;; Paren mode is part of the theme
+(show-paren-mode t)
+
+;; No fringe but nice glyphs for truncated and wrapped lines
+(fringe-mode '(0 . 0))
+(defface fallback '((t :family "Fira Code Light"
+                       :inherit 'face-faded)) "Fallback")
+(set-display-table-slot standard-display-table 'truncation
+                        (make-glyph-code ?… 'fallback))
+(set-display-table-slot standard-display-table 'wrap
+                        (make-glyph-code ?↩ 'fallback))
+(set-display-table-slot standard-display-table 'selective-display
+                        (string-to-vector " …"))
+
+
+;; When we set a face, we take care of removing any previous settings
+(defun set-face (face style)
+  "Reset a face and make it inherit style."
+  (set-face-attribute face nil
+                      :foreground 'unspecified :background 'unspecified
+                      :family     'unspecified :slant      'unspecified
+                      :weight     'unspecified :height     'unspecified
+                      :underline  'unspecified :overline   'unspecified
+                      :box        'unspecified :inherit    style))
+
+;; A theme is fully defined by these six faces 
+(defgroup elegance nil
+  "Faces for the elegance theme"
+  :prefix "face-")
+
+;; Do not show prefix when displaying the elegance group
+(setq custom-unlispify-remove-prefixes t)
+
+(defface face-critical nil
+  "Critical face is for information that requires immediate action.
+It should be of high constrast when compared to other faces. This
+can be realized (for example) by setting an intense background
+color, typically a shade of red. It must be used scarcely."
+  :group 'elegance)
+
+(defface face-popout nil
+  "Popout face is used for information that needs attention.
+To achieve such effect, the hue of the face has to be
+sufficiently different from other faces such that it attracts
+attention through the popout effect."
+  :group 'elegance)
+
+(defface face-strong nil
+  "Strong face is used for information of a structural nature.
+It has to be the same color as the default color and only the
+weight differs by one level (e.g., light/regular or
+regular/bold). IT is generally used for titles, keywords,
+directory, etc."
+  :group 'elegance)
+
+(defface face-salient nil
+  "Salient face is used for information that are important.
+To suggest the information is of the same nature but important,
+the face uses a different hue with approximately the same
+intensity as the default face. This is typically used for links."
+
+  :group 'elegance)
+
+(defface face-faded nil
+  "Faded face is for information that are less important.
+It is made by using the same hue as the default but with a lesser
+intensity than the default. It can be used for comments,
+secondary information and also replace italic (which is generally
+abused anyway)."
+  :group 'elegance)
+
+(defface face-subtle nil
+  "Subtle face is used to suggest a physical area on the screen.
+It is important to not disturb too strongly the reading of
+information and this can be made by setting a very light
+background color that is barely perceptible."
+  :group 'elegance)
+
+
+;; Mode line (this might be slow because of the "☰" that requires substitution)
+;; This line below makes things a bit faster
+(set-fontset-font "fontset-default"  '(#x2600 . #x26ff) "Fira Code 16")
+
+(define-key mode-line-major-mode-keymap [header-line]
+  (lookup-key mode-line-major-mode-keymap [mode-line]))
+
+(defun mode-line-render (left right)
+  (let* ((available-width (- (window-width) (length left) )))
+    (format (format "%%s %%%ds" available-width) left right)))
+(setq-default mode-line-format
+              '((:eval
+                 (mode-line-render
+                  (format-mode-line (list
+                                     (propertize "☰" 'face `(:inherit mode-line-buffer-id)
+                                                 'help-echo "Mode(s) menu"
+                                                 'mouse-face 'mode-line-highlight
+                                                 'local-map   mode-line-major-mode-keymap)
+                                     " %b "
+                                     (if (and buffer-file-name (buffer-modified-p))
+                                         (propertize "(modified)" 'face `(:inherit face-faded)))))
+                  (format-mode-line
+                   (propertize "%4l:%2c  " 'face `(:inherit face-faded)))))))
+
+
+;; Comment if you want to keep the modeline at the bottom
+(setq-default header-line-format mode-line-format)
+(setq-default mode-line-format'(""))
+
+
+;; Vertical window divider
+(setq window-divider-default-right-width 3)
+(setq window-divider-default-places 'right-only)
+(window-divider-mode)
+
+;; Modeline
+(defun set-modeline-faces ()
+
+  (set-face 'header-line                                 'face-strong)
+  (set-face-attribute 'header-line nil
+                                :underline (face-foreground 'default))
+  (set-face-attribute 'mode-line nil
+                      :height 10
+                      :underline (face-foreground 'default)
+                      :overline nil
+                      :box nil 
+                      :foreground (face-background 'default)
+                      :background (face-background 'default))
+  (set-face 'mode-line-inactive                            'mode-line)
+  
+  ;; Mode line at bottom
+  ;; (set-face 'header-line                                 'face-strong)
+  ;; (set-face-attribute 'mode-line nil
+  ;;                     :height 1.0
+  ;;                     :overline (face-background 'default)
+  ;;                     :underline nil
+  ;;                     :foreground (face-foreground 'default)
+  ;;                     :background (face-background 'face-subtle)
+  ;;                     :box `(:line-width 2
+  ;;                                        :color ,(face-background 'face-subtle)
+  ;;                                        :style nil))
+  ;; (set-face 'mode-line-highlight '(face-popout mode-line))
+  ;; (set-face 'mode-line-emphasis  'face-strong)
+  ;; (set-face-attribute 'mode-line-buffer-id nil :weight 'regular)
+  ;; (set-face-attribute 'mode-line-inactive nil
+  ;;                     :height 1.0
+  ;;                     :overline (face-background 'default)
+  ;;                     :underline nil
+  ;;                     :foreground (face-foreground 'face-faded)
+  ;;                     :background (face-background 'face-subtle)
+  ;;                     :box `(:line-width 2
+  ;;                                        :color ,(face-background 'face-subtle)
+  ;;                                        :style nil))
+
+
+  (set-face-attribute 'cursor nil
+                      :background (face-foreground 'default))
+  (set-face-attribute 'window-divider nil
+                      :foreground (face-background 'mode-line))
+  (set-face-attribute 'window-divider-first-pixel nil
+                      :foreground (face-background 'default))
+  (set-face-attribute 'window-divider-last-pixel nil
+                      :foreground (face-background 'default))
+  )
+
+;; Buttons
+(defun set-button-faces ()
+  (set-face-attribute 'custom-button nil
+                      :foreground (face-foreground 'face-faded)
+                      :background (face-background 'face-subtle)
+                      :box `(:line-width 1
+                                         :color ,(face-foreground 'face-faded)
+                                         :style nil))
+  (set-face-attribute 'custom-button-mouse nil
+                      :foreground (face-foreground 'default)
+                      ;; :background (face-foreground 'face-faded)
+                      :inherit 'custom-button
+                      :box `(:line-width 1
+                                         :color ,(face-foreground 'face-subtle)
+                                         :style nil))
+  (set-face-attribute 'custom-button-pressed nil
+                      :foreground (face-background 'default)
+                      :background (face-foreground 'face-salient)
+                      :inherit 'face-salient
+                      :box `(:line-width 1
+                                         :color ,(face-foreground 'face-salient)
+                                         :style nil)
+                      :inverse-video nil))
+
+;; Light theme 
+(defun elegance-light ()
+  (setq frame-background-mode 'light)
+  (set-background-color "#ffffff")
+  (set-foreground-color "#333333")
+  (set-face-attribute 'default nil
+                      :foreground (face-foreground 'default)
+                      :background (face-background 'default))
+  (set-face-attribute 'face-critical nil :foreground "#ffffff"
+                      :background "#ff6347")
+  (set-face-attribute 'face-popout nil :foreground "#ffa07a")
+  (set-face-attribute 'face-strong nil :foreground "#333333"
+                      :weight 'regular)
+  (set-face-attribute 'face-salient nil :foreground "#00008b"
+                      :weight 'light)
+  (set-face-attribute 'face-faded nil :foreground "#999999"
+                      :weight 'light)
+  (set-face-attribute 'face-subtle nil :background "#f0f0f0")
+
+  (set-modeline-faces)
+  
+  (with-eval-after-load 'cus-edit (set-button-faces)))
+
+;; Dark theme
+(defun elegance-dark ()
+  (setq frame-background-mode 'dark)
+  (set-background-color "#3f3f3f")
+  (set-foreground-color "#dcdccc")
+  (set-face-attribute 'default nil
+                      :foreground (face-foreground 'default)
+                      :background (face-background 'default))
+  (set-face-attribute 'face-critical nil :foreground "#385f38"
+                      :background "#f8f893")
+  (set-face-attribute 'face-popout nil :foreground "#f0dfaf")
+  (set-face-attribute 'face-strong nil :foreground "#dcdccc"
+                      :weight 'regular)
+  (set-face-attribute 'face-salient nil :foreground "#dca3a3"
+                      :weight 'light)
+  (set-face-attribute 'face-faded nil :foreground "#777767"
+                      :weight 'light)
+  (set-face-attribute 'face-subtle nil :background "#4f4f4f")
+  (set-modeline-faces)
+  (with-eval-after-load 'cus-edit (set-button-faces)))
+
+;; Set theme
+(elegance-dark)
+
+;; Structural
+(set-face 'bold                                          'face-strong)
+(set-face 'italic                                         'face-faded)
+(set-face 'bold-italic                                   'face-strong)
+(set-face 'region                                        'face-subtle)
+(set-face 'highlight                                     'face-subtle)
+(set-face 'fixed-pitch                                       'default)
+(set-face 'fixed-pitch-serif                                 'default)
+(set-face 'variable-pitch                                    'default)
+(set-face 'cursor                                            'default)
+
+;; Semantic
+(set-face 'shadow                                         'face-faded)
+(set-face 'success                                      'face-salient)
+(set-face 'warning                                       'face-popout)
+(set-face 'error                                       'face-critical)
+
+;; General
+(set-face 'buffer-menu-buffer                            'face-strong)
+(set-face 'minibuffer-prompt                             'face-strong)
+(set-face 'link                                         'face-salient)
+(set-face 'fringe                                         'face-faded)
+(set-face 'isearch                                       'face-strong)
+(set-face 'isearch-fail                                   'face-faded)
+(set-face 'lazy-highlight                                'face-subtle)
+(set-face 'trailing-whitespace                           'face-subtle)
+(set-face 'show-paren-match                              'face-popout)
+(set-face 'show-paren-mismatch                           'face-normal)
+(set-face-attribute 'tooltip nil                         :height 0.85)
+
+;; Programmation mode
+(set-face 'font-lock-comment-face                         'face-faded)
+(set-face 'font-lock-doc-face                             'face-faded)
+(set-face 'font-lock-string-face                         'face-popout)
+(set-face 'font-lock-constant-face                      'face-salient)
+(set-face 'font-lock-warning-face                        'face-popout)
+(set-face 'font-lock-function-name-face                  'face-strong)
+(set-face 'font-lock-variable-name-face                  'face-strong)
+(set-face 'font-lock-builtin-face                       'face-salient)
+(set-face 'font-lock-type-face                          'face-salient)
+(set-face 'font-lock-keyword-face                       'face-salient)
+
+;; Documentation
+(with-eval-after-load 'info
+  (set-face 'info-menu-header                            'face-strong)
+  (set-face 'info-header-node                            'face-normal)
+  (set-face 'Info-quoted                                  'face-faded)
+  (set-face 'info-title-1                                'face-strong)
+  (set-face 'info-title-2                                'face-strong)
+  (set-face 'info-title-3                                'face-strong)
+  (set-face 'info-title-4                               'face-strong))
+
+;; Bookmarks
+(with-eval-after-load 'bookmark
+  (set-face 'bookmark-menu-heading                       'face-strong)
+  (set-face 'bookmark-menu-bookmark                    'face-salient))
+
+;; Message
+(with-eval-after-load 'message
+  (set-face 'message-cited-text                           'face-faded)
+  (set-face 'message-header-cc                               'default)
+  (set-face 'message-header-name                         'face-strong)
+  (set-face 'message-header-newsgroups                       'default)
+  (set-face 'message-header-other                            'default)
+  (set-face 'message-header-subject                     'face-salient)
+  (set-face 'message-header-to                          'face-salient)
+  (set-face 'message-header-xheader                          'default)
+  (set-face 'message-mml                                 'face-popout)
+  (set-face 'message-separator                           'face-faded))
+
+;; Outline
+(with-eval-after-load 'outline
+  (set-face 'outline-1                                   'face-strong)
+  (set-face 'outline-2                                   'face-strong)
+  (set-face 'outline-3                                   'face-strong)
+  (set-face 'outline-4                                   'face-strong)
+  (set-face 'outline-5                                   'face-strong)
+  (set-face 'outline-6                                   'face-strong)
+  (set-face 'outline-7                                   'face-strong)
+  (set-face 'outline-8                                  'face-strong))
+
+;; Interface
+(with-eval-after-load 'cus-edit
+  (set-face 'widget-field                                'face-subtle)
+  (set-face 'widget-button                               'face-strong)
+  (set-face 'widget-single-line-field                    'face-subtle)
+  (set-face 'custom-group-subtitle                       'face-strong)
+  (set-face 'custom-group-tag                            'face-strong)
+  (set-face 'custom-group-tag-1                          'face-strong)
+  (set-face 'custom-comment                               'face-faded)
+  (set-face 'custom-comment-tag                           'face-faded)
+  (set-face 'custom-changed                             'face-salient)
+  (set-face 'custom-modified                            'face-salient)
+  (set-face 'custom-face-tag                             'face-strong)
+  (set-face 'custom-variable-tag                             'default)
+  (set-face 'custom-invalid                              'face-popout)
+  (set-face 'custom-visibility                          'face-salient)
+  (set-face 'custom-state                               'face-salient)
+  (set-face 'custom-link                               'face-salient))
+
+;; Package
+(with-eval-after-load 'package
+  (set-face 'package-description                             'default)
+  (set-face 'package-help-section-name                       'default)
+  (set-face 'package-name                               'face-salient)
+  (set-face 'package-status-avail-obso                    'face-faded)
+  (set-face 'package-status-available                        'default)
+  (set-face 'package-status-built-in                    'face-salient)
+  (set-face 'package-status-dependency                  'face-salient)
+  (set-face 'package-status-disabled                      'face-faded)
+  (set-face 'package-status-external                         'default)
+  (set-face 'package-status-held                             'default)
+  (set-face 'package-status-incompat                      'face-faded)
+  (set-face 'package-status-installed                   'face-salient)
+  (set-face 'package-status-new                              'default)
+  (set-face 'package-status-unsigned                         'default)
+
+  ;; Button face is hardcoded, we have to redefine the relevant
+  ;; function
+  (defun package-make-button (text &rest properties)
+    "Insert button labeled TEXT with button PROPERTIES at point.
+PROPERTIES are passed to `insert-text-button', for which this
+function is a convenience wrapper used by `describe-package-1'."
+    (let ((button-text (if (display-graphic-p)
+                           text (concat "[" text "]")))
+          (button-face (if (display-graphic-p)
+                           '(:box `(:line-width 1
+                                                :color "#999999":style nil)
+                                  :foreground "#999999"
+                                  :background "#F0F0F0")
+                         'link)))
+      (apply #'insert-text-button button-text
+             'face button-face 'follow-link t properties)))
+  )
+
+;; Flyspell
+(with-eval-after-load 'flyspell
+  (set-face 'flyspell-duplicate                         'face-popout)
+  (set-face 'flyspell-incorrect                         'face-popout))
+
+;; Ido 
+(with-eval-after-load 'ido
+  (set-face 'ido-first-match                            'face-salient)
+  (set-face 'ido-only-match                               'face-faded)
+  (set-face 'ido-subdir                                 'face-strong))
+
+;; Diff
+(with-eval-after-load 'diff-mode
+  (set-face 'diff-header                                  'face-faded)
+  (set-face 'diff-file-header                            'face-strong)
+  (set-face 'diff-context                                    'default)
+  (set-face 'diff-removed                                 'face-faded)
+  (set-face 'diff-changed                                'face-popout)
+  (set-face 'diff-added                                 'face-salient)
+  (set-face 'diff-refine-added            '(face-salient face-strong))
+  (set-face 'diff-refine-changed                         'face-popout)
+  (set-face 'diff-refine-removed                          'face-faded)
+  (set-face-attribute     'diff-refine-removed nil :strike-through t))
+
+;; Term
+(with-eval-after-load 'term
+  ;; (setq eterm-256color-disable-bold nil)
+  (set-face 'term-bold                                   'face-strong)
+  (set-face-attribute 'term-color-black nil
+                      :foreground (face-foreground 'default)
+                      :background (face-foreground 'default))
+  (set-face-attribute 'term-color-white nil
+                      :foreground "white" :background "white")
+  (set-face-attribute 'term-color-blue nil
+                      :foreground "#42A5F5" :background "#BBDEFB")
+  (set-face-attribute 'term-color-cyan nil
+                      :foreground "#26C6DA" :background "#B2EBF2")
+  (set-face-attribute 'term-color-green nil
+                      :foreground "#66BB6A" :background "#C8E6C9")
+  (set-face-attribute 'term-color-magenta nil
+                      :foreground "#AB47BC" :background "#E1BEE7")
+  (set-face-attribute 'term-color-red nil
+                      :foreground "#EF5350" :background "#FFCDD2")
+  (set-face-attribute 'term-color-yellow nil
+                      :foreground "#FFEE58" :background "#FFF9C4"))
+
+;; org-agende
+(with-eval-after-load 'org-agenda
+  (set-face 'org-agenda-calendar-event                    'default)
+  (set-face 'org-agenda-calendar-sexp                     'face-faded)
+  (set-face 'org-agenda-clocking                          'face-faded)
+  (set-face 'org-agenda-column-dateline                   'face-faded)
+  (set-face 'org-agenda-current-time                      'face-faded)
+  (set-face 'org-agenda-date                            'face-salient)
+  (set-face 'org-agenda-date-today        '(face-salient face-strong))
+  (set-face 'org-agenda-date-weekend                      'face-faded)
+  (set-face 'org-agenda-diary                             'face-faded)
+  (set-face 'org-agenda-dimmed-todo-face                  'face-faded)
+  (set-face 'org-agenda-done                              'face-faded)
+  (set-face 'org-agenda-filter-category                   'face-faded)
+  (set-face 'org-agenda-filter-effort                     'face-faded)
+  (set-face 'org-agenda-filter-regexp                     'face-faded)
+  (set-face 'org-agenda-filter-tags                       'face-faded)
+  ;; fixes issue #18 (set-face 'org-agenda-property-face                     'face-faded)
+  (set-face 'org-agenda-restriction-lock                  'face-faded)
+  (set-face 'org-agenda-structure                        'face-faded))
+
+;; org mode
+(with-eval-after-load 'org
+  (set-face 'org-archived                                 'face-faded)
+  (set-face 'org-block                                    'face-faded)
+  (set-face 'org-block-begin-line                         'face-faded)
+  (set-face 'org-block-end-line                           'face-faded)
+  (set-face 'org-checkbox                                 'face-faded)
+  (set-face 'org-checkbox-statistics-done                 'face-faded)
+  (set-face 'org-checkbox-statistics-todo                 'face-faded)
+  (set-face 'org-clock-overlay                            'face-faded)
+  (set-face 'org-code                                     'face-faded)
+  (set-face 'org-column                                   'face-faded)
+  (set-face 'org-column-title                             'face-faded)
+  (set-face 'org-date                                     'face-faded)
+  (set-face 'org-date-selected                            'face-faded)
+  (set-face 'org-default                                  'face-faded)
+  (set-face 'org-document-info                            'face-faded)
+  (set-face 'org-document-info-keyword                    'face-faded)
+  (set-face 'org-document-title                           'face-faded)
+  (set-face 'org-done                                        'default)
+  (set-face 'org-drawer                                   'face-faded)
+  (set-face 'org-ellipsis                                 'face-faded)
+  (set-face 'org-footnote                                 'face-faded)
+  (set-face 'org-formula                                  'face-faded)
+  (set-face 'org-headline-done                            'face-faded)
+  ;;  (set-face 'org-hide                                     'face-faded)
+  ;;  (set-face 'org-indent                                   'face-faded)
+  (set-face 'org-latex-and-related                        'face-faded)
+  (set-face 'org-level-1                                 'face-strong)
+  (set-face 'org-level-2                                 'face-strong)
+  (set-face 'org-level-3                                 'face-strong)
+  (set-face 'org-level-4                                 'face-strong)
+  (set-face 'org-level-5                                 'face-strong)
+  (set-face 'org-level-6                                 'face-strong)
+  (set-face 'org-level-7                                 'face-strong)
+  (set-face 'org-level-8                                 'face-strong)
+  (set-face 'org-link                                   'face-salient)
+  (set-face 'org-list-dt                                  'face-faded)
+  (set-face 'org-macro                                    'face-faded)
+  (set-face 'org-meta-line                                'face-faded)
+  (set-face 'org-mode-line-clock                          'face-faded)
+  (set-face 'org-mode-line-clock-overrun                  'face-faded)
+  (set-face 'org-priority                                 'face-faded)
+  (set-face 'org-property-value                           'face-faded)
+  (set-face 'org-quote                                    'face-faded)
+  (set-face 'org-scheduled                                'face-faded)
+  (set-face 'org-scheduled-previously                     'face-faded)
+  (set-face 'org-scheduled-today                          'face-faded)
+  (set-face 'org-sexp-date                                'face-faded)
+  (set-face 'org-special-keyword                          'face-faded)
+  (set-face 'org-table                                    'default)
+  (set-face 'org-tag                                      'face-faded)
+  (set-face 'org-tag-group                                'face-faded)
+  (set-face 'org-target                                   'face-faded)
+  (set-face 'org-time-grid                                'face-faded)
+  (set-face 'org-todo                                    'face-popout)
+  (set-face 'org-upcoming-deadline                        'face-faded)
+  (set-face 'org-verbatim                                 'face-faded)
+  (set-face 'org-verse                                    'face-faded)
+  (set-face 'org-warning                                'face-popout))
+
+;; Mu4e
+(with-eval-after-load 'mu4e
+  (set-face 'mu4e-attach-number-face                     'face-strong)
+  (set-face 'mu4e-cited-1-face                            'face-faded)
+  (set-face 'mu4e-cited-2-face                            'face-faded)
+  (set-face 'mu4e-cited-3-face                            'face-faded)
+  (set-face 'mu4e-cited-4-face                            'face-faded)
+  (set-face 'mu4e-cited-5-face                            'face-faded)
+  (set-face 'mu4e-cited-6-face                            'face-faded)
+  (set-face 'mu4e-cited-7-face                            'face-faded)
+  (set-face 'mu4e-compose-header-face                     'face-faded)
+  (set-face 'mu4e-compose-separator-face                  'face-faded)
+  (set-face 'mu4e-contact-face                          'face-salient)
+  (set-face 'mu4e-context-face                            'face-faded)
+  (set-face 'mu4e-draft-face                              'face-faded)
+  (set-face 'mu4e-flagged-face                            'face-faded)
+  (set-face 'mu4e-footer-face                             'face-faded)
+  (set-face 'mu4e-forwarded-face                          'face-faded)
+  (set-face 'mu4e-header-face                                'default)
+  (set-face 'mu4e-header-highlight-face                  'face-subtle)
+  (set-face 'mu4e-header-key-face                        'face-strong)
+  (set-face 'mu4e-header-marks-face                       'face-faded)
+  (set-face 'mu4e-header-title-face                      'face-strong)
+  (set-face 'mu4e-header-value-face                          'default)
+  (set-face 'mu4e-highlight-face                         'face-popout)
+  (set-face 'mu4e-link-face                             'face-salient)
+  (set-face 'mu4e-modeline-face                           'face-faded)
+  (set-face 'mu4e-moved-face                              'face-faded)
+  (set-face 'mu4e-ok-face                                 'face-faded)
+  (set-face 'mu4e-region-code                             'face-faded)
+  (set-face 'mu4e-replied-face                          'face-salient)
+  (set-face 'mu4e-special-header-value-face                  'default)
+  (set-face 'mu4e-system-face                             'face-faded)
+  (set-face 'mu4e-title-face                             'face-strong)
+  (set-face 'mu4e-trashed-face                            'face-faded)
+  (set-face 'mu4e-unread-face                            'face-strong)
+  (set-face 'mu4e-url-number-face                         'face-faded)
+  (set-face 'mu4e-view-body-face                             'default)
+  (set-face 'mu4e-warning-face                            'face-faded))
+
+(find-file "~/.emacs.d/config/interface/elegant-emacs/Welcome.org")

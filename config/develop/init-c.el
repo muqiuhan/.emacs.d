@@ -27,14 +27,14 @@
 
 (use-package lsp
   :hook 
-  ((c++-mode . lsp)
-   (c-mode . lsp))
+  ((c++-mode . lsp-mode)
+   (c-mode . lsp-mode))
 
   :commands lsp)
 
 (use-package flycheck
   :hook
-  ((c++-mode . flycheck)
-   (c-mode . flycheck)))
+  ((c++-mode . flycheck-mode)
+   (c-mode . flycheck-mode)))
 
 (provide 'init-c)

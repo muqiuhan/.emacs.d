@@ -32,6 +32,14 @@
 (require 'init-font)
 
 (defun init-frame ()
+  (setq frame-title-format
+	'(:eval (concat
+		 (if (and buffer-file-name (buffer-modified-p)) "•")
+		 (buffer-name)
+		 (if buffer-file-name
+		     (concat " (" (directory-file-name (abbreviate-file-name default-directory)) ")"))
+		 " - AutumnEmacs")))
+
   (when *frame-font*
     (set-frame-font *frame-font*))
   (menu-bar-mode *frame-menu-bar*)
@@ -39,6 +47,9 @@
   (tool-bar-mode *frame-tool-bar*)
   (set-fringe-style 0)
   (scroll-bar-mode *frame-scroll-bar*)
+
+  (set-frame-parameter (selected-frame) 'alpha (list *frame-opacity* 100))
+  
   (when *frame-theme*
     (load-theme *frame-theme* t))
   (display-battery-mode *frame-battery-mode*)
