@@ -10,19 +10,6 @@
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -71,6 +58,7 @@ locate PACKAGE."
 (require-package 'yasnippet)
 (require-package 'hide-mode-line)
 (require-package 'markdown-mode)
+(require-package 'powerline)
 
 (defun icon-displayable-p ()
   "Return non-nil if icons are displayable."
@@ -138,31 +126,6 @@ locate PACKAGE."
     (require 'treemacs-all-the-icons)
     (treemacs-load-theme "all-the-icons")))
 
-(use-package lambda-line
-  :straight (:type git :host github :repo "lambda-emacs/lambda-line") 
-  :custom
-  (lambda-line-icon-time t) ;; requires ClockFace font (see below)
-  (lambda-line-clockface-update-fontset "ClockFaceRect") ;; set clock icon
-  (lambda-line-position 'top) ;; Set position of status-line 
-  (lambda-line-abbrev t) ;; abbreviate major modes
-  (lambda-line-hspace "  ")  ;; add some cushion
-  (lambda-line-prefix t) ;; use a prefix symbol
-  (lambda-line-prefix-padding nil) ;; no extra space for prefix 
-  (lambda-line-status-invert nil)  ;; no invert colors
-  (lambda-line-gui-ro-symbol  " ⨂") ;; symbols
-  (lambda-line-gui-mod-symbol " ⬤") 
-  (lambda-line-gui-rw-symbol  " ◯") 
-  (lambda-line-space-top +.50)  ;; padding on top and bottom of line
-  (lambda-line-space-bottom -.50)
-  (lambda-line-symbol-position 0.1) ;; adjust the vertical placement of symbol
-  :config
-   ;; activate lambda-line
-   (lambda-line-mode)
-   ;; set divider line in footer
-   (when (eq lambda-line-position 'top)
-     (setq-default mode-line-format (list "%_"))
-     (setq mode-line-format (list "%_"))))
-
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
@@ -201,8 +164,13 @@ locate PACKAGE."
 
 (load-theme 'doom-material-dark t)
 
-(use-package hide-mode-line
-  :hook (after-init . global-hide-mode-line-mode))
+(use-package powerline
+  :init
+  (powerline-center-theme)
+  (setq-default header-line-format mode-line-format)
+  
+  (use-package hide-mode-line
+  :hook (after-init . global-hide-mode-line-mode)))
 
 (use-package window-numbering
   :hook (after-init . window-numbering-mode))
