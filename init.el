@@ -56,6 +56,7 @@ locate PACKAGE."
 (require-package 'yasnippet)
 (require-package 'hide-mode-line)
 (require-package 'markdown-mode)
+(require-package 'lua-mode)
 (require-package 'nano-modeline)
 (require-package 'rustic)
 (require-package 'company)
@@ -69,6 +70,18 @@ locate PACKAGE."
        (or (display-graphic-p) (daemonp))
        (or (featurep 'all-the-icons)
            (require 'all-the-icons nil t))))
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(toggle-frame-maximized)
+
+(set-face-attribute 'default nil
+		    :background "#111"
+		    :foreground "#eee"
+		    :font "Consolas"
+		    :height 130)
+
+(load-theme 'manoj-dark)
 
 (use-package company
   :diminish
@@ -506,89 +519,6 @@ locate PACKAGE."
 		      :height (face-attribute 'default :height)
 		      :weight (face-attribute 'default :weight)))
 
-(defun splash-screen ()
-  "Emacs splash screen"
-  
-  (interactive)
-  (let* ((splash-buffer  (get-buffer-create "*splash*"))
-         (recover-session (and auto-save-list-file-prefix
-                               (file-directory-p (file-name-directory
-                                                  auto-save-list-file-prefix))))
-         (height         (- (window-body-height nil) 1))
-         (width          (window-body-width nil))
-         (padding-center (- (/ height 2) 1))
-         (padding-bottom (- height (/ height 2) 3)))
-
-    ;; If there are buffer associated with filenames,
-    ;;  we don't show splash screen.
-    (if (eq 0 (length (cl-loop for buf in (buffer-list)
-                               if (buffer-file-name buf)
-                               collect (buffer-file-name buf))))
-        
-        (with-current-buffer splash-buffer
-          (erase-buffer)
-          
-          ;; Buffer local settings
-          (if (one-window-p)
-              (setq mode-line-format nil))
-          (setq cursor-type nil)
-          (setq vertical-scroll-bar nil)
-          (setq horizontal-scroll-bar nil)
-          (setq fill-column width)
-          (face-remap-add-relative 'link :underline nil)
-
-          ;; Vertical padding to center
-          (insert-char ?\n padding-center)
-
-          ;; Central text
-          (insert-text-button " www.gnu.org "
-			      'action (lambda (_) (browse-url "https://www.gnu.org"))
-			      'help-echo "Visit www.gnu.org website"
-			      'follow-link t)
-          (center-line) (insert "\n")
-          (insert (concat
-                   (propertize "GNU Emacs"  'face 'bold)
-                   " " "version "
-                   (format "%d.%d" emacs-major-version emacs-minor-version)))
-          (center-line) (insert "\n")
-          (insert (propertize "A free/libre editor" 'face 'shadow))
-          (center-line)
-
-
-          ;; Vertical padding to bottom
-          (insert-char ?\n padding-bottom)
-
-          ;; Recover session button
-          (when recover-session
-            (delete-char -2)
-            (insert-text-button " [Recover session] "
-				'action (lambda (_) (call-interactively 'recover-session))
-				'help-echo "Recover previous session"
-				'face 'warning
-				'follow-link t)
-            (center-line) (insert "\n") (insert "\n"))
-
-          ;; Copyright text
-          (insert (propertize
-                   "GNU Emacs comes with ABSOLUTELY NO WARRANTY" 'face 'shadow))
-          (center-line) (insert "\n")
-          (insert (propertize
-                   "Copyright (C) 2020 Free Software Foundation, Inc." 'face 'shadow))
-          (center-line) (insert "\n")
-
-          (goto-char 0)
-          (read-only-mode t)
-          
-          (local-set-key [t]               'splash-screen-fade-to-about)
-          (local-set-key (kbd "C-[")       'splash-screen-fade-to-default)
-          (local-set-key (kbd "<escape>")  'splash-screen-fade-to-default)
-          (local-set-key (kbd "q")         'splash-screen-fade-to-default)
-          (local-set-key (kbd "<mouse-1>") 'mouse-set-point)
-          (local-set-key (kbd "<mouse-2>") 'operate-this-button)
-          (display-buffer-same-window splash-buffer nil)
-          (run-with-idle-timer 10.0 nil    'splash-screen-fade-to-about)))))
-
-
 ;; Mac animation, only available from
 ;;  https://bitbucket.org/mituharu/emacs-mac/src/master/
 ;;  https://github.com/railwaycat/homebrew-emacsmacport
@@ -643,16 +573,25 @@ locate PACKAGE."
             inhibit-startup-message t
             inhibit-startup-echo-area-message t)))
 
-(fringe-mode 0)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(toggle-frame-maximized)
-
-(set-face-attribute 'default nil
-		    :background "#111"
-		    :font "SF Mono"
-		    :height 125
-		    :weight 'Semibold)
-
-(load-theme 'manoj-dark)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(c-offsets-alist
+   '((defun-open . 2)
+     (defun-close . 0)
+     (class-open . 2)
+     (class-close . 2)
+     (inline-open . 2)
+     (inline-close . 0)
+     (access-label . -1)
+     (label . 2)))
+ '(package-selected-packages
+   '(modern-cpp-font-lock evil lua-mode yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline merlin lsp-mode hide-mode-line dune doom-themes company-prescient company-box)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(cfrs-border-color ((t (:background "Firebrick")))))
