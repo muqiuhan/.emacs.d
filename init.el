@@ -41,9 +41,11 @@ locate PACKAGE."
 (require-package 'magit)
 (require-package 'prescient)
 (require-package 'treemacs-persp)
+(require-package 'ligature)
 (require-package 'treemacs-projectile)
 (require-package 'treemacs-magit)
 (require-package 'treemacs-all-the-icons)
+(require-package 'powerline)
 (require-package 'doom-themes)
 (require-package 'window-numbering)
 (require-package 'rainbow-delimiters)
@@ -54,10 +56,8 @@ locate PACKAGE."
 (require-package 'ocp-indent)
 (require-package 'tuareg)
 (require-package 'yasnippet)
-(require-package 'hide-mode-line)
 (require-package 'markdown-mode)
 (require-package 'lua-mode)
-(require-package 'nano-modeline)
 (require-package 'rustic)
 (require-package 'company)
 (require-package 'prescient)
@@ -73,15 +73,16 @@ locate PACKAGE."
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(fringe-mode -1)
+(scroll-bar-mode -1)
 (toggle-frame-maximized)
 
-(set-face-attribute 'default nil
-		    :background "#111"
-		    :foreground "#eee"
-		    :font "Consolas"
-		    :height 130)
+(load-theme 'doom-moonlight t)
 
-(load-theme 'manoj-dark)
+(set-face-attribute 'default nil
+		    :font "Fira Code"
+		    :weight 'semibold
+		    :height 115)
 
 (use-package company
   :diminish
@@ -436,7 +437,7 @@ locate PACKAGE."
         treemacs-sorting                 'alphabetic-asc
         treemacs-follow-after-init       t
         treemacs-width                   35
-        treemacs-no-png-images           t)
+        treemacs-no-png-images           nil)
   :config
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
@@ -467,10 +468,10 @@ locate PACKAGE."
     :functions treemacs-set-scope-type
     :config (treemacs-set-scope-type 'Perspectives))
 
-  ;; (use-package treemacs-all-the-icons      ;;
-  ;;   :init				      ;;
-  ;;   (require 'treemacs-all-the-icons)      ;;
-  ;;   (treemacs-load-theme "all-the-icons")) ;;
+  (use-package treemacs-all-the-icons
+    :init				    
+    (require 'treemacs-all-the-icons)
+    (treemacs-load-theme "all-the-icons"))
   )
 
 (use-package rainbow-delimiters
@@ -491,15 +492,11 @@ locate PACKAGE."
   (use-package ocp-indent
     :hook (tuareg-mode . ocp-indent-mode)))
 
-(use-package nano-modeline
-  :init
-  (nano-modeline-mode))
-
-(use-package hide-mode-line
-  :hook (after-init . global-hide-mode-line-mode))
-
 (use-package window-numbering
   :hook (after-init . window-numbering-mode))
+
+(use-package powerline
+  :hook (after-init . powerline-nano-theme))
 
 (use-package display-line-numbers
   :ensure nil
@@ -507,71 +504,40 @@ locate PACKAGE."
   :init (setq display-line-numbers-width-start t)
   :config
   (set-face-attribute 'line-number nil
-		      :background "#009"
 		      :font (face-attribute 'default :font)
 		      :height (face-attribute 'default :height)
 		      :weight (face-attribute 'default :weight))
   
   (set-face-attribute 'line-number-current-line nil
-		      :background "#00f"
-		      :foreground "#fff"
 		      :font (face-attribute 'default :font)
 		      :height (face-attribute 'default :height)
 		      :weight (face-attribute 'default :weight)))
 
-;; Mac animation, only available from
-;;  https://bitbucket.org/mituharu/emacs-mac/src/master/
-;;  https://github.com/railwaycat/homebrew-emacsmacport
-(defvar mac-animation-locked-p nil)
-(defun mac-animation-toggle-lock ()
-  (setq mac-animation-locked-p (not mac-animation-locked-p)))
-(defun mac-animation-fade-out (duration &rest args)
-  (unless mac-animation-locked-p
-    (mac-animation-toggle-lock)
-    (mac-start-animation nil :type 'fade-out :duration duration)
-    (run-with-timer duration nil 'mac-animation-toggle-lock)))
-
-(defun splash-screen-fade-to (about duration)
-  "Fade out current frame for duration and goes to command-or-bufffer"
-  (interactive)
-  (defalias 'mac-animation-fade-out-local
-    (apply-partially 'mac-animation-fade-out duration))
-  (if (get-buffer "*splash*")
-      (progn (if (and (display-graphic-p) (fboundp 'mac-start-animation))
-                 (advice-add 'set-window-buffer
-                             :before 'mac-animation-fade-out-local))
-             (if about (about-emacs))
-             (kill-buffer "*splash*")
-             (if (and (display-graphic-p) (fboundp 'mac-start-animation))
-                 (advice-remove 'set-window-buffer
-                                'mac-animation-fade-out-local)))))
-(defun splash-screen-fade-to-about ()
-  (interactive) (splash-screen-fade-to 1 1.0))
-(defun splash-screen-fade-to-default ()
-  (interactive) (splash-screen-fade-to nil 0.25))
-
-(defun splash-screen-kill ()
-  "Kill the splash screen buffer (immediately)."
-  (interactive)
-  (if (get-buffer "*splash*")
-      (kill-buffer "*splash*")))
-
-;; Suppress any startup message in the echo area
-(run-with-idle-timer 0.05 nil (lambda() (message nil)))
-
-;; Install hook after frame parameters have been applied and only if
-;; no option on the command line
-(if (and (not (member "-no-splash"  command-line-args))
-         (not (member "--file"      command-line-args))
-         (not (member "--insert"    command-line-args))
-         (not (member "--find-file" command-line-args))
-         (not inhibit-startup-screen)
-         )
-    (progn
-      (add-hook 'window-setup-hook 'splash-screen)
-      (setq inhibit-startup-screen t 
-            inhibit-startup-message t
-            inhibit-startup-echo-area-message t)))
+(use-package ligature
+  :load-path "path-to-ligature-repo"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                       "\\\\" "://"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -587,11 +553,13 @@ locate PACKAGE."
      (inline-close . 0)
      (access-label . -1)
      (label . 2)))
+ '(custom-safe-themes
+   '("db5b906ccc66db25ccd23fc531a213a1afb500d717125d526d8ff67df768f2fc" "98fada4d13bcf1ff3a50fceb3ab1fea8619564bb01a8f744e5d22e8210bfff7b" "5b9a45080feaedc7820894ebbfe4f8251e13b66654ac4394cb416fef9fdca789" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
  '(package-selected-packages
-   '(modern-cpp-font-lock evil lua-mode yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline merlin lsp-mode hide-mode-line dune doom-themes company-prescient company-box)))
+   '(ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cfrs-border-color ((t (:background "Firebrick")))))
+ '(cfrs-border-color ((t (:background "#7a88cf")))))
