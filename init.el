@@ -54,6 +54,8 @@ locate PACKAGE."
 (require-package 'ocamlformat)
 (require-package 'dune)
 (require-package 'ocp-indent)
+(require-package 'dune-format)
+(require-package 'opam-switch-mode)
 (require-package 'tuareg)
 (require-package 'yasnippet)
 (require-package 'markdown-mode)
@@ -76,13 +78,16 @@ locate PACKAGE."
 (fringe-mode -1)
 (scroll-bar-mode -1)
 (toggle-frame-maximized)
+(setq backup-directory-alist `(("." . "~/.saves")))
 
-(load-theme 'doom-moonlight t)
-
-(set-face-attribute 'default nil
-		    :font "Fira Code"
-		    :weight 'semibold
-		    :height 115)
+(if (display-graphic-p)
+    (progn
+      (load-theme 'doom-rouge t)  
+      (set-face-attribute 'default nil
+		    :font "Operator Mono"
+		    :weight 'regular
+		    :height 125))
+  (load-theme 'modus-vivendi t))
 
 (use-package company
   :diminish
@@ -436,8 +441,8 @@ locate PACKAGE."
         treemacs-missing-project-action  'remove
         treemacs-sorting                 'alphabetic-asc
         treemacs-follow-after-init       t
-        treemacs-width                   35
-        treemacs-no-png-images           nil)
+        treemacs-width                   35)
+  
   :config
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
@@ -469,10 +474,12 @@ locate PACKAGE."
     :config (treemacs-set-scope-type 'Perspectives))
 
   (use-package treemacs-all-the-icons
-    :init				    
-    (require 'treemacs-all-the-icons)
-    (treemacs-load-theme "all-the-icons"))
-  )
+    :init
+    (if (display-graphic-p)
+	(progn
+	  (require 'treemacs-all-the-icons)
+	  (treemacs-load-theme "all-the-icons"))
+      (setq treemacs-no-png-images t))))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -489,6 +496,12 @@ locate PACKAGE."
   (use-package ocamlformat
     :hook (tuareg-mode . ocamlformat-before-save))
 
+  (use-package dune
+    :config
+    (use-package dune-format))
+
+  (use-package opam-switch-mode)
+  
   (use-package ocp-indent
     :hook (tuareg-mode . ocp-indent-mode)))
 
@@ -554,12 +567,12 @@ locate PACKAGE."
      (access-label . -1)
      (label . 2)))
  '(custom-safe-themes
-   '("db5b906ccc66db25ccd23fc531a213a1afb500d717125d526d8ff67df768f2fc" "98fada4d13bcf1ff3a50fceb3ab1fea8619564bb01a8f744e5d22e8210bfff7b" "5b9a45080feaedc7820894ebbfe4f8251e13b66654ac4394cb416fef9fdca789" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
+   '("545ab1a535c913c9214fe5b883046f02982c508815612234140240c129682a68" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "db5b906ccc66db25ccd23fc531a213a1afb500d717125d526d8ff67df768f2fc" "98fada4d13bcf1ff3a50fceb3ab1fea8619564bb01a8f744e5d22e8210bfff7b" "5b9a45080feaedc7820894ebbfe4f8251e13b66654ac4394cb416fef9fdca789" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
  '(package-selected-packages
-   '(ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
+   '(dune-format opam-switch-mode ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cfrs-border-color ((t (:background "#7a88cf")))))
+ '(cfrs-border-color ((t (:background "#7a88cf"))) t))
