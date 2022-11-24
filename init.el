@@ -45,7 +45,8 @@ locate PACKAGE."
 (require-package 'treemacs-projectile)
 (require-package 'treemacs-magit)
 (require-package 'treemacs-all-the-icons)
-(require-package 'powerline)
+(require-package 'hide-mode-line)
+(require-package 'nano-modeline)
 (require-package 'doom-themes)
 (require-package 'window-numbering)
 (require-package 'rainbow-delimiters)
@@ -489,27 +490,18 @@ locate PACKAGE."
   :hook (racket-mode . racket-xp-mode))
 
 (use-package tuareg
-  :config
-  (use-package merlin
-    :hook (tuareg-mode . merlin-mode))
-
-  (use-package ocamlformat
-    :hook (tuareg-mode . ocamlformat-before-save))
-
-  (use-package dune
-    :config
-    (use-package dune-format))
-
-  (use-package opam-switch-mode)
-  
-  (use-package ocp-indent
-    :hook (tuareg-mode . ocp-indent-mode)))
+  :hook
+  ((tuareg-mode . merlin-mode)
+   (tuareg-mode . ocamlformat-before-save)
+   (tuareg-mode . dune-format)
+   (tuareg-mode . opam-switch-mode)
+   (tuareg-mode . ocp-indent-mode)))
 
 (use-package window-numbering
   :hook (after-init . window-numbering-mode))
 
-(use-package powerline
-  :hook (after-init . powerline-nano-theme))
+(use-package nano-modeline
+  :hook (after-init . nano-modeline-mode))
 
 (use-package display-line-numbers
   :ensure nil
@@ -551,6 +543,8 @@ locate PACKAGE."
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
+
+(global-hide-mode-line-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
