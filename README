@@ -1,10 +1,10 @@
-+----------+
-| .emacs.d |
-+----------+
++-------------------------------------+
+| .emacs.d -> GNU Emacs configuration |
++-------------------------------------+
 
-	My GNU Emacs configuration.
+	A lightweight, fast, simple and crude configuration for GNU Emacs
 
-	For OCaml & Racket
+	Use for OCaml & Racket.
 
 	Copyright (c) 2022 Muqiu Han
 

@@ -76,9 +76,12 @@ locate PACKAGE."
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-(fringe-mode -1)
-(scroll-bar-mode -1)
-(toggle-frame-maximized)
+
+(when (display-graphic-p)
+  (fringe-mode -1)
+  (scroll-bar-mode -1)
+  (toggle-frame-maximized))
+
 (setq backup-directory-alist `(("." . "~/.saves")))
 
 (if (display-graphic-p)
