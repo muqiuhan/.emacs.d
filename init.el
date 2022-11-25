@@ -1,3 +1,26 @@
+;; -*- lexical-binding: t; -*-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Copyright (c) 2022 Muqiu Han							  ;;
+;; 										  ;;
+;; Permission is hereby granted, free of charge, to any person obtaining a copy	  ;;
+;; of this software and associated documentation files (the "Software"), to deal  ;;
+;; in the Software without restriction, including without limitation the rights	  ;;
+;; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell	  ;;
+;; copies of the Software, and to permit persons to whom the Software is	  ;;
+;; furnished to do so, subject to the following conditions:			  ;;
+;; 										  ;;
+;; The above copyright notice and this permission notice shall be included in all ;;
+;; copies or substantial portions of the Software.				  ;;
+;; 										  ;;
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,		  ;;
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF		  ;;
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.	  ;;
+;; IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,	  ;;
+;; DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR	  ;;
+;; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE  ;;
+;; OR OTHER DEALINGS IN THE SOFTWARE.						  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'package)
 (require 'cl-lib)
 
@@ -88,9 +111,9 @@ locate PACKAGE."
     (progn
       (load-theme 'doom-rouge t)  
       (set-face-attribute 'default nil
-		    :font "Operator Mono"
-		    :weight 'regular
-		    :height 125))
+			  :font "Operator Mono"
+			  :weight 'regular
+			  :height 125))
   (load-theme 'modus-vivendi t))
 
 (use-package company
@@ -493,12 +516,53 @@ locate PACKAGE."
   :hook (racket-mode . racket-xp-mode))
 
 (use-package tuareg
-  :hook
-  ((tuareg-mode . merlin-mode)
-   (tuareg-mode . ocamlformat-before-save)
-   (tuareg-mode . dune-format)
-   (tuareg-mode . opam-switch-mode)
-   (tuareg-mode . ocp-indent-mode)))
+  :config
+  (require 'tuareg)
+  (setq tuareg-indent-align-with-first-arg nil)
+
+  (add-hook
+   'tuareg-mode-hook
+   (lambda()
+     (setq show-trailing-whitespace t
+	   tuareg-match-patterns-aligned t
+	   indicate-empty-lines t)
+
+     ;; Enable the representation of some keywords using fonts
+     (when (functionp 'prettify-symbols-mode)
+       (prettify-symbols-mode))
+
+     (when (functionp 'flyspell-prog-mode)
+       (flyspell-prog-mode))
+     
+     (electric-indent-mode 0)))
+
+
+  ;; Easy keys to navigate errors after compilation:
+  (define-key tuareg-mode-map [(f12)] #'next-error)
+  (define-key tuareg-mode-map [(shift f12)] #'previous-error)
+
+
+  ;; Use Merlin if available
+  (when (require 'merlin nil t)
+    (setq merlin-command 'opam)
+    (add-to-list 'auto-mode-alist '("/\\.merlin\\'" . conf-mode))
+
+    (when (functionp 'merlin-document)
+      (define-key tuareg-mode-map (kbd "\C-c\C-h") #'merlin-document))
+
+    ;; Run Merlin if a .merlin file in the parent dirs is detected
+    (add-hook 'tuareg-mode-hook
+              (lambda()
+		(let ((fn (buffer-file-name)))
+                  (if (and fn (locate-dominating-file fn ".merlin"))
+                      (merlin-mode))))))
+
+  ;; Choose modes for related config. files
+  (setq auto-mode-alist
+	(append '(("_oasis\\'" . conf-mode)
+		  ("_tags\\'" . conf-mode)
+		  ("_log\\'" . conf-mode))
+		auto-mode-alist)))
 
 (use-package window-numbering
   :hook (after-init . window-numbering-mode))
@@ -573,3 +637,6 @@ locate PACKAGE."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cfrs-border-color ((t (:background "#7a88cf"))) t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; init.el ends here.
