@@ -33,73 +33,8 @@
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
 
-(defun require-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-	(if (boundp 'package-selected-packages)
-            ;; Record this as a package the user installed explicitly
-            (package-install package nil)
-          (package-install package))
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
-
-(defun maybe-require-package (package &optional min-version no-refresh)
-  "Try to install PACKAGE, and return non-nil if successful.
-In the event of failure, return nil and print a warning message.
-Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
-available package lists will not be re-downloaded in order to
-locate PACKAGE."
-  (condition-case err
-      (require-package package min-version no-refresh)
-    (error
-     (message "Couldn't install optional package `%s': %S" package err)
-     nil)))
-
-(require-package 'use-package)
-(require-package 'magit)
-(require-package 'prescient)
-(require-package 'treemacs-persp)
-(require-package 'ligature)
-(require-package 'xclip)
-(require-package 'treemacs-projectile)
-(require-package 'treemacs-magit)
-(require-package 'treemacs-all-the-icons)
-(require-package 'hide-mode-line)
-(require-package 'nano-modeline)
-(require-package 'doom-themes)
-(require-package 'window-numbering)
-(require-package 'rainbow-delimiters)
-(require-package 'racket-mode)
-(require-package 'merlin)
-(require-package 'ocamlformat)
-(require-package 'dune)
-(require-package 'ocp-indent)
-(require-package 'dune-format)
-(require-package 'opam-switch-mode)
-(require-package 'tuareg)
-(require-package 'yasnippet)
-(require-package 'markdown-mode)
-(require-package 'lua-mode)
-(require-package 'rustic)
-(require-package 'company)
-(require-package 'prescient)
-(require-package 'company-prescient)
-(require-package 'company-box)
-
 (unless (display-graphic-p)
   (xclip-mode t))
-
-(defun icon-displayable-p ()
-  "Return non-nil if icons are displayable."
-  (and t
-       (or (display-graphic-p) (daemonp))
-       (or (featurep 'all-the-icons)
-           (require 'all-the-icons nil t))))
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -416,38 +351,7 @@ locate PACKAGE."
                          (t y))))
           (set-frame-position frame (max x 0) (max y 0))
           (set-frame-size frame text-width text-height t)))
-      (advice-add #'company-box-doc--set-frame-position :override #'my-company-box-doc--set-frame-position)
-
-      (when (icon-displayable-p)
-        (setq company-box-icons-all-the-icons
-              `((Unknown       . ,(all-the-icons-material "find_in_page" :height 1.0 :v-adjust -0.2))
-                (Text          . ,(all-the-icons-faicon "text-width" :height 1.0 :v-adjust -0.02))
-                (Method        . ,(all-the-icons-faicon "cube" :height 1.0 :v-adjust -0.02 :face 'all-the-icons-purple))
-                (Function      . ,(all-the-icons-faicon "cube" :height 1.0 :v-adjust -0.02 :face 'all-the-icons-purple))
-                (Constructor   . ,(all-the-icons-faicon "cube" :height 1.0 :v-adjust -0.02 :face 'all-the-icons-purple))
-                (Field         . ,(all-the-icons-octicon "tag" :height 1.1 :v-adjust 0 :face 'all-the-icons-lblue))
-                (Variable      . ,(all-the-icons-octicon "tag" :height 1.1 :v-adjust 0 :face 'all-the-icons-lblue))
-                (Class         . ,(all-the-icons-material "settings_input_component" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-orange))
-                (Interface     . ,(all-the-icons-material "share" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-lblue))
-                (Module        . ,(all-the-icons-material "view_module" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-lblue))
-                (Property      . ,(all-the-icons-faicon "wrench" :height 1.0 :v-adjust -0.02))
-                (Unit          . ,(all-the-icons-material "settings_system_daydream" :height 1.0 :v-adjust -0.2))
-                (Value         . ,(all-the-icons-material "format_align_right" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-lblue))
-                (Enum          . ,(all-the-icons-material "storage" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-orange))
-                (Keyword       . ,(all-the-icons-material "filter_center_focus" :height 1.0 :v-adjust -0.2))
-                (Snippet       . ,(all-the-icons-material "format_align_center" :height 1.0 :v-adjust -0.2))
-                (Color         . ,(all-the-icons-material "palette" :height 1.0 :v-adjust -0.2))
-                (File          . ,(all-the-icons-faicon "file-o" :height 1.0 :v-adjust -0.02))
-                (Reference     . ,(all-the-icons-material "collections_bookmark" :height 1.0 :v-adjust -0.2))
-                (Folder        . ,(all-the-icons-faicon "folder-open" :height 1.0 :v-adjust -0.02))
-                (EnumMember    . ,(all-the-icons-material "format_align_right" :height 1.0 :v-adjust -0.2))
-                (Constant      . ,(all-the-icons-faicon "square-o" :height 1.0 :v-adjust -0.1))
-                (Struct        . ,(all-the-icons-material "settings_input_component" :height 1.0 :v-adjust -0.2 :face 'all-the-icons-orange))
-                (Event         . ,(all-the-icons-octicon "zap" :height 1.0 :v-adjust 0 :face 'all-the-icons-orange))
-                (Operator      . ,(all-the-icons-material "control_point" :height 1.0 :v-adjust -0.2))
-                (TypeParameter . ,(all-the-icons-faicon "arrows" :height 1.0 :v-adjust -0.02))
-                (Template      . ,(all-the-icons-material "format_align_left" :height 1.0 :v-adjust -0.2)))
-              company-box-icons-alist 'company-box-icons-all-the-icons)))))
+      (advice-add #'company-box-doc--set-frame-position :override #'my-company-box-doc--set-frame-position))))
 
 
 (use-package treemacs
@@ -502,174 +406,50 @@ locate PACKAGE."
     :after persp-mode
     :demand t
     :functions treemacs-set-scope-type
-    :config (treemacs-set-scope-type 'Perspectives))
-
-  (use-package treemacs-all-the-icons
-    :init
-    (if (display-graphic-p)
-	(progn
-	  (require 'treemacs-all-the-icons)
-	  (treemacs-load-theme "all-the-icons"))
-      (setq treemacs-no-png-images t))))
+    :config (treemacs-set-scope-type 'Perspectives)))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package rainbow-identifiers
+  :hook (prog-mode . rainbow-identifiers-mode))
 
 (use-package racket-mode
   :hook (racket-mode . racket-xp-mode))
 
-;; Base configuration for OPAM
+;; Major mode for OCaml programming
+(use-package tuareg
+  :ensure t
+  :mode (("\\.ocamlinit\\'" . tuareg-mode)))
 
-(defun opam-shell-command-to-string (command)
-  "Similar to shell-command-to-string, but returns nil unless the process
-  returned 0, and ignores stderr (shell-command-to-string ignores return value)"
-  (let* ((return-value 0)
-         (return-string
-          (with-output-to-string
-            (setq return-value
-                  (with-current-buffer standard-output
-                    (process-file shell-file-name nil '(t nil) nil
-                                  shell-command-switch command))))))
-    (if (= return-value 0) return-string nil)))
+;; Major mode for editing Dune project files
+(use-package dune
+  :ensure t)
 
-(defun opam-update-env (switch)
-  "Update the environment to follow current OPAM switch configuration"
-  (interactive
-   (list
-    (let ((default
-            (car (split-string (opam-shell-command-to-string "opam switch show --safe")))))
-      (completing-read
-       (concat "opam switch (" default "): ")
-       (split-string (opam-shell-command-to-string "opam switch list -s --safe") "\n")
-       nil t nil nil default))))
-  (let* ((switch-arg (if (= 0 (length switch)) "" (concat "--switch " switch)))
-         (command (concat "opam config env --safe --sexp " switch-arg))
-         (env (opam-shell-command-to-string command)))
-    (when (and env (not (string= env "")))
-      (dolist (var (car (read-from-string env)))
-        (setenv (car var) (cadr var))
-        (when (string= (car var) "PATH")
-          (setq exec-path (split-string (cadr var) path-separator)))))))
+;; Merlin provides advanced IDE features
+(use-package merlin
+  :ensure t
+  :config
+  (add-hook 'tuareg-mode-hook #'merlin-mode)
+  (add-hook 'merlin-mode-hook #'company-mode)
+  ;; we're using flycheck instead
+  (setq merlin-error-after-save nil))
 
-(opam-update-env nil)
+(use-package merlin-eldoc
+  :ensure t
+  :hook ((tuareg-mode) . merlin-eldoc-setup))
 
-(defvar opam-share
-  (let ((reply (opam-shell-command-to-string "opam config var share --safe")))
-    (when reply (substring reply 0 -1))))
+;; This uses Merlin internally
+(use-package flycheck-ocaml
+  :ensure t
+  :config
+  (flycheck-ocaml-setup))
 
-(add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
-;; OPAM-installed tools automated detection and initialisation
-
-(defun opam-setup-tuareg ()
-  (add-to-list 'load-path (concat opam-share "/tuareg") t)
-  (load "tuareg-site-file"))
-
-(defun opam-setup-add-ocaml-hook (h)
-  (add-hook 'tuareg-mode-hook h t)
-  (add-hook 'caml-mode-hook h t))
-
-(defun opam-setup-complete ()
-  (if (require 'company nil t)
-    (opam-setup-add-ocaml-hook
-      (lambda ()
-         (company-mode)
-         (defalias 'auto-complete 'company-complete)))
-    (require 'auto-complete nil t)))
-
-(defun opam-setup-ocp-indent ()
-  (opam-setup-complete)
-  (autoload 'ocp-setup-indent "ocp-indent" "Improved indentation for Tuareg mode")
-  (autoload 'ocp-indent-caml-mode-setup "ocp-indent" "Improved indentation for Caml mode")
-  (add-hook 'tuareg-mode-hook 'ocp-setup-indent t)
-  (add-hook 'caml-mode-hook 'ocp-indent-caml-mode-setup  t))
-
-(defun opam-setup-ocp-index ()
-  (autoload 'ocp-index-mode "ocp-index" "OCaml code browsing, documentation and completion based on build artefacts")
-  (opam-setup-add-ocaml-hook 'ocp-index-mode))
-
-(defun opam-setup-merlin ()
-  (opam-setup-complete)
-  (require 'merlin)
-  (opam-setup-add-ocaml-hook 'merlin-mode)
-
-  (defcustom ocp-index-use-auto-complete nil
-    "Use auto-complete with ocp-index (disabled by default by opam-user-setup because merlin is in use)"
-    :group 'ocp_index)
-  (defcustom merlin-ac-setup 'easy
-    "Use auto-complete with merlin (enabled by default by opam-user-setup)"
-    :group 'merlin-ac)
-
-  ;; So you can do it on a mac, where `C-<up>` and `C-<down>` are used
-  ;; by spaces.
-  (define-key merlin-mode-map
-    (kbd "C-c <up>") 'merlin-type-enclosing-go-up)
-  (define-key merlin-mode-map
-    (kbd "C-c <down>") 'merlin-type-enclosing-go-down)
-  (set-face-background 'merlin-type-face "skyblue"))
-
-(defun opam-setup-utop ()
-  (autoload 'utop "utop" "Toplevel for OCaml" t)
-  (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-  (add-hook 'tuareg-mode-hook 'utop-minor-mode))
-
-(defvar opam-tools
-  '(("tuareg" . opam-setup-tuareg)
-    ("ocp-indent" . opam-setup-ocp-indent)
-    ("ocp-index" . opam-setup-ocp-index)
-    ("merlin" . opam-setup-merlin)
-    ("utop" . opam-setup-utop)))
-
-(defun opam-detect-installed-tools ()
-  (let*
-      ((command "opam list --installed --short --safe --color=never")
-       (names (mapcar 'car opam-tools))
-       (command-string (mapconcat 'identity (cons command names) " "))
-       (reply (opam-shell-command-to-string command-string)))
-    (when reply (split-string reply))))
-
-(defvar opam-tools-installed (opam-detect-installed-tools))
-
-(defun opam-auto-tools-setup ()
-  (interactive)
-  (dolist (tool opam-tools)
-    (when (member (car tool) opam-tools-installed)
-     (funcall (symbol-function (cdr tool))))))
-
-(opam-auto-tools-setup)
-;; ## end of OPAM user-setup addition for emacs / base ## keep this line
-;; ## added by OPAM user-setup for emacs / tuareg ## 01dc60017b240eec63ed4707e2fe9ad2 ## you can edit, but keep this line
-;; Set to autoload tuareg from its original switch when not found in current
-;; switch (don't load tuareg-site-file as it adds unwanted load-paths)
-(defun opam-tuareg-autoload (fct file doc args)
-  (load file)
-  (apply fct args))
-
-(when (not (member "tuareg" opam-tools-installed))
-  (defun tuareg-mode (&rest args)
-    (opam-tuareg-autoload 'tuareg-mode "tuareg" "Major mode for editing OCaml code" args))
-  (defun tuareg-run-ocaml (&rest args)
-    (opam-tuareg-autoload 'tuareg-run-ocaml "tuareg" "Run an OCaml toplevel process" args))
-  (defun ocamldebug (&rest args)
-    (opam-tuareg-autoload 'ocamldebug "ocamldebug" "Run the OCaml debugger" args))
-  (defalias 'run-ocaml 'tuareg-run-ocaml)
-  (defalias 'camldebug 'ocamldebug)
-  (add-to-list 'auto-mode-alist '("\\.ml[iylp]?\\'" . tuareg-mode))
-  (add-to-list 'auto-mode-alist '("\\.eliomi?\\'" . tuareg-mode))
-  (add-to-list 'interpreter-mode-alist '("ocamlrun" . tuareg-mode))
-  (add-to-list 'interpreter-mode-alist '("ocaml" . tuareg-mode))
-  (dolist (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmxs" ".cmt" ".cmti" ".cmi" ".annot"))
-    (add-to-list 'completion-ignored-extensions ext)))
-;; ## end of OPAM user-setup addition for emacs / tuareg ## keep this line
-;; ## added by OPAM user-setup for emacs / ocp-indent ## 3928f993c3f59d947e5b38d6d1e4f955 ## you can edit, but keep this line
-;; Load ocp-indent from its original switch when not found in current switch
-(when (not (assoc "ocp-indent" opam-tools-installed))
-  (autoload 'ocp-setup-indent "~/.emacs.d/site-lisp/ocp-indent.el" "Improved indentation for Tuareg mode")
-  (autoload 'ocp-indent-caml-mode-setup "~/.emacs.d/site-lisp/ocp-indent.el" "Improved indentation for Caml mode")
-  (add-hook 'tuareg-mode-hook 'ocp-setup-indent t)
-  (add-hook 'caml-mode-hook 'ocp-indent-caml-mode-setup t)
-  (setq ocp-indent-path "~/.emacs.d/site-lisp/"))
-;; ## end of OPAM user-setup addition for emacs / ocp-indent ## keep this line
+;; utop configuration
+(use-package utop
+  :ensure t
+  :config
+  (add-hook 'tuareg-mode-hook #'utop-minor-mode))
 
 (use-package window-numbering
   :hook (after-init . window-numbering-mode))
@@ -691,6 +471,30 @@ locate PACKAGE."
 		      :font (face-attribute 'default :font)
 		      :height (face-attribute 'default :height)
 		      :weight (face-attribute 'default :weight)))
+
+(use-package flycheck
+  :diminish
+  :autoload flycheck-redefine-standard-error-levels
+  :hook (after-init . global-flycheck-mode)
+  :init (setq flycheck-global-modes
+              '(not text-mode outline-mode fundamental-mode lisp-interaction-mode
+                    org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
+              flycheck-emacs-lisp-load-path 'inherit
+              flycheck-indication-mode (if (display-graphic-p)
+                                           'right-fringe
+                                         'right-margin)
+              ;; Only check while saving and opening files
+              flycheck-check-syntax-automatically '(save mode-enabled))
+  :config
+  ;; Prettify indication styles
+  (when (fboundp 'define-fringe-bitmap)
+    (define-fringe-bitmap 'flycheck-fringe-bitmap-arrow
+      [16 48 112 240 112 48 16] nil nil 'center))
+  (flycheck-redefine-standard-error-levels "⏴" 'flycheck-fringe-bitmap-arrow)
+
+  ;; Display Flycheck errors
+  (use-package flycheck-popup-tip
+    :hook (flycheck-mode . flycheck-popup-tip-mode)))
 
 (use-package ligature
   :load-path "path-to-ligature-repo"
@@ -737,7 +541,7 @@ locate PACKAGE."
  '(custom-safe-themes
    '("545ab1a535c913c9214fe5b883046f02982c508815612234140240c129682a68" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "db5b906ccc66db25ccd23fc531a213a1afb500d717125d526d8ff67df768f2fc" "98fada4d13bcf1ff3a50fceb3ab1fea8619564bb01a8f744e5d22e8210bfff7b" "5b9a45080feaedc7820894ebbfe4f8251e13b66654ac4394cb416fef9fdca789" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
  '(package-selected-packages
-   '(xclip dune-format opam-switch-mode ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
+   '(flycheck-ocaml rainbow-identifiers flycheck xclip dune-format opam-switch-mode ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
