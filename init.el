@@ -1,25 +1,31 @@
-;; -*- lexical-binding: t; -*-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Copyright (c) 2022 Muqiu Han							  ;;
-;; 										  ;;
-;; Permission is hereby granted, free of charge, to any person obtaining a copy	  ;;
-;; of this software and associated documentation files (the "Software"), to deal  ;;
-;; in the Software without restriction, including without limitation the rights	  ;;
-;; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell	  ;;
-;; copies of the Software, and to permit persons to whom the Software is	  ;;
-;; furnished to do so, subject to the following conditions:			  ;;
-;; 										  ;;
-;; The above copyright notice and this permission notice shall be included in all ;;
-;; copies or substantial portions of the Software.				  ;;
-;; 										  ;;
-;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,		  ;;
-;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF		  ;;
-;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.	  ;;
-;; IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,	  ;;
-;; DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR	  ;;
-;; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE  ;;
-;; OR OTHER DEALINGS IN THE SOFTWARE.						  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init.el --- A lightweight, fast, simple and crude configuration -*- lexical-binding: t no-byte-compile: t -*-
+
+;; Copyright (c) 2022 Muqiu Han
+
+;; Permission is hereby granted, free of charge, to any person obtaining a copy
+;; of this software and associated documentation files (the "Software"), to deal
+;; in the Software without restriction, including without limitation the rights
+;; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+;; copies of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+
+;; The above copyright notice and this permission notice shall be included in all
+;; copies or substantial portions of the Software.
+
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+;; IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+;; DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+;; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+;; OR OTHER DEALINGS IN THE SOFTWARE.
+
+;;; Commentary:
+;;
+;; A lightweight, fast, simple and crude configuration for GNU Emacs (Use for OCaml & Racket develop).
+;;
+
+;;; Code:
 
 (require 'package)
 (require 'cl-lib)
@@ -48,7 +54,7 @@
 
 (if (display-graphic-p)
     (progn
-      (load-theme 'doom-rouge t)  
+      (load-theme 'doom-rouge t)
       (set-face-attribute 'default nil
 			  :font "Operator Mono"
 			  :weight 'regular
@@ -462,15 +468,8 @@
   :hook ((prog-mode yaml-mode conf-mode) . display-line-numbers-mode)
   :init (setq display-line-numbers-width-start t)
   :config
-  (set-face-attribute 'line-number nil
-		      :font (face-attribute 'default :font)
-		      :height (face-attribute 'default :height)
-		      :weight (face-attribute 'default :weight))
-  
-  (set-face-attribute 'line-number-current-line nil
-		      :font (face-attribute 'default :font)
-		      :height (face-attribute 'default :height)
-		      :weight (face-attribute 'default :weight)))
+  (set-face-attribute 'line-number nil :background "#005")
+  (set-face-attribute 'line-number-current-line nil :background "#009"))
 
 (use-package flycheck
   :diminish
@@ -496,58 +495,10 @@
   (use-package flycheck-popup-tip
     :hook (flycheck-mode . flycheck-popup-tip-mode)))
 
-(use-package ligature
-  :load-path "path-to-ligature-repo"
-  :config
-  ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                       "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+(use-package hide-mode-line
+  :hook (after-init . global-hide-mode-line-mode))
 
-(global-hide-mode-line-mode)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(c-offsets-alist
-   '((defun-open . 2)
-     (defun-close . 0)
-     (class-open . 2)
-     (class-close . 2)
-     (inline-open . 2)
-     (inline-close . 0)
-     (access-label . -1)
-     (label . 2)))
- '(custom-safe-themes
-   '("545ab1a535c913c9214fe5b883046f02982c508815612234140240c129682a68" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "db5b906ccc66db25ccd23fc531a213a1afb500d717125d526d8ff67df768f2fc" "98fada4d13bcf1ff3a50fceb3ab1fea8619564bb01a8f744e5d22e8210bfff7b" "5b9a45080feaedc7820894ebbfe4f8251e13b66654ac4394cb416fef9fdca789" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
- '(package-selected-packages
-   '(flycheck-ocaml rainbow-identifiers flycheck xclip dune-format opam-switch-mode ligature yasnippet window-numbering use-package tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-all-the-icons rustic rainbow-delimiters racket-mode powerline ocp-indent ocamlformat nano-theme nano-modeline modern-cpp-font-lock merlin lua-mode lsp-mode hide-mode-line evil dune doom-themes company-prescient company-box)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cfrs-border-color ((t (:background "#7a88cf"))) t))
+(provide 'init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; init.el ends here.
+;;; init.el ends here.
