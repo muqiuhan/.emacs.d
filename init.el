@@ -54,9 +54,9 @@
 
 (if (display-graphic-p)
     (progn
-      (load-theme 'doom-rouge t)
+      (load-theme 'doom-flatwhite t)
       (set-face-attribute 'default nil
-			  :font "Operator Mono"
+			  :font "Dank Mono"
 			  :weight 'regular
 			  :height 125))
   (load-theme 'modus-vivendi t))
@@ -468,8 +468,12 @@
   :hook ((prog-mode yaml-mode conf-mode) . display-line-numbers-mode)
   :init (setq display-line-numbers-width-start t)
   :config
-  (set-face-attribute 'line-number nil :background "#005")
-  (set-face-attribute 'line-number-current-line nil :background "#009"))
+
+  ;; Happy Hacking~
+  (when (and (string= "#000000" (face-attribute 'default :background))
+	     (not (display-graphic-p)))
+    (set-face-attribute 'line-number nil :background "#005")
+    (set-face-attribute 'line-number-current-line nil :background "#009")))
 
 (use-package flycheck
   :diminish
@@ -502,3 +506,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("4ff1c4d05adad3de88da16bd2e857f8374f26f9063b2d77d38d14686e3868d8d" default))
+ '(package-selected-packages
+   '(treemacs-all-the-icons ligature rustic yasnippet doom-themes company-prescient use-package highlight-indent-guides window-numbering flycheck-ocaml treemacs-projectile opam-switch-mode nano-modeline dune-format treemacs-persp hide-mode-line ocp-indent ocamlformat racket-mode company-box utop dune xclip flycheck-popup-tip powerline treemacs-magit lua-mode merlin-eldoc rainbow-identifiers rainbow-delimiters)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
