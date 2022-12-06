@@ -52,14 +52,13 @@
 
 (setq backup-directory-alist `(("." . "~/.saves")))
 
-(if (display-graphic-p)
-    (progn
-      (load-theme 'doom-gruvbox t)
-      (set-face-attribute 'default nil
-			  :font "Dank Mono"
-			  :weight 'regular
-			  :height 125))
-  (load-theme 'modus-vivendi t))
+(when (display-graphic-p)
+  (set-face-attribute 'default nil
+		      :font "Dank Mono"
+		      :weight 'regular
+		      :height 125))
+
+(load-theme 'doom-gruvbox t)
 
 (use-package company
   :diminish
@@ -505,7 +504,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("4ff1c4d05adad3de88da16bd2e857f8374f26f9063b2d77d38d14686e3868d8d" default))
+   '("e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "4ff1c4d05adad3de88da16bd2e857f8374f26f9063b2d77d38d14686e3868d8d" default))
  '(package-selected-packages
    '(treemacs-all-the-icons ligature rustic yasnippet doom-themes company-prescient use-package highlight-indent-guides window-numbering flycheck-ocaml treemacs-projectile opam-switch-mode nano-modeline dune-format treemacs-persp hide-mode-line ocp-indent ocamlformat racket-mode company-box utop dune xclip flycheck-popup-tip powerline treemacs-magit lua-mode merlin-eldoc rainbow-identifiers rainbow-delimiters)))
 (custom-set-faces
