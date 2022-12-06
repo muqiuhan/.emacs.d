@@ -54,7 +54,7 @@
 
 (if (display-graphic-p)
     (progn
-      (load-theme 'doom-flatwhite t)
+      (load-theme 'doom-gruvbox t)
       (set-face-attribute 'default nil
 			  :font "Dank Mono"
 			  :weight 'regular
@@ -466,14 +466,7 @@
 (use-package display-line-numbers
   :ensure nil
   :hook ((prog-mode yaml-mode conf-mode) . display-line-numbers-mode)
-  :init (setq display-line-numbers-width-start t)
-  :config
-
-  ;; Happy Hacking~
-  (when (and (string= "#000000" (face-attribute 'default :background))
-	     (not (display-graphic-p)))
-    (set-face-attribute 'line-number nil :background "#005")
-    (set-face-attribute 'line-number-current-line nil :background "#009")))
+  :init (setq display-line-numbers-width-start t))
 
 (use-package flycheck
   :diminish
