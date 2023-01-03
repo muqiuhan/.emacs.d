@@ -27,6 +27,80 @@
 
 ;;; Code:
 
+;; Package config
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(package-initialize)
+
+(package-install 'treemacs)
+(package-install 'xclip)
+(package-install 'nano-modeline)
+(package-install 'company)
+(package-install 'racket-mode)
+(package-install 'hide-mode-line)
+(package-install 'tuareg)
+(package-install 'merlin)
+(package-install 'merlin-eldoc)
+(package-install 'dune)
+(package-install 'ocamlformat)
+(package-install 'ocp-indent)
+
+;; Close the menu bar
+(menu-bar-mode -1)
+
+;; Company
+(require 'company)
+(global-company-mode t)
+
+;; Line number
+(require 'display-line-numbers)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(set-face-attribute 'line-number-current-line nil :background "#00f" :foreground "#ccc")
+(set-face-attribute 'line-number nil :background "#005" :foreground "#ccc")
+
+;; Xclip
+(require 'xclip)
+(xclip-mode)
+
+;; Treemacs
+(require 'treemacs)
+(setq treemacs-width 50
+      treemacs-indentation 2
+      treemacs-icon-tag-leaf "0")
+
+(global-set-key (kbd "C-x t t") 'treemacs)
+(global-set-key (kbd "M-0") 'treemacs-select-window)
+
+;; Themes
+(load-theme 'modus-vivendi t)
+(set-face-attribute 'default nil :foreground "#eee")
+
+;; Modeline
+(require 'hide-mode-line)
+(require 'nano-modeline)
+(global-hide-mode-line-mode t)
+(nano-modeline)
+
+;; Set the unified storage path for backup files
+(setq backup-directory-alist `(("." . "~/.saves")))
+
+;; Racket
+(require 'racket-mode)
+(add-hook 'racket-mode racket-xp-mode)
+
+;; OCaml
+;; tuareg-mode
+(require 'tuareg)
+(setq auto-mode-alist (append '(("\\.ml[ily]?$" . tuareg-mode)) auto-mode-alist))
+
+;; ocp-indent
+(require 'ocp-indent)
+
+;; merlin
+(require 'merlin)
+(setq merlin-command "~/.opam/5.0.0/bin/merlin")
+(add-hook 'tuareg-mode-hook 'merlin-mode)
+
 (provide 'init)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
