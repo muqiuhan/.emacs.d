@@ -2,7 +2,7 @@
 | .emacs.d |
 +----------+
 
-  A lightweight, fast, simple and crude configuration for GNU Emacs.
+  A lightweight, fast, simple and crude configuration for GNU Emacs<master> (For OCaml & Racket).
 
   Copyright (c) 2022 Muqiu Han
   
@@ -24,17 +24,15 @@
   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
   OR OTHER DEALINGS IN THE SOFTWARE.
 
-O Build configuration
-    ./configure --without-x
-    		--without-xwidgets
-		--without-x-toolkit
-		--without-native-compilation
+O WHY THE MASTER BRANCH?
+  I am not a radical person, but since this configuration is very, very simple, there are almost no bugs in the configuration itself, and it runs under the terminal, so there will be no problem with the emacs master version
+
+O BUILD CONFIGURATION
+  ./configure --without-x --without-xwidgets --with-x-toolkit=no --with-native-compilation=no --without-all
 
 
 O WHY SINGLE FILE?
-    This configuration file is very simple and easy to distribute and carry.
-    Of course, there is nothing wrong with you thinking that it is original.
+    This configuration file is very simple and easy to distribute and carry. Of course, there is nothing wrong with you thinking that it is original.
 
 O WHY NOT GUI?
-    The GUI is of course very good, but for me the terminal is more immersive and more convenient.
-    Generally speaking, it is a matter of personal habits.
+    The GUI is of course very good, but for me the terminal is more immersive and more convenient. Generally speaking, it is a matter of personal habits.
