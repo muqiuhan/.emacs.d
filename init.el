@@ -36,6 +36,8 @@
 (package-install 'xclip)
 (package-install 'nano-modeline)
 (package-install 'company)
+(package-install 'markdown-mode)
+(package-install 'writeroom-mode)
 (package-install 'racket-mode)
 (package-install 'hide-mode-line)
 (package-install 'tuareg)
@@ -44,6 +46,7 @@
 (package-install 'dune)
 (package-install 'ocamlformat)
 (package-install 'ocp-indent)
+(package-install 'magit)
 
 ;; Close the menu bar
 (menu-bar-mode -1)
@@ -98,19 +101,32 @@
 
 ;; merlin
 (require 'merlin)
-(setq merlin-command "~/.opam/5.0.0/bin/merlin")
+(setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
 (add-hook 'tuareg-mode-hook 'merlin-mode)
+
+;; Markdown
+(require 'markdown-mode)
+(require 'writeroom-mode)
+(add-hook 'markdown-mode-hook 'writeroom-mode)
+(setq writeroom-width (floor (/ (window-width) 1.5)))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(c-offsets-alist
+   '((defun-open . 2)
+     (defun-close . 0)
+     (class-open . 2)
+     (class-close . 2)
+     (access-label . -1)))
  '(package-selected-packages
-   '(merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
+   '(magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
