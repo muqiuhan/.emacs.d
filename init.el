@@ -48,6 +48,9 @@
 (package-install 'ocp-indent)
 (package-install 'magit)
 (package-install 'rust-mode)
+(package-install 'toml)
+(package-install 'cargo)
+(package-install 'cargo-mode)
 (package-install 'racer)
 (package-install 'beacon)
 (package-install 'goto-line-preview)
@@ -74,7 +77,7 @@
 
 ;; treemacs
 (require 'treemacs)
-(setq treemacs-width 50
+(setq treemacs-width 35
       treemacs-indentation 2
       treemacs-icon-tag-leaf "0")
 
@@ -144,7 +147,7 @@
      (class-close . 2)
      (access-label . -1)))
  '(package-selected-packages
-   '(goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
+   '(which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
