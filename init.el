@@ -47,6 +47,8 @@
 (package-install 'ocamlformat)
 (package-install 'ocp-indent)
 (package-install 'magit)
+(package-install 'rust-mode)
+(package-install 'racer)
 
 ;; Close the menu bar
 (menu-bar-mode -1)
@@ -104,6 +106,15 @@
 (setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 
+;; Rust
+(require 'rust-mode)
+(require 'racer)
+(setq racer-cmd "~/Workspace/racer/target/release/racer")
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+
 ;; Markdown
 (require 'markdown-mode)
 (require 'writeroom-mode)
@@ -126,7 +137,7 @@
      (class-close . 2)
      (access-label . -1)))
  '(package-selected-packages
-   '(magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
+   '(beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
