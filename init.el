@@ -54,9 +54,13 @@
 (package-install 'racer)
 (package-install 'beacon)
 (package-install 'goto-line-preview)
+(package-install 'bbdb)
+(package-install 'bbdb-vcard)
+(package-install 'notmuch)
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1) ;; close menubar
+(global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (load-theme 'modus-vivendi t) ;; themes
 (set-face-attribute 'default nil :foreground "#eee") ;; make the text less dazzling
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
@@ -100,11 +104,15 @@
 (require 'tuareg)
 (require 'ocp-indent)
 (require 'merlin)
+(require 'ocamlformat)
 
 (setq auto-mode-alist (append '(("\\.ml[ily]?$" . tuareg-mode)) auto-mode-alist)
       merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
 
 (add-hook 'tuareg-mode-hook 'merlin-mode)
+
+;; Quickly format
+(define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat)
 
 ;; Rust
 (require 'rust-mode)
@@ -131,6 +139,20 @@
 (require 'beacon)
 (beacon-mode)
 
+;; Mail
+(require 'bbdb)
+(bbdb-initialize 'message)
+(bbdb-insinuate-message)
+(add-hook 'message-setup-hook 'bbdb-insinuate-mail)
+
+;; Set up notmuch
+(require 'notmuch)
+
+;; set up mail sending using sendmail
+(setq send-mail-function (quote sendmail-send-it))
+(setq user-mail-address "muqiu-han@outlook.com"
+      user-full-name "Muqiu Han")
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
@@ -147,7 +169,7 @@
      (class-close . 2)
      (access-label . -1)))
  '(package-selected-packages
-   '(which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
+   '(cmake-font-lock cmake-mode which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
