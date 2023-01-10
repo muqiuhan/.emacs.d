@@ -136,8 +136,12 @@
 ;; Markdown
 (require 'markdown-mode)
 (require 'writeroom-mode)
+
 (add-hook 'markdown-mode-hook 'writeroom-mode)
 (setq writeroom-width (floor (/ (window-width) 1.5)))
+
+;; Add README support
+(setq auto-mode-alist (append '(("README" . writeroom-mode)) auto-mode-alist))
 
 ;; Goto line preview
 (require 'goto-line-preview)
