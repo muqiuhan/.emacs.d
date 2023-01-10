@@ -55,6 +55,7 @@
 (package-install 'racer)
 (package-install 'beacon)
 (package-install 'goto-line-preview)
+(package-install 'youdao-dictionary)
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1) ;; close menubar
@@ -197,6 +198,12 @@
 	   gnus-topic-topology '(("Gnus" visible))
 	   gnus-topic-alist '(("Gnus")))))
 
+;; Translate
+(require 'youdao-dictionary)
+
+(global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+(global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point)
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
@@ -214,7 +221,7 @@
      (access-label . -1)))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(rust-mode merlin markdown-mode treemacs xclip nano-modeline company writeroom-mode racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti)))
+   '(youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company writeroom-mode racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
