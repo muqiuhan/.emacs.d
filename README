@@ -28,7 +28,11 @@ O WHY THE MASTER BRANCH?
   I am not a radical person, but since this configuration is very, very simple, there are almost no bugs in the configuration itself, and it runs under the terminal, so there will be no problem with the emacs master version
 
 O BUILD CONFIGURATION
-  ./configure --without-x --without-xwidgets --with-x-toolkit=no --with-native-compilation=no --without-all
+  ./configure --without-x
+              --without-xwidgets
+              --with-x-toolkit=no
+              --with-native-compilation
+              --with-json
 
 
 O WHY SINGLE FILE?
