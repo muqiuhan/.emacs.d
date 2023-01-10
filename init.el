@@ -28,11 +28,12 @@
 ;;; Code:
 
 ;; ----------------------------------- Package config -----------------------------------
-(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (package-install 'treemacs)
+(package-install 'himalaya)
 (package-install 'xclip)
 (package-install 'nano-modeline)
 (package-install 'company)
@@ -54,9 +55,6 @@
 (package-install 'racer)
 (package-install 'beacon)
 (package-install 'goto-line-preview)
-(package-install 'bbdb)
-(package-install 'bbdb-vcard)
-(package-install 'notmuch)
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1) ;; close menubar
@@ -64,6 +62,15 @@
 (load-theme 'modus-vivendi t) ;; themes
 (set-face-attribute 'default nil :foreground "#eee") ;; make the text less dazzling
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
+
+;; GUI
+(when (display-graphic-p)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0)
+  (fringe-mode 0)
+
+  (set-face-attribute 'default nil
+		      :font "CPMono_v07 Bold 12"))
 
 ;; company
 (require 'company)
@@ -91,8 +98,9 @@
 ;; modeline
 (require 'hide-mode-line)
 (require 'nano-modeline)
-(global-hide-mode-line-mode t)
-(nano-modeline)
+
+(add-hook 'after-init-hook 'global-hide-mode-line-mode)
+(add-hook 'after-init-hook 'nano-modeline-mode)
 
 ;; ----------------------------------- Develop config -----------------------------------
 
@@ -140,18 +148,7 @@
 (beacon-mode)
 
 ;; Mail
-(require 'bbdb)
-(bbdb-initialize 'message)
-(bbdb-insinuate-message)
-(add-hook 'message-setup-hook 'bbdb-insinuate-mail)
-
-;; Set up notmuch
-(require 'notmuch)
-
-;; set up mail sending using sendmail
-(setq send-mail-function (quote sendmail-send-it))
-(setq user-mail-address "muqiu-han@outlook.com"
-      user-full-name "Muqiu Han")
+(require 'himalaya)
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,8 +165,11 @@
      (class-open . 2)
      (class-close . 2)
      (access-label . -1)))
+ '(delete-selection-mode nil)
  '(package-selected-packages
-   '(cmake-font-lock cmake-mode which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent)))
+   '(himalaya cmake-font-lock cmake-mode which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent))
+ '(warning-suppress-log-types '((comp) (comp)))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
