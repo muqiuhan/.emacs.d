@@ -152,93 +152,50 @@
 (beacon-mode)
 
 ;; Mail
-;; Personal Information
+(require 'nnir)
+
 (setq user-full-name "Muqiu Han"
       user-mail-address "muqiu-han@outlook.com")
 
-;; Send email through SMTP
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-default-smtp-server "smtp.office365.com"
       smtpmail-smtp-service 587
       smtpmail-local-domain "muqiu")
 
-
-(require 'nnir)
-
-;; Please note mail folders in `gnus-select-method' have NO prefix like "nnimap+hotmail:" or "nnimap+gmail:"
 (setq gnus-select-method '(nnimap "Outlook"
 				  (nnimap-address "outlook.office365.com")
 				  (nnimap-server-port 993)
 				  (nnimap-stream ssl)
 				  (nnir-search-engine imap)
-				  (nnmail-expiry-wait 90))) 
+				  (nnmail-expiry-wait 90))
+      
+      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date
+				   (not gnus-thread-sort-by-number))
+      
+      gnus-use-cache t
+      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
+      gnus-thread-hide-subtree nil
+      gnus-thread-ignore-subject t
+      gnus-use-correct-string-widths nil)
 
-;; ask encryption password once
 (setq epa-file-cache-passphrase-for-symmetric-encryption t)
 
-(setq gnus-thread-sort-functions
-      '(gnus-thread-sort-by-most-recent-date
-        (not gnus-thread-sort-by-number)))
+(define-key gnus-group-mode-map (kbd "o") 'gnus-group-list-all-groups)
 
-(setq gnus-use-cache t)
-
-;; {{ press "o" to view all groups
-(defun my-gnus-group-list-subscribed-groups ()
-  "List all subscribed groups with or without un-read messages"
-  (interactive)
-  (gnus-group-list-all-groups 5))
-
-(define-key gnus-group-mode-map
-	    ;; list all the subscribed groups even they contain zero un-read messages
-	    (kbd "o") 'my-gnus-group-list-subscribed-groups)
-
-;; open attachment
-(eval-after-load 'mailcap
-  '(progn
-     (cond
-      ;; on macOS, maybe change mailcap-mime-data?
-      ((eq system-type 'darwin))
-      ;; on Windows, maybe change mailcap-mime-data?
-      ((eq system-type 'windows-nt))
-      (t
-       ;; Linux, read ~/.mailcap
-       (mailcap-parse-mailcaps)))))
-
-;; Tree view for groups.
+(eval-after-load 'mailcap (mailcap-parse-mailcaps))
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 
-;; Threads!  I hate reading un-threaded email -- especially mailing
-;; lists.  This helps a ton!
-(setq gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
-
-;; Also, I prefer to see only the top level message.  If a message has
-;; several replies or is part of a thread, only show the first message.
-;; `gnus-thread-ignore-subject' will ignore the subject and
-;; look at 'In-Reply-To:' and 'References:' headers.
-(setq gnus-thread-hide-subtree t)
-(setq gnus-thread-ignore-subject t)
-
-;; Read HTML mail:
 (setq mm-text-html-renderer 'w3m)
 
-;; http://www.gnu.org/software/emacs/manual/html_node/gnus/_005b9_002e2_005d.html
-(setq gnus-use-correct-string-widths nil)
-
-;; Sample on how to organize mail folders.
-;; It's dependent on `gnus-topic-mode'.
 (eval-after-load 'gnus-topic
   '(progn
-     (setq gnus-message-archive-group '((format-time-string "sent.%Y")))
-     (setq gnus-server-alist '(("archive" nnfolder "archive" (nnfolder-directory "~/Mail/archive")
+     (setq gnus-message-archive-group '((format-time-string "sent.%Y"))
+	   gnus-server-alist '(("archive" nnfolder "archive" (nnfolder-directory "~/Mail/archive")
                                 (nnfolder-active-file "~/Mail/archive/active")
                                 (nnfolder-get-new-mail nil)
-                                (nnfolder-inhibit-expiry t))))
-
-     ;; "Gnus" is the root folder
-     (setq gnus-topic-topology '(("Gnus" visible)))
-     
-     ;; each topic corresponds to a public imap folder
-     (setq gnus-topic-alist '(("Gnus")))))
+                                (nnfolder-inhibit-expiry t)))
+	   gnus-topic-topology '(("Gnus" visible))
+	   gnus-topic-alist '(("Gnus")))))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
