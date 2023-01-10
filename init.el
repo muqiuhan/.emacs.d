@@ -33,7 +33,6 @@
 (package-initialize)
 
 (package-install 'treemacs)
-(package-install 'himalaya)
 (package-install 'xclip)
 (package-install 'nano-modeline)
 (package-install 'company)
@@ -146,9 +145,6 @@
 ;; beacon : easy to visually locate the cursor quickly
 (require 'beacon)
 (beacon-mode)
-
-;; Mail
-(require 'himalaya)
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
