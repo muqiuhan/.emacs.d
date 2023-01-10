@@ -43,6 +43,7 @@
 (package-install 'tuareg)
 (package-install 'merlin)
 (package-install 'merlin-eldoc)
+(package-install 'w3m)
 (package-install 'dune)
 (package-install 'ocamlformat)
 (package-install 'ocp-indent)
@@ -146,6 +147,95 @@
 (require 'beacon)
 (beacon-mode)
 
+;; Mail
+;; Personal Information
+(setq user-full-name "Muqiu Han"
+      user-mail-address "muqiu-han@outlook.com")
+
+;; Send email through SMTP
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-default-smtp-server "smtp.office365.com"
+      smtpmail-smtp-service 587
+      smtpmail-local-domain "muqiu")
+
+
+(require 'nnir)
+
+;; Please note mail folders in `gnus-select-method' have NO prefix like "nnimap+hotmail:" or "nnimap+gmail:"
+(setq gnus-select-method '(nnimap "Outlook"
+				  (nnimap-address "outlook.office365.com")
+				  (nnimap-server-port 993)
+				  (nnimap-stream ssl)
+				  (nnir-search-engine imap)
+				  (nnmail-expiry-wait 90))) 
+
+;; ask encryption password once
+(setq epa-file-cache-passphrase-for-symmetric-encryption t)
+
+(setq gnus-thread-sort-functions
+      '(gnus-thread-sort-by-most-recent-date
+        (not gnus-thread-sort-by-number)))
+
+(setq gnus-use-cache t)
+
+;; {{ press "o" to view all groups
+(defun my-gnus-group-list-subscribed-groups ()
+  "List all subscribed groups with or without un-read messages"
+  (interactive)
+  (gnus-group-list-all-groups 5))
+
+(define-key gnus-group-mode-map
+	    ;; list all the subscribed groups even they contain zero un-read messages
+	    (kbd "o") 'my-gnus-group-list-subscribed-groups)
+
+;; open attachment
+(eval-after-load 'mailcap
+  '(progn
+     (cond
+      ;; on macOS, maybe change mailcap-mime-data?
+      ((eq system-type 'darwin))
+      ;; on Windows, maybe change mailcap-mime-data?
+      ((eq system-type 'windows-nt))
+      (t
+       ;; Linux, read ~/.mailcap
+       (mailcap-parse-mailcaps)))))
+
+;; Tree view for groups.
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+
+;; Threads!  I hate reading un-threaded email -- especially mailing
+;; lists.  This helps a ton!
+(setq gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
+
+;; Also, I prefer to see only the top level message.  If a message has
+;; several replies or is part of a thread, only show the first message.
+;; `gnus-thread-ignore-subject' will ignore the subject and
+;; look at 'In-Reply-To:' and 'References:' headers.
+(setq gnus-thread-hide-subtree t)
+(setq gnus-thread-ignore-subject t)
+
+;; Read HTML mail:
+(setq mm-text-html-renderer 'w3m)
+
+;; http://www.gnu.org/software/emacs/manual/html_node/gnus/_005b9_002e2_005d.html
+(setq gnus-use-correct-string-widths nil)
+
+;; Sample on how to organize mail folders.
+;; It's dependent on `gnus-topic-mode'.
+(eval-after-load 'gnus-topic
+  '(progn
+     (setq gnus-message-archive-group '((format-time-string "sent.%Y")))
+     (setq gnus-server-alist '(("archive" nnfolder "archive" (nnfolder-directory "~/Mail/archive")
+                                (nnfolder-active-file "~/Mail/archive/active")
+                                (nnfolder-get-new-mail nil)
+                                (nnfolder-inhibit-expiry t))))
+
+     ;; "Gnus" is the root folder
+     (setq gnus-topic-topology '(("Gnus" visible)))
+     
+     ;; each topic corresponds to a public imap folder
+     (setq gnus-topic-alist '(("Gnus")))))
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
@@ -163,9 +253,7 @@
      (access-label . -1)))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(himalaya cmake-font-lock cmake-mode which-key toml-mode cargo-mode cargo goto-line-preview beacon racer racer-mode rust-mode magit markdown-mode merlin treemacs xclip nano-modeline company sweet-theme hide-mode-line racket-mode tuareg merlin-eldoc dune ocamlformat ocp-indent))
- '(warning-suppress-log-types '((comp) (comp)))
- '(warning-suppress-types '((comp))))
+   '(rust-mode merlin markdown-mode treemacs xclip nano-modeline company writeroom-mode racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
