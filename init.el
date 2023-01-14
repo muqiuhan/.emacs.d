@@ -32,46 +32,49 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(package-install 'treemacs)
-(package-install 'xclip)
-(package-install 'nano-modeline)
-(package-install 'company)
-(package-install 'markdown-mode)
-(package-install 'writeroom-mode)
-(package-install 'racket-mode)
-(package-install 'hide-mode-line)
-(package-install 'tuareg)
-(package-install 'merlin)
-(package-install 'merlin-eldoc)
-(package-install 'w3m)
-(package-install 'dune)
-(package-install 'ocamlformat)
-(package-install 'ocp-indent)
-(package-install 'magit)
-(package-install 'rust-mode)
-(package-install 'toml)
-(package-install 'cargo)
-(package-install 'cargo-mode)
-(package-install 'racer)
-(package-install 'beacon)
-(package-install 'goto-line-preview)
-(package-install 'youdao-dictionary)
+(defun require-package (&rest packages)
+  (dolist (p packages)
+    (unless (package-installed-p p)
+      (condition-case nil (package-install p)
+        (error
+         (package-refresh-contents)
+         (package-install p))))))
+
+(require-package 'treemacs
+		 'xclip
+		 'nano-modeline
+		 'company
+		 'markdown-mode
+		 'darkroom
+		 'racket-mode
+		 'hide-mode-line
+		 'tuareg
+		 'merlin
+		 'merlin-eldoc
+		 'w3m
+		 'dune
+		 'ocamlformat
+		 'fsharp-mode
+		 'ob-fsharp
+		 'ocp-indent
+		 'magit
+		 'rust-mode
+		 'toml
+		 'cargo
+		 'cargo-mode
+		 'racer
+		 'beacon
+		 'goto-line-preview
+		 'youdao-dictionary)
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1) ;; close menubar
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (load-theme 'modus-vivendi t) ;; themes
-(set-face-attribute 'default nil :foreground "#eee") ;; make the text less dazzling
+(set-face-attribute 'default nil
+		    :foreground "#eee"
+		    :background "#111") ;; make the text less dazzling
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
-
-;; GUI
-(when (display-graphic-p)
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0)
-  (fringe-mode 0)
-
-  (set-face-attribute 'default nil
-		      :font "CPMono_v07 Bold 12"))
 
 ;; company
 (require 'company)
@@ -120,7 +123,6 @@
 
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 
-;; Quickly format
 (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat)
 
 ;; Rust
@@ -132,17 +134,68 @@
 (add-hook 'racer-mode-hook #'company-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 
+;; F#
+(defun fsharp-fantomas-format-buffer ()
+  (interactive)
+  (let ((origin (point)))
+    (fsharp-fantomas-format-region (point-min) (point-max))
+    (goto-char origin)))
+
+(defun fsharp-load-file (file-name)
+  (interactive (comint-get-source "Load F# file: " nil '(fsharp-mode) t))
+  (let ((command (concat "#load \"" file-name "\"")))
+    (comint-check-source file-name)
+    (fsharp-simple-send inferior-fsharp-buffer-name command)))
+
+(defun fsharp-add-this-file-to-proj ()
+  (interactive)
+  (when-let* ((file-long (f-this-file))
+              (project (fsharp-mode/find-fsproj file-long))
+              (file (f-filename file-long)))
+    (with-current-buffer (find-file-noselect project)
+      (goto-char (point-min))
+      (unless (re-search-forward file nil t)
+        (when (and (re-search-forward "<Compile Include=" nil t)
+                   (re-search-backward "<" nil t))
+          (insert (format "<Compile Include=\"%s\" />\n    " file))
+          (save-buffer))))))
+
+(defun fsharp-remove-this-file-from-proj ()
+  (interactive)
+  (when-let* ((file-long (f-this-file))
+              (project (fsharp-mode/find-fsproj file-long))
+              (file (f-filename file-long)))
+    (with-current-buffer (find-file-noselect project)
+      (goto-char (point-min))
+      (when (re-search-forward (format "<Compile Include=\"%s\" />" file) nil t)
+        (move-beginning-of-line 1)
+        (kill-line)
+        (kill-line)
+        (save-buffer)))))
+
+(defun fsharp-build-project ()
+  "Compile project using fake or dotnet."
+  (interactive)
+  (let ((fake-dir (locate-dominating-file default-directory "build.fsx"))
+        (proj (fsharp-mode/find-fsproj (or (f-this-file) ""))))
+    (cond (fake-dir (let ((default-directory fake-dir)
+                          (compile-command "fake build"))
+                      (call-interactively 'compile)))
+          (proj (let ((compile-command (format "dotnet build \"%s\"" proj)))
+                  (call-interactively 'compile)))
+          (t (call-interactively 'compile)))))
+
 ;; ----------------------------------- Utils config -----------------------------------
 
 ;; Markdown
 (require 'markdown-mode)
-(require 'writeroom-mode)
+(require 'darkroom)
 
-(add-hook 'markdown-mode-hook 'writeroom-mode)
-(setq writeroom-width (floor (/ (window-width) 1.5)))
+(add-hook 'markdown-mode-hook 'darkroom-mode)
+(setq darkroom-margin-increment 20)
 
 ;; Add README support
-(setq auto-mode-alist (append '(("README" . writeroom-mode)) auto-mode-alist))
+(setq auto-mode-alist (append '(("README" . darkroom-mode)) auto-mode-alist))
 
 ;; Goto line preview
 (require 'goto-line-preview)
@@ -221,7 +274,9 @@
      (access-label . -1)))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company writeroom-mode racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti)))
+   '(ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
+ '(warning-suppress-log-types '((comp) (comp)))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
