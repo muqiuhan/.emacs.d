@@ -64,13 +64,14 @@
 		 'cargo-mode
 		 'racer
 		 'beacon
+		 'gruvbox-theme
 		 'goto-line-preview
 		 'youdao-dictionary)
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1) ;; close menubar
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
-(load-theme 'modus-vivendi t) ;; themes
+(load-theme 'gruvbox-dark-medium t) ;; themes
 (set-face-attribute 'default nil
 		    :foreground "#eee"
 		    :background "#111") ;; make the text less dazzling
@@ -272,9 +273,11 @@
      (class-open . 2)
      (class-close . 2)
      (access-label . -1)))
+ '(custom-safe-themes
+   '("72ed8b6bffe0bfa8d097810649fd57d2b598deef47c992920aef8b5d9599eefe" default))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
+   '(gruvbox-theme lua-mode ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
