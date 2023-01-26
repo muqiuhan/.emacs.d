@@ -72,9 +72,6 @@
 (menu-bar-mode -1) ;; close menubar
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (load-theme 'gruvbox-dark-medium t) ;; themes
-(set-face-attribute 'default nil
-		    :foreground "#eee"
-		    :background "#111") ;; make the text less dazzling
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 ;; company
@@ -84,8 +81,9 @@
 ;; line number
 (require 'display-line-numbers)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-(set-face-attribute 'line-number-current-line nil :background "#00f" :foreground "#ccc")
-(set-face-attribute 'line-number nil :background "#005" :foreground "#ccc")
+
+(set-face-attribute 'line-number nil :background (face-attribute 'default :background))
+(set-face-attribute 'line-number-current-line nil :foreground (face-attribute 'default :foreground))
 
 ;; xclip: easy to synchorize with the system clipboard
 (require 'xclip)
