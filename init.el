@@ -50,9 +50,11 @@
 		 'nano-modeline
 		 'company
 		 'markdown-mode
+		 'dune-format
 		 'darkroom
 		 'racket-mode
 		 'hide-mode-line
+		 'utop
 		 'tuareg
 		 'merlin
 		 'treemacs-all-the-icons
