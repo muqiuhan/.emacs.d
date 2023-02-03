@@ -85,7 +85,7 @@
   (set-frame-font "Dank Mono 13"))
 
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
-;; (load-theme 'modus-vivendi t) ;; themes
+(load-theme 'modus-vivendi t) ;; themes
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 ;; company
@@ -137,7 +137,9 @@
 (require 'ocamlformat)
 
 (setq auto-mode-alist (append '(("\\.ml[ily]?$" . tuareg-mode)) auto-mode-alist)
-      merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
+      merlin-command "~/.opam/5.0.0/bin/ocamlmerlin"
+      ocamlformat-command "~/.opam/5.0.0/bin/ocamlformat"
+      ocp-indent-path "~/.opam/5.0.0/bin/ocp-indent")
 
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 

@@ -2,7 +2,7 @@
 | .emacs.d |
 +----------+
 
-  A lightweight, fast, simple and crude configuration for GNU Emacs<master>.
+  A lightweight, fast, simple and crude configuration for GNU Emacs<29>.
 
   Copyright (c) 2022 Muqiu Han
   
@@ -28,25 +28,11 @@ O FEATURES
   - OCaml, Racket development environment
   - Email configuration
 
-O DEPENDS
-  Before using this configuration, your operating system needs to have following libraries:
-    - libjasson : https://github.com/akheron/jansson
-    - libgnutls : https://gnutls.org/
-    - mpg123    : http://mpg123.de/
-    - libgccjit
-
-  They can basically be installed from the package manager of the linux distribution.
-  
-  I use openSUSE Tumbleweed: zypper install libjasson-devel libgnutls-devel libgccjit-devel mpg123
-
 O BUILD
   ./configure --without-x
               --without-xwidgets
               --with-x-toolkit=no
-              --with-native-compilation
               --with-json
-	      --with-mailutils
-	      --with-pop
 	      --with-native-compilation
 	      --with-gnutls
 
