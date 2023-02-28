@@ -55,6 +55,7 @@
 		 'racket-mode
 		 'hide-mode-line
 		 'utop
+		 'which-key
 		 'tuareg
 		 'merlin
 		 'treemacs-all-the-icons
@@ -85,7 +86,7 @@
   (set-frame-font "Dank Mono 13"))
 
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
-(load-theme 'modus-vivendi t) ;; themes
+(load-theme 'gruvbox t) ;; themes
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 ;; company
@@ -137,9 +138,9 @@
 (require 'ocamlformat)
 
 (setq auto-mode-alist (append '(("\\.ml[ily]?$" . tuareg-mode)) auto-mode-alist)
-      merlin-command "~/.opam/5.0.0/bin/ocamlmerlin"
-      ocamlformat-command "~/.opam/5.0.0/bin/ocamlformat"
-      ocp-indent-path "~/.opam/5.0.0/bin/ocp-indent")
+      merlin-command "~/.opam/default/bin/ocamlmerlin"
+      ocamlformat-command "~/.opam/default/bin/ocamlformat"
+      ocp-indent-path "~/.opam/default/bin/ocp-indent")
 
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 
@@ -277,6 +278,10 @@
 (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
 (global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point)
 
+;; Which key
+(require 'which-key)
+(which-key-mode t)
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
@@ -296,7 +301,7 @@
    '("72ed8b6bffe0bfa8d097810649fd57d2b598deef47c992920aef8b5d9599eefe" default))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(dune-format flycheck-ocaml flycheck-pos-tip flycheck-posframe flycheck treemacs-all-the-icons modus-themes gruvbox-theme lua-mode ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
+   '(which-key dune-format flycheck-ocaml flycheck-pos-tip flycheck-posframe flycheck treemacs-all-the-icons modus-themes gruvbox-theme lua-mode ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
