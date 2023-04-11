@@ -35,7 +35,7 @@
 (setq url-proxy-services
       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 	("http" . "127.0.0.1:7890")
-	         ("https" . "127.0.0.1:7890")))
+	("https" . "127.0.0.1:7890")))
 
 (defun require-package (&rest packages)
   (dolist (p packages)
@@ -60,14 +60,12 @@
 		 'merlin
 		 'treemacs-all-the-icons
 		 'merlin-eldoc
-		 'w3m
 		 'dune
 		 'ocamlformat
 		 'fsharp-mode
 		 'ob-fsharp
 		 'ocp-indent
 		 'magit
-		 'rust-mode
 		 'toml
 		 'cargo
 		 'cargo-mode
@@ -83,10 +81,11 @@
   (tool-bar-mode -1)
   (fringe-mode -1)
   (scroll-bar-mode -1)
-  (set-frame-font "Dank Mono 13"))
+  (set-frame-font "Dank Mono 12"))
+
+(setq-default line-spacing 0.2)
 
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
-(load-theme 'gruvbox t) ;; themes
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 ;; company
@@ -96,9 +95,6 @@
 ;; line number
 (require 'display-line-numbers)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
-(set-face-attribute 'line-number nil :background "#003")
-(set-face-attribute 'line-number-current-line nil :background "#00a")
 
 ;; xclip: easy to synchorize with the system clipboard
 (require 'xclip)
@@ -146,14 +142,21 @@
 
 (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat)
 
-;; Rust
-(require 'rust-mode)
-(require 'racer)
-(setq racer-cmd "~/Workspace/racer/target/release/racer")
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
-(add-hook 'racer-mode-hook #'company-mode)
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+;; C++
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(c-offsets-alist
+   '((defun-open . 2)
+     (defun-close . 0)
+     (class-open . 2)
+     (class-close . 2)
+     (access-label . -1)))
+ '(delete-selection-mode nil)
+ '(package-selected-packages
+   '(youdao-dictionary yasnippet xclip which-key w3m utop treemacs-all-the-icons toml smooth-scrolling smooth-scroll racket-mode racer popon ocp-indent ocamlformat ob-fsharp nano-modeline merlin-eldoc magit highlight-indent-guides hide-mode-line greenbar green-screen-theme green-is-the-new-black-theme goto-line-preview flycheck dune-format dune darkroom company cargo-mode cargo beacon autothemer)))
 
 ;; F#
 (defun fsharp-fantomas-format-buffer ()
@@ -282,28 +285,15 @@
 (require 'which-key)
 (which-key-mode t)
 
+;; Theme
+(load-theme 'manoj-dark t)
+
+(set-face-attribute 'line-number 'nil :foreground "#090")
+(set-face-attribute 'line-number-current-line 'nil :foreground "#0f0")
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(c-offsets-alist
-   '((defun-open . 2)
-     (defun-close . 0)
-     (class-open . 2)
-     (class-close . 2)
-     (access-label . -1)))
- '(custom-safe-themes
-   '("72ed8b6bffe0bfa8d097810649fd57d2b598deef47c992920aef8b5d9599eefe" default))
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(which-key dune-format flycheck-ocaml flycheck-pos-tip flycheck-posframe flycheck treemacs-all-the-icons modus-themes gruvbox-theme lua-mode ob-fsharp fsharp-mode utop darkroom youdao-dictionary rust-mode merlin markdown-mode treemacs xclip nano-modeline company racket-mode hide-mode-line tuareg merlin-eldoc dune ocamlformat ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview w3m centered-window perfect-margin olivetti))
- '(warning-suppress-log-types '((comp) (comp)))
- '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
