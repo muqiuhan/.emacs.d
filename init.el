@@ -57,21 +57,19 @@
 		 'utop
 		 'which-key
 		 'tuareg
-		 'merlin
+		 'window-numbering
 		 'treemacs-all-the-icons
-		 'merlin-eldoc
 		 'dune
+		 'lsp-mode
 		 'ocamlformat
 		 'fsharp-mode
-		 'ob-fsharp
-		 'ocp-indent
 		 'magit
 		 'toml
 		 'cargo
 		 'cargo-mode
-		 'racer
 		 'beacon
 		 'goto-line-preview
+		 'rustic
 		 'youdao-dictionary)
 
 ;; ----------------------------------- Basic config -----------------------------------
@@ -80,8 +78,7 @@
 (when (display-graphic-p)
   (tool-bar-mode -1)
   (fringe-mode -1)
-  (scroll-bar-mode -1)
-  (set-frame-font "Dank Mono 12"))
+  (scroll-bar-mode -1))
 
 (setq-default line-spacing 0.2)
 
@@ -112,7 +109,7 @@
   (treemacs-load-theme "all-the-icons"))
 
 (global-set-key (kbd "C-x t t") 'treemacs)
-(global-set-key (kbd "M-0") 'treemacs-select-window)
+(global-set-key (kbd "M-RET") 'treemacs-select-window)
 
 ;; modeline
 (require 'hide-mode-line)
@@ -129,87 +126,16 @@
 
 ;; OCaml
 (require 'tuareg)
-(require 'ocp-indent)
-(require 'merlin)
 (require 'ocamlformat)
 
-(setq auto-mode-alist (append '(("\\.ml[ily]?$" . tuareg-mode)) auto-mode-alist)
-      merlin-command "~/.opam/default/bin/ocamlmerlin"
-      ocamlformat-command "~/.opam/default/bin/ocamlformat"
-      ocp-indent-path "~/.opam/default/bin/ocp-indent")
-
-(add-hook 'tuareg-mode-hook 'merlin-mode)
-
+(add-hook 'tuareg-mode-hook 'lsp)
 (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat)
 
-;; C++
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(c-offsets-alist
-   '((defun-open . 2)
-     (defun-close . 0)
-     (class-open . 2)
-     (class-close . 2)
-     (access-label . -1)))
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(youdao-dictionary yasnippet xclip which-key w3m utop treemacs-all-the-icons toml smooth-scrolling smooth-scroll racket-mode racer popon ocp-indent ocamlformat ob-fsharp nano-modeline merlin-eldoc magit highlight-indent-guides hide-mode-line greenbar green-screen-theme green-is-the-new-black-theme goto-line-preview flycheck dune-format dune darkroom company cargo-mode cargo beacon autothemer)))
-
-;; F#
-(defun fsharp-fantomas-format-buffer ()
-  (interactive)
-  (let ((origin (point)))
-    (fsharp-fantomas-format-region (point-min) (point-max))
-    (goto-char origin)))
-
-(defun fsharp-load-file (file-name)
-  (interactive (comint-get-source "Load F# file: " nil '(fsharp-mode) t))
-  (let ((command (concat "#load \"" file-name "\"")))
-    (comint-check-source file-name)
-    (fsharp-simple-send inferior-fsharp-buffer-name command)))
-
-(defun fsharp-add-this-file-to-proj ()
-  (interactive)
-  (when-let* ((file-long (f-this-file))
-              (project (fsharp-mode/find-fsproj file-long))
-              (file (f-filename file-long)))
-    (with-current-buffer (find-file-noselect project)
-      (goto-char (point-min))
-      (unless (re-search-forward file nil t)
-        (when (and (re-search-forward "<Compile Include=" nil t)
-                   (re-search-backward "<" nil t))
-          (insert (format "<Compile Include=\"%s\" />\n    " file))
-          (save-buffer))))))
-
-(defun fsharp-remove-this-file-from-proj ()
-  (interactive)
-  (when-let* ((file-long (f-this-file))
-              (project (fsharp-mode/find-fsproj file-long))
-              (file (f-filename file-long)))
-    (with-current-buffer (find-file-noselect project)
-      (goto-char (point-min))
-      (when (re-search-forward (format "<Compile Include=\"%s\" />" file) nil t)
-        (move-beginning-of-line 1)
-        (kill-line)
-        (kill-line)
-        (save-buffer)))))
-
-(defun fsharp-build-project ()
-  "Compile project using fake or dotnet."
-  (interactive)
-  (let ((fake-dir (locate-dominating-file default-directory "build.fsx"))
-        (proj (fsharp-mode/find-fsproj (or (f-this-file) ""))))
-    (cond (fake-dir (let ((default-directory fake-dir)
-                          (compile-command "fake build"))
-                      (call-interactively 'compile)))
-          (proj (let ((compile-command (format "dotnet build \"%s\"" proj)))
-                  (call-interactively 'compile)))
-          (t (call-interactively 'compile)))))
-
 ;; ----------------------------------- Utils config -----------------------------------
+
+;; window numbering
+(require 'window-numbering)
+(add-hook 'after-init-hook 'window-numbering-mode)
 
 ;; Markdown
 (require 'markdown-mode)
@@ -294,6 +220,96 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(c-offsets-alist
+   '((defun-open . 2)
+     (defun-close . 0)
+     (class-open . 2)
+     (class-close . 2)
+     (access-label . -1)))
+ '(connection-local-criteria-alist
+   '(((:application tramp)
+      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+ '(connection-local-profile-alist
+   '((tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . tramp-ps-time)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (user . string)
+       (group . string)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (ttname . string)
+       (time . tramp-ps-time)
+       (nice . number)
+       (etime . tramp-ps-time)
+       (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (group . string)
+       (comm . 52)
+       (state . string)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . number)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh")
+      (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":")
+      (null-device . "/dev/null"))))
+ '(package-selected-packages
+   '(lsp-mode xclip nano-modeline company dune-format darkroom racket-mode hide-mode-line utop which-key treemacs-all-the-icons merlin-eldoc dune ocamlformat ob-fsharp ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview youdao-dictionary rustic eglot-fsharp window-numbering)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
