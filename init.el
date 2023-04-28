@@ -78,7 +78,12 @@
 (when (display-graphic-p)
   (tool-bar-mode -1)
   (fringe-mode -1)
-  (scroll-bar-mode -1))
+  (scroll-bar-mode -1)
+
+  (set-face-attribute 'default nil
+		      :font "Victor Mono"
+		      :weight 'bold
+		      :height 120))
 
 (setq-default line-spacing 0.2)
 
@@ -100,8 +105,9 @@
 ;; treemacs
 (require 'treemacs)
 
-(setq treemacs-width 35
+(setq treemacs-width 50
       treemacs-indentation 2
+      treemacs-position 'right
       treemacs-icon-tag-leaf "0")
 
 (when (display-graphic-p)
@@ -119,6 +125,10 @@
 (add-hook 'after-init-hook 'nano-modeline-mode)
 
 ;; ----------------------------------- Develop config -----------------------------------
+
+;; Lsp
+(require 'lsp)
+(setq-default lsp-headerline-breadcrumb-enable nil)
 
 ;; Racket
 (require 'racket-mode)
@@ -155,52 +165,6 @@
 (require 'beacon)
 (beacon-mode)
 
-;; Mail
-(require 'nnir)
-
-(setq user-full-name "Muqiu Han"
-      user-mail-address "muqiu-han@outlook.com")
-
-(setq message-send-mail-function 'smtpmail-send-it
-      smtpmail-default-smtp-server "smtp.office365.com"
-      smtpmail-smtp-service 587
-      smtpmail-local-domain "muqiu")
-
-(setq gnus-select-method '(nnimap "Outlook"
-				  (nnimap-address "outlook.office365.com")
-				  (nnimap-server-port 993)
-				  (nnimap-stream ssl)
-				  (nnir-search-engine imap)
-				  (nnmail-expiry-wait 90))
-      
-      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date
-				   (not gnus-thread-sort-by-number))
-      
-      gnus-use-cache t
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
-      gnus-thread-hide-subtree nil
-      gnus-thread-ignore-subject t
-      gnus-use-correct-string-widths nil)
-
-(setq epa-file-cache-passphrase-for-symmetric-encryption t)
-
-(define-key gnus-group-mode-map (kbd "o") 'gnus-group-list-all-groups)
-
-(eval-after-load 'mailcap (mailcap-parse-mailcaps))
-(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-
-(setq mm-text-html-renderer 'w3m)
-
-(eval-after-load 'gnus-topic
-  '(progn
-     (setq gnus-message-archive-group '((format-time-string "sent.%Y"))
-	   gnus-server-alist '(("archive" nnfolder "archive" (nnfolder-directory "~/Mail/archive")
-                                (nnfolder-active-file "~/Mail/archive/active")
-                                (nnfolder-get-new-mail nil)
-                                (nnfolder-inhibit-expiry t)))
-	   gnus-topic-topology '(("Gnus" visible))
-	   gnus-topic-alist '(("Gnus")))))
-
 ;; Translate
 (require 'youdao-dictionary)
 
@@ -220,99 +184,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(c-offsets-alist
-   '((defun-open . 2)
-     (defun-close . 0)
-     (class-open . 2)
-     (class-close . 2)
-     (access-label . -1)))
- '(connection-local-criteria-alist
-   '(((:application tramp)
-      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
- '(connection-local-profile-alist
-   '((tramp-connection-local-darwin-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . tramp-ps-time)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
-     (tramp-connection-local-busybox-ps-profile
-      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (user . string)
-       (group . string)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (ttname . string)
-       (time . tramp-ps-time)
-       (nice . number)
-       (etime . tramp-ps-time)
-       (args)))
-     (tramp-connection-local-bsd-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (group . string)
-       (comm . 52)
-       (state . string)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . number)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
-     (tramp-connection-local-default-shell-profile
-      (shell-file-name . "/bin/sh")
-      (shell-command-switch . "-c"))
-     (tramp-connection-local-default-system-profile
-      (path-separator . ":")
-      (null-device . "/dev/null"))))
- '(package-selected-packages
-   '(lsp-mode xclip nano-modeline company dune-format darkroom racket-mode hide-mode-line utop which-key treemacs-all-the-icons merlin-eldoc dune ocamlformat ob-fsharp ocp-indent magit toml cargo cargo-mode racer beacon goto-line-preview youdao-dictionary rustic eglot-fsharp window-numbering)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -25,26 +25,13 @@
   OR OTHER DEALINGS IN THE SOFTWARE.
 
 O FEATURES
-  - OCaml, Racket development environment
-  - Email configuration
+  LSP, Translator, Treemacs, Nano-Modeline
+  Supported Programming Languages: OCaml, Rust, C/C++, F#
 
-O BUILD
+O RECOMMEND CONFIGURE
   ./configure --without-x
               --without-xwidgets
               --with-x-toolkit=no
               --with-json
 	      --with-native-compilation
 	      --with-gnutls
-
-O WHY THE MASTER BRANCH?
-  I am not a radical person, but since this configuration is very simple,
-  there are almost no bugs in the configuration itself,
-  and it runs under the terminal, so there will be no problem with the emacs master version.
-
-O WHY SINGLE FILE?
-    This configuration file is very simple and easy to distribute and carry.
-    Of course, there is nothing wrong with you thinking that it is original.
-
-O WHY NOT GUI?
-    The GUI is of course very good, but for me the terminal is more immersive and more convenient.
-    Generally speaking, it is a matter of personal habits.
