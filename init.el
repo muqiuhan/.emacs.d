@@ -28,7 +28,7 @@
 ;;; Code:
 
 ;; ----------------------------------- Package config -----------------------------------
-(require 'package)
+(use-package package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
@@ -62,6 +62,7 @@
 		 'dune
 		 'lsp-mode
 		 'ocamlformat
+		 'use-package
 		 'fsharp-mode
 		 'magit
 		 'toml
@@ -90,90 +91,115 @@
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;; company
-(require 'company)
-(global-company-mode t)
+(use-package company
+  :defer t
+  :init (global-company-mode t))
 
 ;; line number
-(require 'display-line-numbers)
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(use-package display-line-numbers
+  :defer t
+  :hook (prog-mode . display-line-numbers-mode))
 
 ;; xclip: easy to synchorize with the system clipboard
-(require 'xclip)
-(xclip-mode)
+(use-package xclip
+  :defer t
+  :init
+  (when (string-equal "xorg" (getenv "XDG_SESSION_TYPE"))
+    (xclip-mode)))
 
 ;; treemacs
-(require 'treemacs)
+(use-package treemacs
+  :defer t
+  :config
+  (setq treemacs-width 50
+	treemacs-indentation 2
+	treemacs-position 'right
+	treemacs-icon-tag-leaf "0")
+  :init
+  (when (display-graphic-p)
+    (use-package treemacs-all-the-icons)
+    (treemacs-load-theme "all-the-icons"))
 
-(setq treemacs-width 50
-      treemacs-indentation 2
-      treemacs-position 'right
-      treemacs-icon-tag-leaf "0")
-
-(when (display-graphic-p)
-  (require 'treemacs-all-the-icons)
-  (treemacs-load-theme "all-the-icons"))
-
-(global-set-key (kbd "C-x t t") 'treemacs)
-(global-set-key (kbd "M-RET") 'treemacs-select-window)
+  :bind (([f8]        . treemacs)
+         ("M-0"       . treemacs-select-window)
+         ("C-x t t"   . treemacs)))
 
 ;; modeline
-(require 'hide-mode-line)
-(require 'nano-modeline)
+(use-package hide-mode-line
+  :defer t
+  :hook (after-init . global-hide-mode-line-mode))
 
-(add-hook 'after-init-hook 'global-hide-mode-line-mode)
-(add-hook 'after-init-hook 'nano-modeline-mode)
+(use-package nano-modeline
+  :defer t
+  :hook (after-init . nano-modeline-mode))
 
 ;; ----------------------------------- Develop config -----------------------------------
 
 ;; Lsp
-(require 'lsp)
-(setq-default lsp-headerline-breadcrumb-enable nil)
+(use-package lsp
+  :defer t
+  :config
+  (setq-default lsp-headerline-breadcrumb-enable nil))
 
 ;; Racket
-(require 'racket-mode)
-(add-hook 'racket-mode racket-xp-mode)
+(use-package racket-mode
+  :defer t
+  :hook (racket-mode . racket-xp-mode))
 
 ;; OCaml
-(require 'tuareg)
-(require 'ocamlformat)
-
-(add-hook 'tuareg-mode-hook 'lsp)
-(define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat)
+(use-package tuareg
+  :defer t
+  :hook (tuareg-mode . lsp)
+  :config
+  (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat))
 
 ;; ----------------------------------- Utils config -----------------------------------
 
 ;; window numbering
-(require 'window-numbering)
-(add-hook 'after-init-hook 'window-numbering-mode)
+(use-package window-numbering
+  :defer t
+  :hook (after-init . window-numbering-mode))
 
 ;; Markdown
-(require 'markdown-mode)
-(require 'darkroom)
+(use-package markdown-mode
+  :defer t
+  :hook (markdown-mode . darkroom-mode))
 
-(add-hook 'markdown-mode-hook 'darkroom-mode)
-(setq darkroom-margin-increment 20)
+(use-package darkroom
+  :defer t
+  :config
+  (setq darkroom-margin-increment 20))
 
 ;; Add README support
 (setq auto-mode-alist (append '(("README" . darkroom-mode)) auto-mode-alist))
 
 ;; Goto line preview
-(require 'goto-line-preview)
-(global-set-key [remap goto-line] 'goto-line-preview)
+(use-package goto-line-preview
+  :defer t
+  :init
+  (global-set-key [remap goto-line] 'goto-line-preview))
 
 ;; beacon : easy to visually locate the cursor quickly
-(require 'beacon)
-(beacon-mode)
+(use-package beacon
+  :defer t
+  :init
+  (beacon-mode))
 
 ;; Translate
-(require 'youdao-dictionary)
-
-(global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
-(global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point)
+(use-package youdao-dictionary
+  :defer t
+  :init
+  (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+  (global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point))
 
 ;; Which key
-(require 'which-key)
-(which-key-mode t)
+(use-package which-key
+  :defer t
+  :init
+  (which-key-mode t))
 
 ;; Theme
 (load-theme 'manoj-dark t)
