@@ -141,8 +141,9 @@
 ;; Lsp
 (use-package lsp
   :defer t
-  :config
-  (setq-default lsp-headerline-breadcrumb-enable nil))
+  :init
+  (remove-hook 'lsp-mode-hoo 'lsp-headerline-breadcrumb-mode)
+  (setq lsp-headerline-breadcrumb-enable nil))
 
 ;; Racket
 (use-package racket-mode
