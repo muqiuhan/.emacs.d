@@ -27,52 +27,6 @@
 
 ;;; Code:
 
-;; ----------------------------------- Package config -----------------------------------
-(use-package package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
-
-(setq url-proxy-services
-      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-	("http" . "127.0.0.1:7890")
-	("https" . "127.0.0.1:7890")))
-
-(defun require-package (&rest packages)
-  (dolist (p packages)
-    (unless (package-installed-p p)
-      (condition-case nil (package-install p)
-        (error
-         (package-refresh-contents)
-         (package-install p))))))
-
-(require-package 'treemacs
-		 'xclip
-		 'nano-modeline
-		 'company
-		 'markdown-mode
-		 'dune-format
-		 'darkroom
-		 'racket-mode
-		 'hide-mode-line
-		 'utop
-		 'which-key
-		 'tuareg
-		 'window-numbering
-		 'treemacs-all-the-icons
-		 'dune
-		 'lsp-mode
-		 'ocamlformat
-		 'use-package
-		 'fsharp-mode
-		 'magit
-		 'toml
-		 'cargo
-		 'cargo-mode
-		 'beacon
-		 'goto-line-preview
-		 'rustic
-		 'youdao-dictionary)
-
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1)
 
@@ -82,9 +36,9 @@
   (scroll-bar-mode -1)
 
   (set-face-attribute 'default nil
-		      :font "Victor Mono"
+		      :font "Dank Mono"
 		      :weight 'bold
-		      :height 120))
+		      :height 135))
 
 (setq-default line-spacing 0.2)
 
@@ -92,6 +46,50 @@
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 (setq gc-cons-threshold (* 50 1000 1000))
+
+;; ----------------------------------- Package config -----------------------------------
+(use-package package :defer t
+  :init
+  (setq-default url-proxy-services
+		'(("no_proxy" . "^\\(localhost\\|10.*\\)")
+		  ("http" . "127.0.0.1:7890")
+		  ("https" . "127.0.0.1:7890")))
+  
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+  (defun require-package (&rest packages)
+    (dolist (p packages)
+      (unless (package-installed-p p)
+	(condition-case nil (package-install p)
+          (error
+           (package-refresh-contents)
+           (package-install p))))))
+  
+  (require-package 'treemacs
+		   'xclip
+		   'nano-modeline
+		   'company
+		   'markdown-mode
+		   'dune-format
+		   'darkroom
+		   'racket-mode
+		   'hide-mode-line
+		   'utop
+		   'which-key
+		   'tuareg
+		   'window-numbering
+		   'treemacs-all-the-icons
+		   'dune
+		   'ocamlformat
+		   'use-package
+		   'fsharp-mode
+		   'magit
+		   'toml
+		   'beacon
+		   'goto-line-preview
+		   'youdao-dictionary))
+
+;; ----------------------------------- config -----------------------------------
 
 ;; company
 (use-package company
@@ -116,7 +114,7 @@
   :config
   (setq treemacs-width 50
 	treemacs-indentation 2
-	treemacs-position 'right
+	treemacs-position 'left
 	treemacs-icon-tag-leaf "0")
   :init
   (when (display-graphic-p)
@@ -136,15 +134,6 @@
   :defer t
   :hook (after-init . nano-modeline-mode))
 
-;; ----------------------------------- Develop config -----------------------------------
-
-;; Lsp
-(use-package lsp
-  :defer t
-  :init
-  (remove-hook 'lsp-mode-hoo 'lsp-headerline-breadcrumb-mode)
-  (setq lsp-headerline-breadcrumb-enable nil))
-
 ;; Racket
 (use-package racket-mode
   :defer t
@@ -153,11 +142,8 @@
 ;; OCaml
 (use-package tuareg
   :defer t
-  :hook (tuareg-mode . lsp)
   :config
   (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat))
-
-;; ----------------------------------- Utils config -----------------------------------
 
 ;; window numbering
 (use-package window-numbering
@@ -203,10 +189,10 @@
   (which-key-mode t))
 
 ;; Theme
-(load-theme 'manoj-dark t)
+;; (load-theme 'modus-vivendi t)
 
-(set-face-attribute 'line-number 'nil :foreground "#090")
-(set-face-attribute 'line-number-current-line 'nil :foreground "#0f0")
+(set-face-attribute 'line-number 'nil :foreground "#999")
+(set-face-attribute 'line-number-current-line 'nil :foreground "#000")
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
