@@ -36,11 +36,11 @@
   (scroll-bar-mode -1)
 
   (set-face-attribute 'default nil
-		      :font "Dank Mono"
+		      :font "NanumGothicCoding"
 		      :weight 'bold
-		      :height 135))
+		      :height 139))
 
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 0)
 
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
@@ -112,9 +112,9 @@
 (use-package treemacs
   :defer t
   :config
-  (setq treemacs-width 50
+  (setq treemacs-width 35
 	treemacs-indentation 2
-	treemacs-position 'left
+	treemacs-position 'right
 	treemacs-icon-tag-leaf "0")
   :init
   (when (display-graphic-p)
@@ -122,7 +122,7 @@
     (treemacs-load-theme "all-the-icons"))
 
   :bind (([f8]        . treemacs)
-         ("M-0"       . treemacs-select-window)
+         ("M-RET"       . treemacs-select-window)
          ("C-x t t"   . treemacs)))
 
 ;; modeline
@@ -142,6 +142,7 @@
 ;; OCaml
 (use-package tuareg
   :defer t
+  :hook (tuareg-mode . merlin-mode)
   :config
   (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat))
 
