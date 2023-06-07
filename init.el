@@ -72,11 +72,10 @@
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (when (display-graphic-p)
   (setq default-frame-alist '(
-			      (undecorated . t)
-			      (drag-internal-border . 1)
 			      (internal-border-width . 5)
 			      (vertical-scroll-bars)
 			      (left-fringe)
@@ -94,10 +93,10 @@
 
 (set-cursor-color "#0f0")
 
-(global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
-(setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
+(global-auto-revert-mode 1)
+(setq backup-directory-alist `(("." . "~/.saves"))
+      gc-cons-threshold (* 50 1000 1000))
 
-(setq gc-cons-threshold (* 50 1000 1000))
 (load-theme 'doom-gruvbox t)
 
 
