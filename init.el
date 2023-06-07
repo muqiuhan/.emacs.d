@@ -27,6 +27,48 @@
 
 ;;; Code:
 
+;; ----------------------------------- Package config -----------------------------------
+
+(require 'package)
+(setq-default url-proxy-services
+	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+		("http" . "127.0.0.1:7890")
+		("https" . "127.0.0.1:7890")))
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+(defun require-package (&rest packages)
+  (dolist (p packages)
+    (unless (package-installed-p p)
+      (condition-case nil (package-install p)
+        (error
+         (package-refresh-contents)
+         (package-install p))))))
+
+(require-package 'treemacs
+		 'xclip
+		 'company
+		 'markdown-mode
+		 'dune-format
+		 'darkroom
+		 'doom-themes
+		 'racket-mode
+		 'utop
+		 'which-key
+		 'tuareg
+		 'window-numbering
+		 'treemacs-all-the-icons
+		 'dune
+		 'ocamlformat
+		 'use-package
+		 'fsharp-mode
+		 'magit
+		 'toml
+		 'beacon
+		 'goto-line-preview
+		 'youdao-dictionary)
+
+
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1)
 
@@ -36,58 +78,20 @@
   (scroll-bar-mode -1)
 
   (set-face-attribute 'default nil
-		      :font "NanumGothicCoding"
-		      :weight 'bold
-		      :height 139))
+		      :font "SF Mono"
+		      :weight 'medium
+		      :height 115))
 
-(setq-default line-spacing 0)
+(setq-default line-spacing 0
+	      cursor-type '(hbar . 5))
+
+(set-cursor-color "#0f0")
 
 (global-auto-revert-mode 1) ;; auto revert/refresh file when change detected
 (setq backup-directory-alist `(("." . "~/.saves"))) ;; set the unified storage path for backup files
 
 (setq gc-cons-threshold (* 50 1000 1000))
-
-;; ----------------------------------- Package config -----------------------------------
-(use-package package :defer t
-  :init
-  (setq-default url-proxy-services
-		'(("no_proxy" . "^\\(localhost\\|10.*\\)")
-		  ("http" . "127.0.0.1:7890")
-		  ("https" . "127.0.0.1:7890")))
-  
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
-  (defun require-package (&rest packages)
-    (dolist (p packages)
-      (unless (package-installed-p p)
-	(condition-case nil (package-install p)
-          (error
-           (package-refresh-contents)
-           (package-install p))))))
-  
-  (require-package 'treemacs
-		   'xclip
-		   'nano-modeline
-		   'company
-		   'markdown-mode
-		   'dune-format
-		   'darkroom
-		   'racket-mode
-		   'hide-mode-line
-		   'utop
-		   'which-key
-		   'tuareg
-		   'window-numbering
-		   'treemacs-all-the-icons
-		   'dune
-		   'ocamlformat
-		   'use-package
-		   'fsharp-mode
-		   'magit
-		   'toml
-		   'beacon
-		   'goto-line-preview
-		   'youdao-dictionary))
+(load-theme 'doom-gruvbox t)
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -99,13 +103,18 @@
 ;; line number
 (use-package display-line-numbers
   :defer t
+
+  :init
+  (set-face-attribute 'line-number nil :italic nil)
+  (set-face-attribute 'line-number-current-line nil :italic nil)
+  
   :hook (prog-mode . display-line-numbers-mode))
 
 ;; xclip: easy to synchorize with the system clipboard
 (use-package xclip
   :defer t
   :init
-  (when (string-equal "xorg" (getenv "XDG_SESSION_TYPE"))
+  (when (string-equal "x11" (getenv "XDG_SESSION_TYPE"))
     (xclip-mode)))
 
 ;; treemacs
@@ -125,14 +134,10 @@
          ("M-RET"       . treemacs-select-window)
          ("C-x t t"   . treemacs)))
 
-;; modeline
-(use-package hide-mode-line
+;; powerline
+(use-package powerline
   :defer t
-  :hook (after-init . global-hide-mode-line-mode))
-
-(use-package nano-modeline
-  :defer t
-  :hook (after-init . nano-modeline-mode))
+  :hook (after-init . powerline-center-theme))
 
 ;; Racket
 (use-package racket-mode
@@ -170,12 +175,6 @@
   :init
   (global-set-key [remap goto-line] 'goto-line-preview))
 
-;; beacon : easy to visually locate the cursor quickly
-(use-package beacon
-  :defer t
-  :init
-  (beacon-mode))
-
 ;; Translate
 (use-package youdao-dictionary
   :defer t
@@ -188,12 +187,6 @@
   :defer t
   :init
   (which-key-mode t))
-
-;; Theme
-;; (load-theme 'modus-vivendi t)
-
-(set-face-attribute 'line-number 'nil :foreground "#999")
-(set-face-attribute 'line-number-current-line 'nil :foreground "#000")
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
