@@ -47,7 +47,9 @@
 
 (require-package 'treemacs
 		 'xclip
+		 'proof-general
 		 'company
+		 'company-coq
 		 'markdown-mode
 		 'dune-format
 		 'darkroom
@@ -79,10 +81,10 @@
 
   (set-face-attribute 'default nil
 		      :font "SF Mono"
-		      :weight 'medium
+		      :weight 'semibold
 		      :height 115))
 
-(setq-default line-spacing 0
+(setq-default line-spacing 0.0
 	      cursor-type '(hbar . 5))
 
 (set-cursor-color "#0f0")
@@ -151,6 +153,14 @@
   :config
   (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat))
 
+;; Proof Environment for Coq
+(use-package proof-general
+  :defer t
+  :init
+  (use-package company-coq
+    :defer t
+    :hook (coq-mode . company-coq)))
+
 ;; window numbering
 (use-package window-numbering
   :defer t
@@ -179,7 +189,7 @@
 (use-package youdao-dictionary
   :defer t
   :init
-  (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+  (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point-posframe)
   (global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point))
 
 ;; Which key
@@ -191,3 +201,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(proof-general xclip nano-modeline company markdown-mode dune-format darkroom doom-themes racket-mode hide-mode-line utop which-key window-numbering treemacs-all-the-icons dune ocamlformat fsharp-mode magit toml beacon goto-line-preview youdao-dictionary powerline)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
