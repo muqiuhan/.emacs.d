@@ -29,9 +29,4 @@ O FEATURES
   Supported Programming Languages: OCaml, Rust, C/C++, F#
 
 O RECOMMEND CONFIGURE
-  ./configure --without-x
-              --without-xwidgets
-              --with-x-toolkit=no
-              --with-json
-	      --with-native-compilation
-	      --with-gnutls
+  ./configure --without-x --without-xwidgets --with-x-toolkit=no --with-json --with-native-compilation --with-gnutls
