@@ -70,22 +70,27 @@
 		 'goto-line-preview
 		 'youdao-dictionary)
 
-
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1)
 
 (when (display-graphic-p)
-  (tool-bar-mode -1)
-  (fringe-mode -1)
-  (scroll-bar-mode -1)
+  (setq default-frame-alist '(
+			      (undecorated . t)
+			      (drag-internal-border . 1)
+			      (internal-border-width . 5)
+			      (vertical-scroll-bars)
+			      (left-fringe)
+			      (right-fringe . 0)))
+
+  (setq-default line-spacing 0.0
+		cursor-type '(hbar . 5))
 
   (set-face-attribute 'default nil
 		      :font "SF Mono"
 		      :weight 'semibold
-		      :height 115))
+		      :height 115)
 
-(setq-default line-spacing 0.0
-	      cursor-type '(hbar . 5))
+  (toggle-frame-maximized))
 
 (set-cursor-color "#0f0")
 
@@ -94,6 +99,7 @@
 
 (setq gc-cons-threshold (* 50 1000 1000))
 (load-theme 'doom-gruvbox t)
+
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -201,16 +207,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(proof-general xclip nano-modeline company markdown-mode dune-format darkroom doom-themes racket-mode hide-mode-line utop which-key window-numbering treemacs-all-the-icons dune ocamlformat fsharp-mode magit toml beacon goto-line-preview youdao-dictionary powerline)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
