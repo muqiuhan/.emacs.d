@@ -52,9 +52,11 @@
 		 'racket-mode
 		 'utop
 		 'which-key
+		 'flycheck-ocaml
 		 'tuareg
 		 'window-numbering
 		 'treemacs-all-the-icons
+		 'eldoc-box
 		 'dune
 		 'ocamlformat
 		 'use-package
@@ -73,16 +75,16 @@
   (setq default-frame-alist '(
 			      (internal-border-width . 5)
 			      (vertical-scroll-bars)
-			      (left-fringe)
+			      (left-fringe . 0)
 			      (right-fringe . 0)))
 
-  (setq-default line-spacing 0.0
+  (setq-default line-spacing 0.1
 		cursor-type '(hbar . 5))
 
   (set-face-attribute 'default nil
-		      :font "SF Mono"
-		      :weight 'semibold
-		      :height 115)
+		      :font "Consolas Ligaturized v3"
+		      :weight 'bold
+		      :height 140)
 
   (toggle-frame-maximized))
 
@@ -92,7 +94,7 @@
 (setq backup-directory-alist `(("." . "~/.saves"))
       gc-cons-threshold (* 50 1000 1000))
 
-(load-theme 'doom-gruvbox t)
+(load-theme 'tango-dark t)
 
 
 ;; ----------------------------------- config -----------------------------------
@@ -125,7 +127,7 @@
   :config
   (setq treemacs-width 35
 	treemacs-indentation 2
-	treemacs-position 'right
+	treemacs-position 'left
 	treemacs-icon-tag-leaf "0")
   :init
   (when (display-graphic-p)
@@ -141,6 +143,12 @@
   :defer t
   :hook (after-init . powerline-center-theme))
 
+;; eldoc
+(when (display-graphic-p)
+  (use-package eldoc-mode
+    :defer t
+    :hook (eldoc-mode . eldoc-box-hover-at-point-mode)))
+
 ;; Racket
 (use-package racket-mode
   :defer t
@@ -149,9 +157,28 @@
 ;; OCaml
 (use-package tuareg
   :defer t
-  :hook (tuareg-mode . merlin-mode)
+  
   :config
-  (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat))
+  (use-package merlin
+    :hook ((tuareg-mode . merlin-mode)
+	   (tuareg-mode . merlin-eldoc-setup)
+	   (tuareg-mode . flycheck-ocaml-setup))
+
+    :config
+    (setq merlin-completion-with-doc t))
+  
+  (use-package ocamlformat
+    :config
+    (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat-before-save)))
+
+;; C/C++
+(custom-set-variables
+ '(c-offsets-alist
+   '((defun-open . 2)
+     (defun-close . 0)
+     (class-open . 2)
+     (class-close . 2)
+     (access-label . -1))))
 
 ;; Proof Environment for Coq
 (use-package proof-general
@@ -174,10 +201,10 @@
 (use-package darkroom
   :defer t
   :config
-  (setq darkroom-margin-increment 20))
+  (setq darkroom-margin-increment 0.1)
 
-;; Add README support
-(setq auto-mode-alist (append '(("README" . darkroom-mode)) auto-mode-alist))
+  :init
+  (setq auto-mode-alist (append '(("README" . darkroom-mode)) auto-mode-alist)))
 
 ;; Goto line preview
 (use-package goto-line-preview
@@ -201,3 +228,9 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
