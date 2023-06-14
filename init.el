@@ -29,7 +29,11 @@
 (setq-default url-proxy-services
 	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 		("http" . "127.0.0.1:7890")
-		("https" . "127.0.0.1:7890")))
+		("https" . "127.0.0.1:7890"))
+	      
+	      is-graphics (display-graphic-p)
+
+	      is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
@@ -42,7 +46,6 @@
          (package-install p))))))
 
 (require-package 'treemacs
-		 'xclip
 		 'proof-general
 		 'company
 		 'company-coq
@@ -54,10 +57,10 @@
 		 'utop
 		 'which-key
 		 'simple-modeline
+		 'flycheck-ocaml
+		 'flycheck
 		 'tuareg
 		 'window-numbering
-		 'treemacs-all-the-icons
-		 'eldoc-box
 		 'dune
 		 'ocamlformat
 		 'use-package
@@ -65,6 +68,16 @@
 		 'beacon
 		 'goto-line-preview
 		 'youdao-dictionary)
+
+(when is-x11
+  (require-package 'xclip))
+
+(if is-graphics
+  (require-package 'flycheck-posframe
+		   'treemacs-all-the-icons
+		   'eldoc-box)
+  (require-package 'flycheck-popup-tip))
+		   
 
 ;; ----------------------------------- Basic config -----------------------------------
 (menu-bar-mode -1)
@@ -162,8 +175,6 @@
          ("M-RET"       . treemacs-select-window)
          ("C-x t t"   . treemacs)))
 
-
-
 ;; eldoc
 (when (display-graphic-p)
   (use-package eldoc-mode
@@ -177,6 +188,10 @@
       (set-face-attribute 'eldoc-box-body nil
 			  :background (face-attribute 'default :background)))))
 
+;; Flycheck
+(use-package flycheck
+  
+
 ;; Racket
 (use-package racket-mode
   :defer t
@@ -185,15 +200,22 @@
 ;; OCaml
 (use-package tuareg
   :defer t
-  
   :config
   (use-package merlin
     :hook ((tuareg-mode . merlin-mode)
 	   (tuareg-mode . merlin-eldoc-setup)
-	   (tuareg-mode . flycheck-ocaml-setup))
+	   (tuareg-mode . flycheck-mode))
 
     :config
     (setq merlin-completion-with-doc t))
+
+  (use-package flycheck-ocaml
+    :ensure t
+    :config
+    (add-hook 'tuareg-mode-hook
+              (lambda ()
+		(setq-local merlin-error-after-save nil)
+		(flycheck-ocaml-setup))))
   
   (use-package ocamlformat
     :config
