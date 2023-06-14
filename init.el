@@ -25,6 +25,7 @@
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
+
 (setq-default url-proxy-services
 	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 		("http" . "127.0.0.1:7890")
@@ -52,7 +53,7 @@
 		 'racket-mode
 		 'utop
 		 'which-key
-		 'flycheck-ocaml
+		 'simple-modeline
 		 'tuareg
 		 'window-numbering
 		 'treemacs-all-the-icons
@@ -60,9 +61,7 @@
 		 'dune
 		 'ocamlformat
 		 'use-package
-		 'fsharp-mode
 		 'magit
-		 'toml
 		 'beacon
 		 'goto-line-preview
 		 'youdao-dictionary)
@@ -72,13 +71,12 @@
 (tool-bar-mode -1)
 
 (when (display-graphic-p)
-  (setq default-frame-alist '(
-			      (internal-border-width . 5)
+  (setq default-frame-alist '((internal-border-width . 5)
 			      (vertical-scroll-bars)
 			      (left-fringe . 0)
 			      (right-fringe . 0)))
 
-  (setq-default line-spacing 0.1
+  (setq-default line-spacing 0.2
 		cursor-type '(hbar . 5))
 
   (set-face-attribute 'default nil
@@ -88,14 +86,11 @@
 
   (toggle-frame-maximized))
 
-(set-cursor-color "#0f0")
-
 (global-auto-revert-mode 1)
 (setq backup-directory-alist `(("." . "~/.saves"))
       gc-cons-threshold (* 50 1000 1000))
 
-(load-theme 'tango-dark t)
-
+(load-theme 'doom-dark+ t)
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -114,6 +109,18 @@
   
   :hook (prog-mode . display-line-numbers-mode))
 
+;; Beacon
+(use-package beacon
+  :defer t
+  :hook (after-init . beacon-mode)
+  :config
+  (setq beacon-color "#0f0"))
+
+;; mode line
+(use-package simple-modeline
+  :defer t
+  :hook (after-init . simple-modeline-mode))
+
 ;; xclip: easy to synchorize with the system clipboard
 (use-package xclip
   :defer t
@@ -129,6 +136,23 @@
 	treemacs-indentation 2
 	treemacs-position 'left
 	treemacs-icon-tag-leaf "0")
+
+  (dolist (face '(treemacs-root-face
+                  treemacs-git-unmodified-face
+                  treemacs-git-modified-face
+                  treemacs-git-renamed-face
+                  treemacs-git-ignored-face
+                  treemacs-git-untracked-face
+                  treemacs-git-added-face
+                  treemacs-git-conflict-face
+                  treemacs-directory-face
+                  treemacs-directory-collapsed-face
+                  treemacs-file-face
+                  treemacs-tags-face))
+    (set-face-attribute face nil
+			:font (face-attribute 'default :font)
+			:height 130))
+  
   :init
   (when (display-graphic-p)
     (use-package treemacs-all-the-icons)
@@ -138,16 +162,20 @@
          ("M-RET"       . treemacs-select-window)
          ("C-x t t"   . treemacs)))
 
-;; powerline
-(use-package powerline
-  :defer t
-  :hook (after-init . powerline-center-theme))
+
 
 ;; eldoc
 (when (display-graphic-p)
   (use-package eldoc-mode
     :defer t
-    :hook (eldoc-mode . eldoc-box-hover-at-point-mode)))
+    :hook (eldoc-mode . eldoc-box-hover-at-point-mode)
+    :config
+    (use-package eldoc-box
+      :config
+      (set-face-attribute 'eldoc-box-border nil :background "#444")
+
+      (set-face-attribute 'eldoc-box-body nil
+			  :background (face-attribute 'default :background)))))
 
 ;; Racket
 (use-package racket-mode
@@ -172,13 +200,12 @@
     (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat-before-save)))
 
 ;; C/C++
-(custom-set-variables
- '(c-offsets-alist
-   '((defun-open . 2)
-     (defun-close . 0)
-     (class-open . 2)
-     (class-close . 2)
-     (access-label . -1))))
+(setq-default c-offsets-alist
+	      '((defun-open . 2)
+		(defun-close . 0)
+		(class-open . 2)
+		(class-close . 2)
+		(access-label . -1)))
 
 ;; Proof Environment for Coq
 (use-package proof-general
@@ -228,6 +255,7 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
