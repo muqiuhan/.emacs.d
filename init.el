@@ -57,6 +57,7 @@
 		 'utop
 		 'which-key
 		 'simple-modeline
+		 'flycheck-inline
 		 'flycheck-ocaml
 		 'flycheck
 		 'tuareg
@@ -73,11 +74,10 @@
   (require-package 'xclip))
 
 (if is-graphics
-  (require-package 'flycheck-posframe
-		   'treemacs-all-the-icons
+  (require-package 'treemacs-all-the-icons
 		   'company-box
 		   'eldoc-box)
-  (require-package 'flycheck-popup-tip))
+  (require-package))
 		   
 
 ;; ----------------------------------- Basic config -----------------------------------
@@ -114,7 +114,18 @@
   :init (global-company-mode t)
   :config
   (when is-graphics
-    ()))
+    (use-package company-box
+      :hook (company-mode . company-box-mode)
+      :config
+      (setq-default company-box-doc-delay 0
+		    company-box-doc-delay 0
+		    company-box-doc-enable t
+		    company-box-doc-frame-parameters
+		    '((vertical-scroll-bars . nil)
+		      (horizontal-scroll-bars . nil)
+		      (internal-border-width . 1)
+		      (left-fringe . 0)
+		      (right-fringe . 0))))))
 
 ;; line number
 (use-package display-line-numbers
@@ -181,25 +192,17 @@
 
 ;; eldoc
 (when is-graphics
-  (use-package eldoc-mode
+  (use-package eldoc-box
     :defer t
-    :hook (eldoc-mode . eldoc-box-hover-at-point-mode)
+    :hook (eldoc-mode . eldoc-box-hover-mode)
     :config
-    (use-package eldoc-box
-      :config
-      (set-face-attribute 'eldoc-box-border nil :background "#444")
-
-      (set-face-attribute 'eldoc-box-body nil
-			  :background (face-attribute 'default :background)))))
+    (set-face-attribute 'eldoc-box-border nil :background "#444")
+    (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
 ;; Flycheck
-(use-package flycheck
-  :config
-  (if is-graphics
-      (use-package flycheck-posframe
-	:hook (flycheck-mode . flycheck-posframe-mode))
-    (use-package flycheck-popup-tip
-      :hook (flycheck-mode . flycheck-popup-tip-mode))))
+(use-package flycheck-inline
+  :defer t
+  :hook (flycheck-mode . flycheck-inline-mode))
 
 ;; Racket
 (use-package racket-mode
@@ -303,7 +306,7 @@
      (defun-close . 0)
      (class-open . 2)
      (class-close . 2)
-     (access-label . -1)))
+     (access-label . -1)) t)
  '(connection-local-criteria-alist
    '(((:application tramp)
       tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
@@ -383,4 +386,4 @@
  '(custom-safe-themes
    '("adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "f458b92de1f6cf0bdda6bce23433877e94816c3364b821eb4ea9852112f5d7dc" "016f665c0dd5f76f8404124482a0b13a573d17e92ff4eb36a66b409f4d1da410" "49acd691c89118c0768c4fb9a333af33e3d2dca48e6f79787478757071d64e68" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "512ce140ea9c1521ccaceaa0e73e2487e2d3826cc9d287275550b47c04072bc4" "bf948e3f55a8cd1f420373410911d0a50be5a04a8886cabe8d8e471ad8fdba8e" "680f62b751481cc5b5b44aeab824e5683cf13792c006aeba1c25ce2d89826426" "a44e2d1636a0114c5e407a748841f6723ed442dc3a0ed086542dc71b92a87aee" "631c52620e2953e744f2b56d102eae503017047fb43d65ce028e88ef5846ea3b" "a138ec18a6b926ea9d66e61aac28f5ce99739cf38566876dc31e29ec8757f6e2" "2dd4951e967990396142ec54d376cced3f135810b2b69920e77103e0bcedfba9" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" default))
  '(package-selected-packages
-   '(company-box simple-modeline xclip nano-modeline markdown-mode dune-format darkroom doom-themes racket-mode hide-mode-line utop which-key window-numbering treemacs-all-the-icons dune ocamlformat fsharp-mode magit toml beacon goto-line-preview youdao-dictionary powerline proof-general company-coq centered-window merlin-eldoc flycheck-ocaml eldoc-box flycheck-posframe flycheck-pos-tip flycheck-popup-tip flycheck-inline highlight-indent-guides)))
+   '(eldoc-overlay company-box simple-modeline xclip nano-modeline markdown-mode dune-format darkroom doom-themes racket-mode hide-mode-line utop which-key window-numbering treemacs-all-the-icons dune ocamlformat fsharp-mode magit toml beacon goto-line-preview youdao-dictionary powerline proof-general company-coq centered-window merlin-eldoc flycheck-ocaml eldoc-box flycheck-posframe flycheck-pos-tip flycheck-popup-tip flycheck-inline highlight-indent-guides)))
