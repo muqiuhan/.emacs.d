@@ -2,17 +2,20 @@
 | .emacs.d |
 +----------+
 
-  A simple, lightweight, fast configuration for OCaml, Racket and Coq development.
+  A simple, lightweight, fast configuration for OCaml, Racket and Coq development,
+  and support terminal
 
-O FEATURES
-  o- Terminal first, but also provides GUI support.
-  o- Treemacs, using all-the-icons in the GUI
-  o- Powerline mode
-  o- Magit mode
-  o- Darkroom mode
-
-O RECOMMEND CONFIGURE
-  ./configure --without-x --without-xwidgets --with-x-toolkit=no --with-json --with-native-compilation --with-gnutls
+O THE PROGRAMMING LANGUAGE ENVIRONMENT
+  o- Racket: racket-mode + racket-xp-mode
+  o- OCaml: tuareg + merlin + ocamlformat + utop
+  o- Coq: Proof-General
+  
+O AUXILIARY
+  o- Treemacs
+  o- Darkroom
+  o- Company: company-box
+  o- Eldoc: eldoc-box
+  o- Flycheck: flycheck-inline
 
 O LICENSE
   Copyright (C) 2022 Muqiu Han <muqiu-han@outlook.com>
