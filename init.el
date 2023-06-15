@@ -51,8 +51,6 @@
 		 'company-coq
 		 'markdown-mode
 		 'dune-format
-		 'darkroom
-		 'doom-themes
 		 'racket-mode
 		 'merlin-eldoc
 		 'utop
@@ -62,6 +60,7 @@
 		 'flycheck-ocaml
 		 'flycheck
 		 'tuareg
+		 'olivetti
 		 'window-numbering
 		 'dune
 		 'ocamlformat
@@ -105,7 +104,7 @@
 (setq backup-directory-alist `(("." . "~/.saves"))
       gc-cons-threshold (* 50 1000 1000))
 
-(load-theme 'doom-dark+ t)
+(load-theme 'tango-dark t)
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -131,10 +130,12 @@
 ;; line number
 (use-package display-line-numbers
   :defer t
-
-  :init
-  (set-face-attribute 'line-number nil :italic nil)
-  (set-face-attribute 'line-number-current-line nil :italic nil)
+  :config 
+  (set-face-attribute 'line-number nil
+		      :italic nil)
+  
+  (set-face-attribute 'line-number-current-line nil
+		      :italic nil)
   
   :hook (prog-mode . display-line-numbers-mode))
 
@@ -259,15 +260,10 @@
 ;; Markdown
 (use-package markdown-mode
   :defer t
-  :hook (markdown-mode . darkroom-mode))
-
-(use-package darkroom
-  :defer t
-  :config
-  (setq darkroom-margin-increment 0.1)
+  :hook (markdown-mode . olivetti-mode)
 
   :init
-  (setq auto-mode-alist (append '(("README" . darkroom-mode)) auto-mode-alist)))
+  (setq auto-mode-alist (append '(("README" . olivetti-mode)) auto-mode-alist)))
 
 ;; Goto line preview
 (use-package goto-line-preview
