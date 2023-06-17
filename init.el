@@ -80,7 +80,6 @@
 		 'tuareg
 		 'olivetti
 		 'window-numbering
-		 'evil
 		 'dune
 		 'ocamlformat
 		 'use-package
@@ -111,11 +110,6 @@
 (load-theme 'tango-dark t)
 
 ;; ----------------------------------- config -----------------------------------
-
-;; evil
-(use-package evil
-  :defer t
-  :init (evil-mode 1))
 
 ;; company
 (use-package company
