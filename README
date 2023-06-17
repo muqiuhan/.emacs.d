@@ -3,7 +3,7 @@
 +----------+
 
   A simple, lightweight, fast configuration for OCaml, Racket and Coq development,
-  and support terminal
+  and support terminal.
 
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
   o- Racket: racket-mode + racket-xp-mode
@@ -11,6 +11,7 @@ O THE PROGRAMMING LANGUAGE ENVIRONMENT
   o- Coq: Proof-General
   
 O AUXILIARY
+  o- Evil
   o- Treemacs
   o- Darkroom
   o- Company: company-box
