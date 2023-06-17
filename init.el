@@ -250,6 +250,13 @@
 		(class-close . 2)
 		(access-label . -1)))
 
+;; Agda
+(add-hook 'after-init-hook
+	  '(lambda ()
+	     (interactive)
+	     (load-file (let ((coding-system-for-read 'utf-8))
+			  (shell-command-to-string "agda-mode locate")))))
+
 ;; Proof Environment for Coq
 (use-package proof-general
   :defer t
