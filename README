@@ -2,13 +2,14 @@
 | .emacs.d |
 +----------+
 
-  A simple, lightweight, fast configuration for OCaml, Racket and Coq development,
+  A simple, lightweight, fast configuration for OCaml, Racket and Coq/Agda development,
   and support terminal.
 
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
   o- Racket: racket-mode + racket-xp-mode
   o- OCaml: tuareg + merlin + ocamlformat + utop
   o- Coq: Proof-General
+  o- Agda: agda2-mode
   
 O AUXILIARY
   o- Evil

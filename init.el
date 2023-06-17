@@ -22,18 +22,36 @@
 ;;
 ;;; Code:
 
-;; ----------------------------------- Package config -----------------------------------
-
-(require 'package)
+(setq agda-mode-locate "~/.cabal/bin/agda-mode locate")
 
 (setq-default url-proxy-services
 	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 		("http" . "127.0.0.1:7890")
-		("https" . "127.0.0.1:7890"))
-	      
-	      is-graphics (display-graphic-p)
+		("https" . "127.0.0.1:7890")))
 
-	      is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
+(setq is-graphics (display-graphic-p))
+(setq is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
+
+(setq backup-directory-alist `(("." . "~/.saves"))
+      gc-cons-threshold (* 50 1000 1000))
+
+(setq default-frame-alist '((internal-border-width . 5)
+			    (vertical-scroll-bars)
+			    (left-fringe . 0)
+			    (right-fringe . 0)))
+
+(setq-default line-spacing 0.2
+	      cursor-type '(hbar . 5))
+
+(set-face-attribute 'default nil
+		    :font "Consolas Ligaturized v3"
+		    :weight 'bold
+		    :height 140)
+
+
+;; ----------------------------------- Package config -----------------------------------
+
+(require 'package)
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
@@ -82,28 +100,13 @@
 
 
 ;; ----------------------------------- Basic config -----------------------------------
-(menu-bar-mode -1)
-(tool-bar-mode -1)
 
-(when (display-graphic-p)
-  (setq default-frame-alist '((internal-border-width . 5)
-			      (vertical-scroll-bars)
-			      (left-fringe . 0)
-			      (right-fringe . 0)))
-
-  (setq-default line-spacing 0.2
-		cursor-type '(hbar . 5))
-
-  (set-face-attribute 'default nil
-		      :font "Consolas Ligaturized v3"
-		      :weight 'bold
-		      :height 140)
-
-  (toggle-frame-maximized))
+(toggle-frame-maximized)
 
 (global-auto-revert-mode 1)
-(setq backup-directory-alist `(("." . "~/.saves"))
-      gc-cons-threshold (* 50 1000 1000))
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (load-theme 'tango-dark t)
 
@@ -158,11 +161,10 @@
   :hook (after-init . simple-modeline-mode))
 
 ;; xclip: easy to synchorize with the system clipboard
-(use-package xclip
-  :defer t
-  :init
-  (when (string-equal "x11" (getenv "XDG_SESSION_TYPE"))
-    (xclip-mode)))
+(when is-x11
+  (use-package xclip
+    :defer t
+    :hook (after-init . xclip-mode)))
 
 ;; treemacs
 (use-package treemacs
@@ -255,7 +257,7 @@
 	  '(lambda ()
 	     (interactive)
 	     (load-file (let ((coding-system-for-read 'utf-8))
-			  (shell-command-to-string "agda-mode locate")))))
+			  (shell-command-to-string agda-mode-locate)))))
 
 ;; Proof Environment for Coq
 (use-package proof-general
