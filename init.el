@@ -44,9 +44,9 @@
 	      cursor-type '(hbar . 5))
 
 (set-face-attribute 'default nil
-		    :font "Consolas Ligaturized v3"
-		    :weight 'bold
-		    :height 140)
+		    :font "Consolas ligaturized v3"
+		    :weight 'semibold
+		    :height 145)
 
 
 ;; ----------------------------------- Package config -----------------------------------
@@ -71,6 +71,8 @@
 		 'dune-format
 		 'racket-mode
 		 'merlin-eldoc
+		 'vterm
+		 'vterm-toggle
 		 'utop
 		 'which-key
 		 'simple-modeline
@@ -253,6 +255,8 @@
 	     (load-file (let ((coding-system-for-read 'utf-8))
 			  (shell-command-to-string agda-mode-locate)))))
 
+(setq agda2-program-name "~/.cabal/bin/agda")
+
 ;; Proof Environment for Coq
 (use-package proof-general
   :defer t
@@ -283,9 +287,15 @@
 ;; Translate
 (use-package youdao-dictionary
   :defer t
-  :init
-  (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point-posframe)
-  (global-set-key (kbd "C-c p") 'youdao-dictionary-play-voice-at-point))
+  :bind (("C-c y" . youdao-dictionary-search-at-point-posframe)
+	 ("C-c p" . youdao-dictionary-play-voice-at-point)))
+
+;; vterm
+(use-package vterm 
+  :defer t
+  :bind (([f9] . vterm-toggle)
+	 :map vterm-mode-map
+	 ([f9] . vterm-toggle)))
 
 ;; Which key
 (use-package which-key
