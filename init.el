@@ -44,10 +44,11 @@
 	      cursor-type '(hbar . 5))
 
 (set-face-attribute 'default nil
-		    :font "Consolas ligaturized v3"
-		    :weight 'semibold
+		    :font "JetBrains Mono"
+		    :weight 'bold
 		    :height 145)
 
+(load-theme 'doom-dark+ t)
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -78,6 +79,7 @@
 		 'simple-modeline
 		 'flycheck-inline
 		 'flycheck-ocaml
+		 'doom-themes
 		 'flycheck
 		 'tuareg
 		 'olivetti
@@ -109,8 +111,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-(load-theme 'tango-dark t)
-
 ;; ----------------------------------- config -----------------------------------
 
 ;; company
@@ -137,10 +137,13 @@
   :defer t
   :config 
   (set-face-attribute 'line-number nil
-		      :italic nil)
+		      :font (face-attribute 'default :font)
+		      :weight (face-attribute 'default :weight))
   
   (set-face-attribute 'line-number-current-line nil
-		      :italic nil)
+		      :italic nil
+		      :font (face-attribute 'default :font)
+		      :weight (face-attribute 'default :weight))
   
   :hook (prog-mode . display-line-numbers-mode))
 
