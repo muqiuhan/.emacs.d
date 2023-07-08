@@ -22,8 +22,6 @@
 ;;
 ;;; Code:
 
-(setq agda-mode-locate "~/.cabal/bin/agda-mode locate")
-
 (setq-default url-proxy-services
 	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 		("http" . "127.0.0.1:7890")
@@ -48,7 +46,7 @@
 		    :weight 'bold
 		    :height 145)
 
-(load-theme 'doom-dark+ t)
+(load-theme 'doom-gruvbox t)
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -86,9 +84,11 @@
 		 'window-numbering
 		 'dune
 		 'ocamlformat
+		 'cider
 		 'use-package
 		 'magit
 		 'beacon
+		 'rainbow-delimiters
 		 'goto-line-preview
 		 'youdao-dictionary)
 
@@ -251,14 +251,20 @@
 		(class-close . 2)
 		(access-label . -1)))
 
+;; Clojure
+(use-package cider
+  :defer t
+  :ensure t)
+
 ;; Agda
 (add-hook 'after-init-hook
 	  '(lambda ()
 	     (interactive)
-	     (load-file (let ((coding-system-for-read 'utf-8))
-			  (shell-command-to-string agda-mode-locate)))))
+	     (let ((agda2-program-name "~/.cabal/bin/agda")
+		   (agda-mode-locate "~/.cabal/bin/agda-mode locate"))
 
-(setq agda2-program-name "~/.cabal/bin/agda")
+	       (load-file (let ((coding-system-for-read 'utf-8))
+			    (shell-command-to-string agda-mode-locate))))))
 
 ;; Proof Environment for Coq
 (use-package proof-general
@@ -292,6 +298,11 @@
   :defer t
   :bind (("C-c y" . youdao-dictionary-search-at-point-posframe)
 	 ("C-c p" . youdao-dictionary-play-voice-at-point)))
+
+;; rainbow-delimiters
+(use-package rainbow-delimiters
+  :defer t
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; vterm
 (use-package vterm 

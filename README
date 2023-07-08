@@ -2,21 +2,36 @@
 | .emacs.d |
 +----------+
 
-  A simple, lightweight, fast configuration for OCaml, Racket and Coq/Agda development,
-  and support terminal.
+  A simple, lightweight, fast configuration for GNU/Emacs.
 
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
-  o- Racket: racket-mode + racket-xp-mode
+
   o- OCaml: tuareg + merlin + ocamlformat + utop
+  o- Racket: racket-mode + racket-xp-mode
   o- Coq: Proof-General
   o- Agda: agda2-mode
+  o- Clojure: cider-mode
   
 O AUXILIARY
+
   o- Treemacs
   o- Darkroom
   o- Company: company-box
   o- Eldoc: eldoc-box
   o- Flycheck: flycheck-inline
+  o- vterm
+
+O Key Binding
+
+  o- Global
+  
+     Dictionary		C-c C-y
+     Vterm		[F9]
+     Treemacs		C-x t t or [F8]
+
+  o- OCaml
+  
+     ocamlformat	C-x x f
 
 O LICENSE
   Copyright (C) 2022 Muqiu Han <muqiu-han@outlook.com>
