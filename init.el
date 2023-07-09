@@ -42,7 +42,7 @@
 	      cursor-type '(hbar . 5))
 
 (set-face-attribute 'default nil
-		    :font "JetBrains Mono"
+		    :font "Monego"
 		    :weight 'bold
 		    :height 145)
 
@@ -296,8 +296,12 @@
 ;; Translate
 (use-package youdao-dictionary
   :defer t
-  :bind (("C-c y" . youdao-dictionary-search-at-point-posframe)
-	 ("C-c p" . youdao-dictionary-play-voice-at-point)))
+  :bind ("C-c p" . youdao-dictionary-play-voice-at-point)
+  :init
+  (require 'popup)
+  (if is-graphics
+      (global-set-key (kbd "C-c y")  'youdao-dictionary-search-at-point-posframe)
+    (global-set-key (kbd "C-c y")  'youdao-dictionary-search-at-point+)))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
