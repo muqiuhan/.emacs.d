@@ -44,9 +44,9 @@
 (set-face-attribute 'default nil
 		    :font "Monego"
 		    :weight 'bold
-		    :height 145)
+		    :height 125)
 
-(load-theme 'doom-gruvbox t)
+(load-theme 'doom-dark+ t)
 
 ;; ----------------------------------- Package config -----------------------------------
 

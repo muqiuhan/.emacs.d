@@ -4,6 +4,17 @@
 
   A simple, lightweight, fast configuration for GNU/Emacs.
 
+O CONFIGURE
+  This is my ./configure arguments:
+
+  ./configure \
+	--without-x \
+	--without-xwidgets \
+	--with-x-toolkit=no \
+	--with-json \
+	--with-native-compilation \
+	--with-gnutls
+
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
 
   o- OCaml: tuareg + merlin + ocamlformat + utop
