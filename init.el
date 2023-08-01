@@ -93,7 +93,7 @@
 		 'beacon
 		 'rainbow-delimiters
 		 'goto-line-preview
-		 'youdao-dictionary)
+		 'go-translate)
 
 (when is-x11
   (require-package 'xclip))
@@ -319,14 +319,16 @@
 		      :foreground (face-attribute 'default :foreground)))
 
 ;; Translate
-(use-package youdao-dictionary
-  :defer t
-  :bind ("C-c p" . youdao-dictionary-play-voice-at-point)
-  :init
-  (require 'popup)
-  (if is-graphics
-      (global-set-key (kbd "C-c y")  'youdao-dictionary-search-at-point-posframe)
-    (global-set-key (kbd "C-c y")  'youdao-dictionary-search-at-point+)))
+(use-package go-translate
+  :bind ("C-c y" . gts-do-translate)
+  :config
+  (setq gts-translate-list '(("en" "zh")))
+
+  (setq gts-default-translator
+	(gts-translator
+	 :picker (gts-prompt-picker)
+	 :engines (list (gts-google-engine) (gts-google-rpc-engine))
+	 :render (gts-buffer-render))))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
