@@ -9,11 +9,20 @@ O CONFIGURE
 
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
 
+  Eglot will try to start in every prog-mode:
+
+  o- Native support for C/C++ (eglot + clangd)
   o- OCaml: tuareg + merlin + ocamlformat + utop
   o- Racket: racket-mode + racket-xp-mode
   o- Coq: Proof-General
   o- Agda: agda2-mode
   o- Clojure: cider-mode
+
+O OTHER
+
+  o- Vterm: [F9]
+  o- Translate: C-c y
+  o- Treemacs: C-x t t
 
 O LICENSE
   Copyright (C) 2022 Muqiu Han <muqiu-han@outlook.com>
