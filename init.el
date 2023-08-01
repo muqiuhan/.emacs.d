@@ -308,6 +308,16 @@
   :init
   (global-set-key [remap goto-line] 'goto-line-preview))
 
+;; mini modeline
+(use-package mini-modeline
+  :defer t
+  :hook (after-init . mini-modeline-mode)
+  :config
+  (setq-default mini-modeline-echo-duration "middle"
+		mini-modeline-right-padding 0)
+
+  (set-face-attribute 'mini-modeline-mode-line nil :background "#555"))
+
 ;; Translate
 (use-package youdao-dictionary
   :defer t
