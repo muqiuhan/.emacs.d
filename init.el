@@ -33,12 +33,13 @@
 (setq backup-directory-alist `(("." . "~/.saves"))
       gc-cons-threshold (* 50 1000 1000))
 
-(setq-default line-spacing 0
-	      cursor-type 'bar)
+(setq-default line-spacing 0.2
+	      cursor-type 'hbar)
 
 (defun set-font (english chinese english-size chinese-size)
   (set-face-attribute 'default nil
-		      :font (format "%s:pixelsize=%d" english english-size))
+		      :font (format "%s:pixelsize=%d" english english-size)
+		      :weight 'bold)
 
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font) charset
@@ -47,7 +48,7 @@
 		       :size chinese-size
 		       :weight 'bold))))
 
-(set-font "Operator Mono Medium" "TsangerMingHei" 19 19)
+(set-font "Consolas Ligaturized v3" "TsangerMingHei" 19 19)
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -313,10 +314,9 @@
   :defer t
   :hook (after-init . mini-modeline-mode)
   :config
-  (setq-default mini-modeline-echo-duration "middle"
-		mini-modeline-right-padding 0)
-
-  (set-face-attribute 'mini-modeline-mode-line nil :background "#555"))
+  (set-face-attribute 'mini-modeline-mode-line nil
+		      :background "#555"
+		      :foreground (face-attribute 'default :foreground)))
 
 ;; Translate
 (use-package youdao-dictionary
