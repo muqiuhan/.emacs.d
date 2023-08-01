@@ -33,18 +33,21 @@
 (setq backup-directory-alist `(("." . "~/.saves"))
       gc-cons-threshold (* 50 1000 1000))
 
-(setq default-frame-alist '((internal-border-width . 5)
-			    (vertical-scroll-bars)
-			    (left-fringe . 0)
-			    (right-fringe . 0)))
-
 (setq-default line-spacing 0
 	      cursor-type 'bar)
 
-(set-face-attribute 'default nil
-		    :font "IntelOne Mono"
-		    :weight 'bold
-		    :height 130)
+(defun set-font (english chinese english-size chinese-size)
+  (set-face-attribute 'default nil
+		      :font (format "%s:pixelsize=%d" english english-size))
+
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font) charset
+                      (font-spec
+		       :family chinese
+		       :size chinese-size
+		       :weight 'bold))))
+
+(set-font "Operator Mono Medium" "TsangerMingHei" 19 19)
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -67,7 +70,7 @@
 		 'markdown-mode
 		 'dune-format
 		 'flymake-popon
-		 'github-dark-vscode-theme
+		 'mini-modeline
 		 'racket-mode
 		 'eglot
 		 'merlin-eldoc
@@ -75,7 +78,6 @@
 		 'vterm-toggle
 		 'utop
 		 'which-key
-		 'simple-modeline
 		 'flycheck-inline
 		 'flycheck-ocaml
 		 'flycheck
@@ -107,11 +109,13 @@
 (toggle-frame-maximized)
 
 (global-auto-revert-mode 1)
-
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(fringe-mode -1)
+(scroll-bar-mode -1)
 
-(load-theme 'github-dark-vscode t)
+(load-theme 'modus-vivendi t)
+(set-face-attribute 'default nil :background "#191919")
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -168,11 +172,6 @@
   :hook (after-init . beacon-mode)
   :config
   (setq beacon-color "#0f0"))
-
-;; mode line
-(use-package simple-modeline
-  :defer t
-  :hook (after-init . simple-modeline-mode))
 
 ;; xclip: easy to synchorize with the system clipboard
 (when is-x11
@@ -343,3 +342,5 @@
   (which-key-mode t))
 
 (provide 'init)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; init.el ends here
