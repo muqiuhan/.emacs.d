@@ -46,8 +46,6 @@
 		    :weight 'bold
 		    :height 130)
 
-(load-theme 'github-dark-vscode t)
-
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
@@ -69,7 +67,7 @@
 		 'markdown-mode
 		 'dune-format
 		 'flymake-popon
-		 'github-dark-vscode
+		 'github-dark-vscode-theme
 		 'racket-mode
 		 'eglot
 		 'merlin-eldoc
@@ -112,6 +110,8 @@
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+
+(load-theme 'github-dark-vscode t)
 
 ;; ----------------------------------- config -----------------------------------
 
