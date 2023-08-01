@@ -46,7 +46,7 @@
 		    :weight 'bold
 		    :height 130)
 
-(load-theme 'doom-dark+ t)
+(load-theme 'github-dark-vscode t)
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -69,6 +69,7 @@
 		 'markdown-mode
 		 'dune-format
 		 'flymake-popon
+		 'github-dark-vscode
 		 'racket-mode
 		 'eglot
 		 'merlin-eldoc
@@ -79,7 +80,6 @@
 		 'simple-modeline
 		 'flycheck-inline
 		 'flycheck-ocaml
-		 'doom-themes
 		 'flycheck
 		 'tuareg
 		 'olivetti
@@ -343,5 +343,3 @@
   (which-key-mode t))
 
 (provide 'init)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; init.el ends here
