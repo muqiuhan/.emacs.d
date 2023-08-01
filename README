@@ -2,18 +2,10 @@
 | .emacs.d |
 +----------+
 
-  A simple, lightweight, fast configuration for GNU/Emacs.
+  A simple, lightweight, fast configuration for GNU/Emacs 29.1
 
 O CONFIGURE
-  This is my ./configure arguments:
-
-  ./configure \
-	--without-x \
-	--without-xwidgets \
-	--with-x-toolkit=no \
-	--with-json \
-	--with-native-compilation \
-	--with-gnutls
+  ./configure --with-all --with-treesitter
 
 O THE PROGRAMMING LANGUAGE ENVIRONMENT
 
@@ -22,27 +14,6 @@ O THE PROGRAMMING LANGUAGE ENVIRONMENT
   o- Coq: Proof-General
   o- Agda: agda2-mode
   o- Clojure: cider-mode
-  
-O AUXILIARY
-
-  o- Treemacs
-  o- Darkroom
-  o- Company: company-box
-  o- Eldoc: eldoc-box
-  o- Flycheck: flycheck-inline
-  o- vterm
-
-O Key Binding
-
-  o- Global
-  
-     Dictionary		C-c C-y
-     Vterm		[F9]
-     Treemacs		C-x t t or [F8]
-
-  o- OCaml
-  
-     ocamlformat	C-x x f
 
 O LICENSE
   Copyright (C) 2022 Muqiu Han <muqiu-han@outlook.com>
