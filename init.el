@@ -36,19 +36,19 @@
 (setq-default line-spacing 0.2
 	      cursor-type 'hbar)
 
-(defun set-font (english chinese english-size chinese-size)
-  (set-face-attribute 'default nil
-		      :font (format "%s:pixelsize=%d" english english-size)
-		      :weight 'bold)
+(when is-graphics
+  (defun set-font (english chinese english-size chinese-size)
+    (set-face-attribute 'default nil
+			:font (format "%s:pixelsize=%d" english english-size)
+			:weight 'bold)
 
-  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font) charset
-                      (font-spec
-		       :family chinese
-		       :size chinese-size
-		       :weight 'bold))))
-
-(set-font "Consolas Ligaturized v3" "TsangerMingHei" 19 19)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font) charset
+			(font-spec
+			 :family chinese
+			 :size chinese-size
+			 :weight 'bold))))
+  (set-font "Consolas Ligaturized v3" "TsangerMingHei" 19 19))
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -307,16 +307,17 @@
 (use-package goto-line-preview
   :defer t
   :init
-  (global-set-key [remap goto-line] 'goto-line-preview))
+ (global-set-key [remap goto-line] 'goto-line-preview))
 
-;; mini modeline
-(use-package mini-modeline
-  :defer t
-  :hook (after-init . mini-modeline-mode)
+;; modeline
+(use-package nano-modeline
+  :ensure t
   :config
-  (set-face-attribute 'mini-modeline-mode-line nil
-		      :background "#555"
-		      :foreground (face-attribute 'default :foreground)))
+  (use-package hide-mode-line
+    :config
+    (global-hide-mode-line-mode))
+
+  (nano-modeline-text-mode))
 
 ;; Translate
 (use-package go-translate
@@ -348,6 +349,7 @@
   :hook (after-init . pixel-scroll-precision-mode)
   :config
   (setq pixel-scroll-precision-interpolate-page t)
+
   (defun +pixel-scroll-interpolate-down (&optional lines)
     (interactive)
     (if lines
@@ -372,3 +374,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(hide-mode-line feline youdao-dictionary xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons texfrag simple-modeline rainbow-delimiters racket-mode proof-general powerline olivetti ocamlformat nyan-mode nano-modeline mini-modeline merlin-eldoc markdown-mode makey magit lean-mode goto-line-preview goto-chg go-translate flymake-popon flycheck-ocaml flycheck-inline eldoc-box eglot-fsharp dune-format dune company-coq company-box cider beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
