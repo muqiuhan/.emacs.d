@@ -345,7 +345,11 @@
 ;; pixel-scroll-mode
 (use-package pixel-scroll
   :defer t
-  :hook (after-init . pixel-scroll-precision-mode))
+  :hook (after-init . pixel-scroll-precision-mode)
+  :config
+  (setq pixel-scroll-precision-interpolate-page t)
+  (defalias 'scroll-up-command 'pixel-scroll-interpolate-down)
+  (defalias 'scroll-down-command 'pixel-scroll-interpolate-up))
 
 ;; Which key
 (use-package which-key
