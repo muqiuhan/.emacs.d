@@ -71,7 +71,7 @@
 		 'markdown-mode
 		 'dune-format
 		 'flymake-popon
-		 'mini-modeline
+		 'nano-modeline
 		 'racket-mode
 		 'eglot
 		 'merlin-eldoc
@@ -293,7 +293,8 @@
 ;; window numbering
 (use-package window-numbering
   :defer t
-  :hook (after-init . window-numbering-mode))
+  :hook ((after-init . window-numbering-mode)
+	 (window-numbering-mode . window-numbering-clear-mode-line)))
 
 ;; Markdown
 (use-package markdown-mode
@@ -311,13 +312,17 @@
 
 ;; modeline
 (use-package nano-modeline
-  :ensure t
+  :defer t
+  :init
+  (require 'nano-modeline)
+  (nano-modeline-text-mode t)
+
   :config
   (use-package hide-mode-line
-    :config
-    (global-hide-mode-line-mode))
-
-  (nano-modeline-text-mode))
+    :hook ((completion-list-mode-hook . hide-mode-line-mode)
+	   (treemacs-mode . hide-mode-line-mode))
+    :init
+    (setq-default mode-line-format nil)))
 
 ;; Translate
 (use-package go-translate
@@ -374,16 +379,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(hide-mode-line feline youdao-dictionary xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons texfrag simple-modeline rainbow-delimiters racket-mode proof-general powerline olivetti ocamlformat nyan-mode nano-modeline mini-modeline merlin-eldoc markdown-mode makey magit lean-mode goto-line-preview goto-chg go-translate flymake-popon flycheck-ocaml flycheck-inline eldoc-box eglot-fsharp dune-format dune company-coq company-box cider beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
