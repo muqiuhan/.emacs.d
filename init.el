@@ -83,6 +83,7 @@
 		 'flycheck-ocaml
 		 'flycheck
 		 'tuareg
+		 'hide-mode-line
 		 'olivetti
 		 'window-numbering
 		 'dune
