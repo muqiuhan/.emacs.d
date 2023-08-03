@@ -41,14 +41,14 @@
     (set-face-attribute 'default nil
 			:font (format "%s:pixelsize=%d" english english-size)
 			:weight 'bold)
-
+    
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
 			(font-spec
 			 :family chinese
 			 :size chinese-size
 			 :weight 'bold))))
-  (set-font "Consolas Ligaturized v3" "TsangerMingHei" 19 19))
+  (set-font "Berkeley Mono" "TsangerMingHei" 17 17))
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -90,6 +90,7 @@
 		 'ocamlformat
 		 'cider
 		 'use-package
+		 'doom-themes
 		 'magit
 		 'beacon
 		 'rainbow-delimiters
@@ -116,8 +117,13 @@
 (fringe-mode -1)
 (scroll-bar-mode -1)
 
-(load-theme 'modus-vivendi t)
-(set-face-attribute 'default nil :background "#191919")
+(load-theme 'doom-gruvbox t)
+
+;; Save your eyes!!!
+(if (string-equal "#000000" (face-attribute 'default :background))
+    (set-face-attribute 'default nil :background "#191919"))
+
+(set-default 'truncate-lines t)
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -126,12 +132,12 @@
   :defer t
   :init (global-company-mode t)
   :config
+  
   (when is-graphics
     (use-package company-box
       :hook (company-mode . company-box-mode)
       :config
-      (setq-default company-box-doc-delay 0
-		    company-box-doc-delay 0
+      (setq-default company-box-doc-delay 0.5
 		    company-box-doc-enable t
 		    company-box-doc-frame-parameters
 		    '((vertical-scroll-bars . nil)
@@ -173,7 +179,7 @@
   :defer t
   :hook (after-init . beacon-mode)
   :config
-  (setq beacon-color "#0f0"))
+  (setq beacon-color (face-attribute 'default :foreground)))
 
 ;; xclip: easy to synchorize with the system clipboard
 (when is-x11
@@ -309,7 +315,7 @@
 (use-package goto-line-preview
   :defer t
   :init
- (global-set-key [remap goto-line] 'goto-line-preview))
+  (global-set-key [remap goto-line] 'goto-line-preview))
 
 ;; modeline
 (use-package nano-modeline
