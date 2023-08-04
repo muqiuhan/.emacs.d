@@ -48,7 +48,7 @@
 			 :family chinese
 			 :size chinese-size
 			 :weight 'bold))))
-  (set-font "Berkeley Mono" "TsangerMingHei" 17 17))
+  (set-font "Cascadia Code" "TsangerMingHei" 16 16))
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -74,22 +74,15 @@
 		 'nano-modeline
 		 'racket-mode
 		 'eglot
-		 'merlin-eldoc
 		 'vterm
 		 'vterm-toggle
 		 'utop
 		 'which-key
-		 'flycheck-inline
-		 'flycheck-ocaml
-		 'flycheck
 		 'tuareg
 		 'hide-mode-line
 		 'olivetti
 		 'window-numbering
-		 'dune
-		 'ocamlformat
 		 'cider
-		 'use-package
 		 'doom-themes
 		 'magit
 		 'beacon
@@ -252,27 +245,10 @@
 ;; OCaml
 (use-package tuareg
   :defer t
-  :hook ((tuareg-mode . flycheck-mode)
-	 (tuareg-mode . eglot-mode))
+  :commands (ocamlformat-before-save)
   :config
-  (use-package merlin
-    :hook ((tuareg-mode . merlin-mode)
-	   (merlin-mode . merlin-eldoc-setup))
-
-    :config
-    (setq merlin-completion-with-doc t))
-
-  (use-package flycheck-ocaml
-    :ensure t
-    :config
-    (add-hook 'tuareg-mode-hook
-              (lambda ()
-		(setq-local merlin-error-after-save nil)
-		(flycheck-ocaml-setup))))
-  
-  (use-package ocamlformat
-    :config
-    (define-key tuareg-mode-map (kbd "C-x x f") 'ocamlformat-before-save)))
+  (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+  (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save))
 
 ;; Clojure
 (use-package cider
