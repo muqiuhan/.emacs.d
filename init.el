@@ -22,33 +22,29 @@
 ;;
 ;;; Code:
 
+;; ----------------------- Generic Configuration -----------------------
+(setq-default ocaml-environment t)
+(setq-default racket-environment t)
+(setq-default clojure-environment t)
+(setq-default agda-environment t)
+(setq-default coq-environment t)
+(setq-default backup-directory-alist `(("." . "~/.saves")))
+(setq-default gc-cons-threshold (* 50 1000 1000))
+(setq-default line-spacing 0.2)
+(setq-default cursor-type 'hbar)
+(setq-default font "Fira Code")
+(setq-default font-weight 'semibold)
+(setq-default font-size 17)
+(setq-default chinese-font "TsangerMingHei")
+(setq-default chinese-font-weight 'bold)
+(setq-default chinese-font-size 17)
 (setq-default url-proxy-services
 	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 		("http" . "127.0.0.1:7890")
 		("https" . "127.0.0.1:7890")))
-
-(setq is-graphics (display-graphic-p))
-(setq is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
-
-(setq backup-directory-alist `(("." . "~/.saves"))
-      gc-cons-threshold (* 50 1000 1000))
-
-(setq-default line-spacing 0.2
-	      cursor-type 'hbar)
-
-(when is-graphics
-  (defun set-font (english chinese english-size chinese-size)
-    (set-face-attribute 'default nil
-			:font (format "%s:pixelsize=%d" english english-size)
-			:weight 'bold)
-    
-    (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font (frame-parameter nil 'font) charset
-			(font-spec
-			 :family chinese
-			 :size chinese-size
-			 :weight 'bold))))
-  (set-font "Cascadia Code" "TsangerMingHei" 16 16))
+(setq-default theme 'doom-gruvbox)
+(setq-default is-graphics (display-graphic-p))
+(setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -65,24 +61,16 @@
          (package-install p))))))
 
 (require-package 'treemacs
-		 'proof-general
 		 'company
-		 'company-coq
 		 'markdown-mode
-		 'dune-format
 		 'flymake-popon
 		 'nano-modeline
-		 'racket-mode
 		 'eglot
 		 'vterm
 		 'vterm-toggle
-		 'utop
 		 'which-key
-		 'tuareg
 		 'hide-mode-line
-		 'olivetti
 		 'window-numbering
-		 'cider
 		 'doom-themes
 		 'magit
 		 'beacon
@@ -97,7 +85,7 @@
     (require-package 'treemacs-all-the-icons
 		     'company-box
 		     'eldoc-box)
-  (require-package))
+  '())
 
 
 ;; ----------------------------------- Basic config -----------------------------------
@@ -110,13 +98,27 @@
 (fringe-mode -1)
 (scroll-bar-mode -1)
 
-(load-theme 'doom-gruvbox t)
+(load-theme theme t)
 
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
     (set-face-attribute 'default nil :background "#191919"))
 
 (set-default 'truncate-lines t)
+
+(when is-graphics
+  (defun set-font (english chinese english-size chinese-size)
+    (set-face-attribute 'default nil
+			:font (format "%s:pixelsize=%d" english english-size)
+			:weight font-weight)
+    
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font) charset
+			(font-spec
+			 :family chinese
+			 :size chinese-size
+			 :weight chinese-font-weight))))
+  (set-font font chinese-font font-size chinese-font-size))
 
 ;; ----------------------------------- config -----------------------------------
 
@@ -201,9 +203,7 @@
                   treemacs-directory-collapsed-face
                   treemacs-file-face
                   treemacs-tags-face))
-    (set-face-attribute face nil
-			:font (face-attribute 'default :font)
-			:height 130))
+    (set-face-attribute face nil :font (face-attribute 'default :font)))
   
   :init
   (when (display-graphic-p)
@@ -232,60 +232,65 @@
                           (eglot-ensure))))
          ((markdown-mode yaml-mode yaml-ts-mode) . eglot-ensure)))
 
-;; Flycheck
-(use-package flycheck-inline
-  :defer t
-  :hook (flycheck-mode . flycheck-inline-mode))
-
 ;; Racket
-(use-package racket-mode
-  :defer t
-  :hook (racket-mode . racket-xp-mode))
+(when racket-environment
+  (require-package 'racket-mode)
+  
+  (use-package racket-mode
+    :defer t
+    :hook (racket-mode . racket-xp-mode)))
 
 ;; OCaml
-(use-package tuareg
-  :defer t
-  :commands (ocamlformat-before-save)
-  :config
-  (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-  (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save))
+(when ocaml-environment
+  (require-package 'utop
+		   'tuareg
+		   'ocamlformat
+		   'dune-format
+		   'dune)
+  
+  (use-package tuareg
+    :defer t
+    :commands (ocamlformat-before-save)
+    :config
+    (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+    (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
 
 ;; Clojure
-(use-package cider
-  :defer t
-  :ensure t)
+(when clojure-environment
+  (require-package 'cider)
+  
+  (use-package cider
+    :defer t
+    :ensure t))
 
 ;; Agda
-(add-hook 'after-init-hook
-	  '(lambda ()
-	     (interactive)
-	     (let ((agda2-program-name "~/.cabal/bin/agda")
-		   (agda-mode-locate "~/.cabal/bin/agda-mode locate"))
+(when agda-environment
+  (add-hook 'after-init-hook
+	    '(lambda ()
+	       (interactive)
+	       (let ((agda2-program-name "~/.cabal/bin/agda")
+		     (agda-mode-locate "~/.cabal/bin/agda-mode locate"))
 
-	       (load-file (let ((coding-system-for-read 'utf-8))
-			    (shell-command-to-string agda-mode-locate))))))
+		 (load-file (let ((coding-system-for-read 'utf-8))
+			      (shell-command-to-string agda-mode-locate)))))))
 
 ;; Proof Environment for Coq
-(use-package proof-general
-  :defer t
-  :init
-  (use-package company-coq
+(when coq-environment
+  (require-package 'proof-general
+		   'company-coq)
+  
+  (use-package proof-general
     :defer t
-    :hook (coq-mode . company-coq)))
+    :init
+    (use-package company-coq
+      :defer t
+      :hook (coq-mode . company-coq))))
 
 ;; window numbering
 (use-package window-numbering
   :defer t
   :hook ((after-init . window-numbering-mode)
 	 (window-numbering-mode . window-numbering-clear-mode-line)))
-
-;; Markdown
-(use-package markdown-mode
-  :defer t
-  :hook (markdown-mode . olivetti-mode)
-
-  :init
-  (setq auto-mode-alist (append '(("README" . olivetti-mode)) auto-mode-alist)))
 
 ;; Goto line preview
 (use-package goto-line-preview
@@ -362,3 +367,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(dune xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons rainbow-delimiters racket-mode proof-general ocamlformat nano-modeline markdown-mode magit hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box dune-format doom-themes company-coq company-box cider beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
