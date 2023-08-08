@@ -23,10 +23,10 @@ __[29.1 Support]__ || __[Terminal Suport]__ || __[lsp support]__
 (setq-default coq-environment t)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 0.7)
 (setq-default cursor-type 'hbar)
-(setq-default font "Fira Code")
-(setq-default font-weight 'semibold)
+(setq-default font "Vin Mono Pro ExtraBold")
+(setq-default font-weight 'extrabold)
 (setq-default font-size 17)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
@@ -38,6 +38,9 @@ __[29.1 Support]__ || __[Terminal Suport]__ || __[lsp support]__
 (setq-default theme 'doom-gruvbox)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
+(setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+				 ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 ```
 
 ## PROGRAMMING LANGUAGE ENVIRONMEN
