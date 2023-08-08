@@ -8,15 +8,11 @@ __[29.1 Support]__ || __[Terminal Suport]__ || __[lsp support]__
 
 </div>
 
-## BUILD CONFIGURE
+## RECOMMEND BUILD CONFIGURE
+> If you are very familiar with configure options or know exactly what kind of Emacs you need to build, then feel free to :)
 
-Emacs 29.1 added treesitter support, you can turn on this option：
-``./configure --with-all --with-treesitter``
-
-Other Emacs versions only require:
-``./configure --with-all``
-
-If you are very familiar with configure options or know exactly what kind of Emacs you need to build, then feel free to :)
+- Emacs 29.1 and later: ``./configure --with-all --with-treesitter``
+- Other" ``./configure --with-all``
 
 ## CONFIGURATION
 ```elisp
