@@ -367,16 +367,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(dune xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons rainbow-delimiters racket-mode proof-general ocamlformat nano-modeline markdown-mode magit hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box dune-format doom-themes company-coq company-box cider beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
