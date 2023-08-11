@@ -63,6 +63,7 @@
 
 (require-package 'treemacs
 		 'markdown-mode
+		 'nerd-icons
 		 'nano-modeline
 		 'eglot
 		 'vterm
@@ -126,26 +127,26 @@
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
   :defer t
-  :custom
-  (corfu-auto t)
-  (corfu-auto-prefix 0)
-  (corfu-quit-at-boundary t)
-  (corfu-quit-no-match t)
-  (corfu-preview-current nil)
-  (corfu-preselect 'prompt)
-  (corfu-scroll-margin 5)
-
-  
   :bind ("M-/" . completion-at-point)
   :hook ((after-init . global-corfu-mode)
          (global-corfu-mode . corfu-popupinfo-mode))
   :config
-  (setq corfu-popupinfo-delay '(0 . 0))
-  
+  (setq corfu-auto t
+	corfu-popupinfo-delay '(0 . 0)
+	corfu-popupinfo-hide nil
+	corfu-auto-prefix 0
+	corfu-quit-at-boundary t
+	corfu-quit-no-match t
+	corfu-preview-current t
+	corfu-preselect 'prompt
+	corfu-scroll-margin 5
+	corfu-echo-mode t
+	corfu-auto-delay 0)
+
   (unless is-graphics
     (use-package corfu-terminal
       :hook (global-corfu-mode . corfu-terminal-mode)))
-
+  
   (when is-graphics
     (use-package kind-icon
       :after corfu
@@ -206,10 +207,6 @@
 	  (concat icon-pad icon icon-pad item-pad)))
 
       (defun nerd-icon-margin-formatter (metadata)
-	"Return a margin-formatter function which produces kind icons.
-METADATA is the completion metadata supplied by the caller (see
-info node `(elisp)Programmed Completion').  To use, add this
-function to the relevant margin-formatters list."
 	(if-let ((kind-func (nerd-icon--metadata-get metadata "company-kind")))
             (lambda (cand)
               (if-let ((kind (funcall kind-func cand)))
@@ -239,7 +236,7 @@ function to the relevant margin-formatters list."
   (when is-graphics
     (use-package flymake-popon
       :defer t
-      :hook (flymake-mode . flymake-popon)
+      :hook (flymake-mode . flymake-popon-mode)
       :config
       (setq flymake-popon-delay 0.1))))
 
