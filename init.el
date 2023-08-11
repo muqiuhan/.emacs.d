@@ -66,6 +66,7 @@
 		 'nerd-icons
 		 'nano-modeline
 		 'eglot
+		 'indent-guide
 		 'vterm
 		 'vterm-toggle
 		 'which-key
@@ -428,6 +429,14 @@
 	 :map vterm-mode-map
 	 ([f9] . vterm-toggle)))
 
+(use-package indent-guide
+  :defer t
+  :hook (after-init . indent-guide-global-mode)
+  :config
+  (setq indent-guide-delay 0
+	indent-guide-character "|")
+  (set-face-background 'indent-guide-face (face-attribute 'default :background)))
+
 ;; pixel-scroll-mode
 (use-package pixel-scroll
   :defer t
@@ -459,3 +468,15 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
