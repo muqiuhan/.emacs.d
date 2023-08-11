@@ -4,7 +4,10 @@
 
 *A simple, lightweight, fast configuration for GNU/Emacs*
 
-__[29.1 Support]__ || __[Terminal Suport]__ || __[lsp support]__
+__[29.1 Support]__ | __[Terminal Suport]__ | __[lsp support]__
+
+![demo1.png](./.github/Screenshot_20230811_203023.png)
+![demo2.png](./.github/Screenshot_20230811_203238.png)
 
 </div>
 
