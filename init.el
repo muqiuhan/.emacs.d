@@ -24,6 +24,8 @@
 
 ;; ----------------------- Generic Configuration -----------------------
 
+(setq-default org-enviroment t)
+(setq-default org-file-directory "~/Documents")
 (setq-default ocaml-environment t)
 (setq-default racket-environment t)
 (setq-default clojure-environment t)
@@ -33,22 +35,22 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.7)
 (setq-default cursor-type 'hbar)
-(setq-default font "Vin Mono Pro ExtraBold")
+(setq-default font "Vin Mono Pro")
 (setq-default font-weight 'extrabold)
 (setq-default font-size 17)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 17)
-(setq-default url-proxy-services
-	      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-		("http" . "127.0.0.1:7890")
-		("https" . "127.0.0.1:7890")))
 (setq-default theme 'doom-gruvbox)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-				 ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+				                 ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+				                 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(setq-default url-proxy-services
+              '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+                ("http" . "127.0.0.1:7890")
+                ("https" . "127.0.0.1:7890")))
 
 ;; ----------------------------------- Package config -----------------------------------
 
@@ -63,31 +65,32 @@
          (package-install p))))))
 
 (require-package 'treemacs
-		 'company
-		 'company-prescient
-		 'markdown-mode
-		 'flymake-popon
-		 'nano-modeline
-		 'eglot
-		 'vterm
-		 'vterm-toggle
-		 'which-key
-		 'hide-mode-line
-		 'window-numbering
-		 'doom-themes
-		 'magit
-		 'beacon
-		 'rainbow-delimiters
-		 'goto-line-preview
-		 'go-translate)
+		         'company
+		         'company-prescient
+		         'markdown-mode
+		         'flymake-popon
+		         'nano-modeline
+		         'eglot
+		         'vterm
+		         'vterm-toggle
+		         'which-key
+		         'hide-mode-line
+		         'window-numbering
+		         'doom-themes
+		         'magit
+                 'sideline-flymake
+		         'beacon
+		         'rainbow-delimiters
+		         'goto-line-preview
+		         'go-translate)
 
 (when is-x11
   (require-package 'xclip))
 
 (if is-graphics
     (require-package 'treemacs-all-the-icons
-		     'company-box
-		     'eldoc-box)
+		             'company-box
+		             'eldoc-box)
   '())
 
 
@@ -112,15 +115,15 @@
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
-			:font (format "%s:pixelsize=%d" english english-size)
-			:weight font-weight)
-    
+			            :font (format "%s:pixelsize=%d" english english-size)
+			            :weight font-weight)
+
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
-			(font-spec
-			 :family chinese
-			 :size chinese-size
-			 :weight chinese-font-weight))))
+			            (font-spec
+			             :family chinese
+			             :size chinese-size
+			             :weight chinese-font-weight))))
   (set-font font chinese-font font-size chinese-font-size))
 
 ;; ----------------------------------- config -----------------------------------
@@ -142,7 +145,7 @@
          :map company-search-map
          ("C-p" . company-select-previous)
          ("C-n" . company-select-next))
-  
+
   :hook (after-init . global-company-mode)
   :init
   (setq company-tooltip-align-annotations t
@@ -174,7 +177,7 @@
                   company-box-doc-delay 0.1)
       :config
       (with-no-warnings
-	(defun my-company-box-icons--elisp (candidate)
+	    (defun my-company-box-icons--elisp (candidate)
           (when (or (derived-mode-p 'emacs-lisp-mode) (derived-mode-p 'lisp-mode))
             (let ((sym (intern candidate)))
               (cond ((fboundp sym) 'Function)
@@ -183,15 +186,15 @@
                     ((boundp sym) 'Variable)
                     ((symbolp sym) 'Text)
                     (t . nil)))))
-	(advice-add #'company-box-icons--elisp :override #'my-company-box-icons--elisp)
+	    (advice-add #'company-box-icons--elisp :override #'my-company-box-icons--elisp)
 
-	;; Display borders and optimize performance
-	(defun my-company-box--display (string on-update)
+	    ;; Display borders and optimize performance
+	    (defun my-company-box--display (string on-update)
           "Display the completions."
           (company-box--render-buffer string on-update)
 
           (let ((frame (company-box--get-frame))
-		(border-color (face-foreground 'font-lock-comment-face nil t)))
+		        (border-color (face-foreground 'font-lock-comment-face nil t)))
             (unless frame
               (setq frame (company-box--make-frame))
               (company-box--set-frame frame))
@@ -206,37 +209,37 @@
               (set-face-background 'child-frame-border border-color frame)))
           (with-current-buffer (company-box--get-buffer)
             (company-box--maybe-move-number (or company-box--last-start 1))))
-	
-	(advice-add #'company-box--display :override #'my-company-box--display)
 
-	(setq company-box-doc-frame-parameters '((internal-border-width . 1)
-						 (left-fringe . 8)
-						 (right-fringe . 8)))
+	    (advice-add #'company-box--display :override #'my-company-box--display)
 
-	(defun my-company-box-doc--make-buffer (object)
+	    (setq company-box-doc-frame-parameters '((internal-border-width . 1)
+						                         (left-fringe . 8)
+						                         (right-fringe . 8)))
+
+	    (defun my-company-box-doc--make-buffer (object)
           (let* ((buffer-list-update-hook nil)
-		 (inhibit-modification-hooks t)
-		 (string (cond ((stringp object) object)
+		         (inhibit-modification-hooks t)
+		         (string (cond ((stringp object) object)
                                ((bufferp object) (with-current-buffer object (buffer-string))))))
             (when (and string (> (length (string-trim string)) 0))
               (with-current-buffer (company-box--get-buffer "doc")
-		(erase-buffer)
-		(insert (propertize "\n" 'face '(:height 0.5)))
-		(insert string)
-		(insert (propertize "\n\n" 'face '(:height 0.5)))
+		        (erase-buffer)
+		        (insert (propertize "\n" 'face '(:height 0.5)))
+		        (insert string)
+		        (insert (propertize "\n\n" 'face '(:height 0.5)))
 
-		(with-current-buffer (company-box--get-buffer "doc")
+		        (with-current-buffer (company-box--get-buffer "doc")
                   (let (bolp next before after)
                     (goto-char 1)
                     (while (setq next (next-single-property-change (or next 1) 'markdown-hr))
                       (when (get-text-property next 'markdown-hr)
-			(goto-char next)
-			(setq bolp (bolp)
+			            (goto-char next)
+			            (setq bolp (bolp)
                               before (char-before))
-			(delete-region (point) (save-excursion (forward-visible-line 1) (point)))
-			(setq after (char-after (1+ (point))))
-			(insert
-			 (concat
+			            (delete-region (point) (save-excursion (forward-visible-line 1) (point)))
+			            (setq after (char-after (1+ (point))))
+			            (insert
+			             (concat
                           (and bolp (not (equal before ?\n)) (propertize "\n" 'face '(:height 0.5)))
                           (propertize "\n" 'face '(:height 0.5))
                           (propertize " "
@@ -246,16 +249,16 @@
                           (propertize " " 'display '(space :height (1)))
                           (and (not (equal after ?\n)) (propertize " \n" 'face '(:height 0.5)))))))))
 
-		(setq mode-line-format nil
+		        (setq mode-line-format nil
                       display-line-numbers nil
                       header-line-format nil
                       show-trailing-whitespace nil
                       cursor-in-non-selected-windows nil)
-		(current-buffer)))))
-	(advice-add #'company-box-doc--make-buffer :override #'my-company-box-doc--make-buffer)
+		        (current-buffer)))))
+	    (advice-add #'company-box-doc--make-buffer :override #'my-company-box-doc--make-buffer)
 
-	;; Display the border and fix the markdown header properties
-	(defun my-company-box-doc--show (selection frame)
+	    ;; Display the border and fix the markdown header properties
+	    (defun my-company-box-doc--show (selection frame)
           (cl-letf (((symbol-function 'completing-read) #'company-box-completing-read)
                     (window-configuration-change-hook nil)
                     (inhibit-redisplay t)
@@ -266,34 +269,34 @@
                                            company-selection
                                            (company-box--get-frame)
                                            (frame-visible-p (company-box--get-frame))))
-			 (candidate (nth selection company-candidates))
-			 (doc (or (company-call-backend 'quickhelp-string candidate)
+			             (candidate (nth selection company-candidates))
+			             (doc (or (company-call-backend 'quickhelp-string candidate)
                                   (company-box-doc--fetch-doc-buffer candidate)))
-			 (doc (company-box-doc--make-buffer doc)))
+			             (doc (company-box-doc--make-buffer doc)))
               (let ((frame (frame-local-getq company-box-doc-frame))
                     (border-color (face-foreground 'font-lock-comment-face nil t)))
-		(unless (frame-live-p frame)
+		        (unless (frame-live-p frame)
                   (setq frame (company-box-doc--make-frame doc))
                   (frame-local-setq company-box-doc-frame frame))
-		(set-face-background 'internal-border border-color frame)
-		(when (facep 'child-frame-border)
+		        (set-face-background 'internal-border border-color frame)
+		        (when (facep 'child-frame-border)
                   (set-face-background 'child-frame-border border-color frame))
-		(company-box-doc--set-frame-position frame)
+		        (company-box-doc--set-frame-position frame)
 
-		(with-current-buffer (company-box--get-buffer "doc")
+		        (with-current-buffer (company-box--get-buffer "doc")
                   (let (next)
                     (while (setq next (next-single-property-change (or next 1) 'company-box-doc--replace-hr))
                       (when (get-text-property next 'company-box-doc--replace-hr)
-			(put-text-property next (1+ next) 'display
+			            (put-text-property next (1+ next) 'display
                                            '(space :align-to (- right-fringe 1) :height (1)))
-			(put-text-property (1+ next) (+ next 2) 'display
+			            (put-text-property (1+ next) (+ next 2) 'display
                                            '(space :align-to right-fringe :height (1)))))))
 
-		(unless (frame-visible-p frame)
+		        (unless (frame-visible-p frame)
                   (make-frame-visible frame))))))
-	(advice-add #'company-box-doc--show :override #'my-company-box-doc--show)
+	    (advice-add #'company-box-doc--show :override #'my-company-box-doc--show)
 
-	(defun my-company-box-doc--set-frame-position (frame)
+	    (defun my-company-box-doc--set-frame-position (frame)
           (-let* ((frame-resize-pixelwise t)
 
                   (box-frame (company-box--get-frame))
@@ -315,7 +318,7 @@
                   (fringe-right (or (alist-get 'right-fringe company-box-doc-frame-parameters) 0))
                   (width (+ text-width border-width fringe-left fringe-right))
                   (x (if (> width space-right)
-			 (if (> space-left width)
+			             (if (> space-left width)
                              (- space-left width)
                            space-left)
                        x))
@@ -324,14 +327,14 @@
                   (height (+ text-height (* 2 border-width)))
                   (y (cond ((= x space-left)
                             (if (> (+ y box-height height) bottom)
-				(+ (- y height) border-width)
+				                (+ (- y height) border-width)
                               (- (+ y box-height) border-width)))
                            ((> (+ y height) bottom)
                             (- (+ y box-height) height))
                            (t y))))
             (set-frame-position frame (max x 0) (max y 0))
             (set-frame-size frame text-width text-height t)))
-	(advice-add #'company-box-doc--set-frame-position :override #'my-company-box-doc--set-frame-position)
+	    (advice-add #'company-box-doc--set-frame-position :override #'my-company-box-doc--set-frame-position)
 
         (setq company-box-icons-all-the-icons
               `((Unknown . ,(all-the-icons-material "find_in_page" :height 1.0 :v-adjust -0.2))
@@ -364,31 +367,32 @@
               company-box-icons-alist 'company-box-icons-all-the-icons)))))
 
 ;; Flymake
-(use-package flymake
-  :defer t
-  :init
-  (when is-graphics
-    (use-package flymake-popon
-      :hook (flymake-mode . flymake-popon-mode)
-      :config
-      (setq flymake-popon-delay 0
-	    flymake-popon-posframe-border-width 1)
 
-      (set-face-attribute 'flymake-popon-posframe-border nil :foreground "#444444"))))
+(use-package flymake
+  :hook (prog-mode . flymake-mode)
+  :init (setq flymake-fringe-indicator-position 'right-fringe)
+  :config (setq elisp-flymake-byte-compile-load-path
+                (append elisp-flymake-byte-compile-load-path load-path))
+  (when is-graphics
+    (use-package sideline-flymake
+      :diminish sideline-mode
+      :hook (flymake-mode . sideline-mode)
+      :init (setq sideline-flymake-display-mode 'point
+                  sideline-backends-right '(sideline-flymake)))))
 
 ;; line number
 (use-package display-line-numbers
   :defer t
-  :config 
+  :config
   (set-face-attribute 'line-number nil
-		      :font (face-attribute 'default :font)
-		      :weight (face-attribute 'default :weight))
-  
+		              :font (face-attribute 'default :font)
+		              :weight (face-attribute 'default :weight))
+
   (set-face-attribute 'line-number-current-line nil
-		      :italic nil
-		      :font (face-attribute 'default :font)
-		      :weight (face-attribute 'default :weight))
-  
+		              :italic nil
+		              :font (face-attribute 'default :font)
+		              :weight (face-attribute 'default :weight))
+
   :hook (prog-mode . display-line-numbers-mode))
 
 ;; Beacon
@@ -409,9 +413,9 @@
   :defer t
   :config
   (setq treemacs-width 35
-	treemacs-indentation 2
-	treemacs-position 'left
-	treemacs-icon-tag-leaf "0")
+	    treemacs-indentation 2
+	    treemacs-position 'left
+	    treemacs-icon-tag-leaf "0")
 
   (dolist (face '(treemacs-root-face
                   treemacs-git-unmodified-face
@@ -426,7 +430,7 @@
                   treemacs-file-face
                   treemacs-tags-face))
     (set-face-attribute face nil :font (face-attribute 'default :font)))
-  
+
   :init
   (when (display-graphic-p)
     (use-package treemacs-all-the-icons)
@@ -457,7 +461,7 @@
 ;; Racket
 (when racket-environment
   (require-package 'racket-mode)
-  
+
   (use-package racket-mode
     :defer t
     :hook (racket-mode . racket-xp-mode)))
@@ -465,11 +469,11 @@
 ;; OCaml
 (when ocaml-environment
   (require-package 'utop
-		   'tuareg
-		   'ocamlformat
-		   'dune-format
-		   'dune)
-  
+		           'tuareg
+		           'ocamlformat
+		           'dune-format
+		           'dune)
+
   (use-package tuareg
     :defer t
     :commands (ocamlformat-before-save)
@@ -488,19 +492,19 @@
 ;; Agda
 (when agda-environment
   (add-hook 'after-init-hook
-	    '(lambda ()
-	       (interactive)
-	       (let ((agda2-program-name "~/.cabal/bin/agda")
-		     (agda-mode-locate "~/.cabal/bin/agda-mode locate"))
+	        '(lambda ()
+	           (interactive)
+	           (let ((agda2-program-name "~/.cabal/bin/agda")
+		             (agda-mode-locate "~/.cabal/bin/agda-mode locate"))
 
-		 (load-file (let ((coding-system-for-read 'utf-8))
-			      (shell-command-to-string agda-mode-locate)))))))
+		         (load-file (let ((coding-system-for-read 'utf-8))
+			                  (shell-command-to-string agda-mode-locate)))))))
 
 ;; Proof Environment for Coq
 (when coq-environment
   (require-package 'proof-general
-		   'company-coq)
-  
+		           'company-coq)
+
   (use-package proof-general
     :defer t
     :init
@@ -508,11 +512,17 @@
       :defer t
       :hook (coq-mode . company-coq))))
 
+(use-package org-roam-ui
+  :bind ("C-c n u" . org-roam-ui-mode)
+  :init (when (featurep 'xwidget-internal)
+          (setq org-roam-ui-browser-function #'xwidget-webkit-browse-url)))
+
+
 ;; window numbering
 (use-package window-numbering
   :defer t
   :hook ((after-init . window-numbering-mode)
-	 (window-numbering-mode . window-numbering-clear-mode-line)))
+	     (window-numbering-mode . window-numbering-clear-mode-line)))
 
 ;; Goto line preview
 (use-package goto-line-preview
@@ -530,7 +540,7 @@
   :config
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
-	   (treemacs-mode . hide-mode-line-mode))
+	       (treemacs-mode . hide-mode-line-mode))
     :init
     (setq-default mode-line-format nil)))
 
@@ -541,10 +551,10 @@
   (setq gts-translate-list '(("en" "zh")))
 
   (setq gts-default-translator
-	(gts-translator
-	 :picker (gts-prompt-picker)
-	 :engines (list (gts-google-engine) (gts-google-rpc-engine))
-	 :render (gts-buffer-render))))
+	    (gts-translator
+	     :picker (gts-prompt-picker)
+	     :engines (list (gts-google-engine) (gts-google-rpc-engine))
+	     :render (gts-buffer-render))))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
@@ -552,11 +562,11 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; vterm
-(use-package vterm 
+(use-package vterm
   :defer t
   :bind (([f9] . vterm-toggle)
-	 :map vterm-mode-map
-	 ([f9] . vterm-toggle)))
+	     :map vterm-mode-map
+	     ([f9] . vterm-toggle)))
 
 ;; pixel-scroll-mode
 (use-package pixel-scroll
@@ -568,13 +578,13 @@
   (defun +pixel-scroll-interpolate-down (&optional lines)
     (interactive)
     (if lines
-	(pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
+	    (pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
       (pixel-scroll-interpolate-down)))
 
   (defun +pixel-scroll-interpolate-up (&optional lines)
     (interactive)
     (if lines
-	(pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
+	    (pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
     (pixel-scroll-interpolate-up))
 
   (defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
