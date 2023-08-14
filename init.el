@@ -24,21 +24,22 @@
 
 ;; ----------------------- Generic Configuration -----------------------
 (setq-default ocaml-environment t)
+(setq-default fsharp-environment t)
 (setq-default racket-environment nil)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
-(setq-default line-spacing 0.7)
+(setq-default line-spacing 0.2)
 (setq-default cursor-type 'hbar)
-(setq-default font "Vin Mono Pro")
+(setq-default font "Berkeley Mono")
 (setq-default font-weight 'extrabold)
 (setq-default font-size 17)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 17)
-(setq-default theme 'doom-gruvbox)
+(setq-default theme 'solarized-dark-high-contrast)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -71,7 +72,6 @@
 		 'which-key
 		 'hide-mode-line
 		 'window-numbering
-		 'doom-themes
 		 'magit
                  'flymake-popon
 		 'beacon
@@ -343,6 +343,15 @@
     (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
     (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
 
+;; F#
+(when fsharp-environment
+  (require-package 'fsharp-mode
+		   'eglot-fsharp)
+  
+  (use-package fsharp-mode
+    :defer t
+    :ensure t))
+
 ;; Clojure
 (when clojure-environment
   (require-package 'cider)
@@ -468,4 +477,4 @@
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; init.el ends here
+;;; init.el ends here
