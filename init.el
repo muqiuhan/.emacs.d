@@ -32,14 +32,14 @@
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type 'hbar)
-(setq-default font "Berkeley Mono")
-(setq-default font-weight 'extrabold)
-(setq-default font-size 17)
+(setq-default cursor-type 'bar)
+(setq-default font "Consolas Ligaturized v3")
+(setq-default font-weight 'bold)
+(setq-default font-size 31)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
-(setq-default chinese-font-size 17)
-(setq-default theme 'solarized-dark-high-contrast)
+(setq-default chinese-font-size 31)
+(setq-default theme 'modus-vivendi)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -49,7 +49,6 @@
               '(("no_proxy" . "^\\(localhost\\|10.*\\)")
                 ("http" . "127.0.0.1:7890")
                 ("https" . "127.0.0.1:7890")))
-
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
@@ -102,6 +101,7 @@
 (scroll-bar-mode -1)
 
 (load-theme theme t)
+(global-hl-line-mode t)
 
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
@@ -112,8 +112,8 @@
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
-			:font (format "%s:pixelsize=%d" english english-size)
-			:weight font-weight)
+			:font (format "%s:pixelsize=%d" font english-size)
+			:weight 'bold)
 
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
@@ -478,3 +478,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(eglot-fsharp fsharp-mode xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons solarized-theme rainbow-delimiters racket-mode proof-general ocamlformat nerd-icons nano-modeline markdown-mode magit kind-icon indent-guide hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box dune-format dune corfu-terminal cider cape beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
