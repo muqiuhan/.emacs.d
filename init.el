@@ -308,7 +308,7 @@
     :defer t
     :hook (eldoc-mode . eldoc-box-hover-mode)
     :config
-    (setq-default eldoc-box-offset '(-16 16 16))
+    (setq-default eldoc-box-offset '(-16 16 50))
     (set-face-attribute 'eldoc-box-border nil :background "#444")
     (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
