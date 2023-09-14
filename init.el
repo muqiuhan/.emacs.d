@@ -28,14 +28,15 @@
 (setq-default racket-environment nil)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
+(setq-default scala-environment t)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type 'bar)
-(setq-default font "Consolas Ligaturized v3")
+(setq-default cursor-type '(bar . 3))
+(setq-default font "Hack Nerd Font Mono")
 (setq-default font-weight 'bold)
-(setq-default font-size 31)
+(setq-default font-size 24)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
@@ -103,17 +104,13 @@
 (load-theme theme t)
 (global-hl-line-mode t)
 
-;; Save your eyes!!!
-(if (string-equal "#000000" (face-attribute 'default :background))
-    (set-face-attribute 'default nil :background "#191919"))
-
 (set-default 'truncate-lines t)
 
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
 			:font (format "%s:pixelsize=%d" font english-size)
-			:weight 'bold)
+			:weight font-weight)
 
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
@@ -123,6 +120,11 @@
 			 :weight chinese-font-weight))))
   (set-font font chinese-font font-size chinese-font-size))
 
+;; Save your eyes!!!
+(if (string-equal "#000000" (face-attribute 'default :background))
+    (set-face-attribute 'default nil :background "#111111"))
+
+
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
   :defer t
@@ -130,6 +132,7 @@
   :hook ((after-init . global-corfu-mode)
          (global-corfu-mode . corfu-popupinfo-mode))
   :config
+
   (setq corfu-auto t
 	corfu-popupinfo-delay '(0 . 0)
 	corfu-popupinfo-hide nil
@@ -149,7 +152,6 @@
   (when is-graphics
     (require-package 'nerd-icons
 		     'kind-icon)
-    
     (use-package kind-icon
       :after corfu
       :init
@@ -360,6 +362,24 @@
     :defer t
     :ensure t))
 
+;; Clojure
+(when scala-environment
+  (require-package 'scala-mode
+		   'sbt-mode)
+
+  (use-package scala-mode
+    :defer t
+    :interpreter ("scala" . scala-mode)
+    :config
+    (use-package sbt-mode
+      :commands sbt-start sbt-command
+      :config
+      (substitute-key-definition
+       'minibuffer-complete-word
+       'self-insert-command
+       minibuffer-local-completion-map)
+      (setq sbt:program-options '("-Dsbt.supershell=false")))))
+
 ;; Agda
 (when agda-environment
   (add-hook 'after-init-hook
@@ -388,7 +408,6 @@
   :init (when (featurep 'xwidget-internal)
           (setq org-roam-ui-browser-function #'xwidget-webkit-browse-url)))
 
-
 ;; window numbering
 (use-package window-numbering
   :defer t
@@ -409,6 +428,17 @@
   (nano-modeline-text-mode t)
 
   :config
+  (set-face-attribute 'nano-modeline-active nil
+		      :background (face-attribute 'default :background)
+		      :overline (face-attribute 'default :foreground)
+		      :box nil
+		      :underline nil)
+
+  (set-face-attribute 'nano-modeline-status nil
+		      :foreground (face-attribute 'default :foreground)
+		      :background (face-attribute 'default :background)
+		      :box t)
+  
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
 	   (treemacs-mode . hide-mode-line-mode))
@@ -478,16 +508,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(eglot-fsharp fsharp-mode xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons solarized-theme rainbow-delimiters racket-mode proof-general ocamlformat nerd-icons nano-modeline markdown-mode magit kind-icon indent-guide hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box dune-format dune corfu-terminal cider cape beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
