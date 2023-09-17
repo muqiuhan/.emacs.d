@@ -34,7 +34,7 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
 (setq-default cursor-type '(bar . 3))
-(setq-default font "Hack")
+(setq-default font "Berkeley Mono")
 (setq-default font-weight 'bold)
 (setq-default font-size 24)
 (setq-default chinese-font "TsangerMingHei")
@@ -103,11 +103,6 @@
 (scroll-bar-mode -1)
 
 (load-theme theme t)
-(global-hl-line-mode t)
-
-(set-face-attribute 'hl-line nil
-		    :box '(:line-width 2 :color "#282828")
-		    :background (face-attribute 'default :background))
 
 (set-default 'truncate-lines t)
 
@@ -430,13 +425,15 @@
 
 ;; modeline
 (use-package nano-modeline
-  :defer t
-  :init
-  (require 'nano-modeline)
-  (nano-modeline-text-mode t)
-
   :config
-  (setq nano-modeline-position 'nano-modeline-footer)
+  (setq nano-modeline-position #'nano-modeline-footer
+	nano-modeline-padding '(0 . 0))
+
+  (use-package hide-mode-line
+    :hook ((completion-list-mode-hook . hide-mode-line-mode)
+	   (treemacs-mode . hide-mode-line-mode))
+    :init
+    (setq-default mode-line-format nil))
   
   (set-face-attribute 'nano-modeline-active nil
 		      :foreground "#FFFFFF"
@@ -446,15 +443,11 @@
 		      :foreground "#FFFFFF"
 		      :background "#16825D")
 
-    (set-face-attribute 'nano-modeline-inactive nil
+  (set-face-attribute 'nano-modeline-inactive nil
 		      :foreground "#FFFFFF"
 		      :background (face-attribute 'default :background))
-    
-  (use-package hide-mode-line
-    :hook ((completion-list-mode-hook . hide-mode-line-mode)
-	   (treemacs-mode . hide-mode-line-mode))
-    :init
-    (setq-default mode-line-format nil)))
+
+  (nano-modeline-prog-mode t))
 
 ;; Translate
 (use-package go-translate
@@ -537,6 +530,14 @@
   :defer t
   :init
   (which-key-mode t))
+
+;; hl-line-mode
+(use-package hl-line
+  :hook (prog-mode . hl-line-mode)
+  :config
+  (set-face-attribute 'hl-line nil
+		    :box '(:line-width 2 :color "#282828")
+		    :background (face-attribute 'default :background)))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
