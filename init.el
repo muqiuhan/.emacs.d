@@ -34,13 +34,13 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
 (setq-default cursor-type '(bar . 3))
-(setq-default font "Hack Nerd Font Mono")
+(setq-default font "Hack")
 (setq-default font-weight 'bold)
 (setq-default font-size 24)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'modus-vivendi)
+(setq-default theme 'vscode-dark-plus)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -66,13 +66,14 @@
 		 'markdown-mode
 		 'nano-modeline
 		 'eglot
-		 'indent-guide
+		 'highlight-indent-guides
 		 'vterm
 		 'vterm-toggle
 		 'which-key
 		 'hide-mode-line
 		 'window-numbering
 		 'magit
+		 'vscode-dark-plus-theme
                  'flymake-popon
 		 'beacon
 		 'rainbow-delimiters
@@ -104,6 +105,10 @@
 (load-theme theme t)
 (global-hl-line-mode t)
 
+(set-face-attribute 'hl-line nil
+		    :box '(:line-width 2 :color "#282828")
+		    :background (face-attribute 'default :background))
+
 (set-default 'truncate-lines t)
 
 (when is-graphics
@@ -119,6 +124,9 @@
 			 :size chinese-size
 			 :weight chinese-font-weight))))
   (set-font font chinese-font font-size chinese-font-size))
+
+(set-face-attribute 'font-lock-keyword-face nil :font (face-attribute 'default :font))
+(set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
 
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
@@ -325,7 +333,7 @@
 ;; Racket
 (when racket-environment
   (require-package 'racket-mode)
-
+  
   (use-package racket-mode
     :defer t
     :hook (racket-mode . racket-xp-mode)))
@@ -428,17 +436,20 @@
   (nano-modeline-text-mode t)
 
   :config
+  (setq nano-modeline-position 'nano-modeline-footer)
+  
   (set-face-attribute 'nano-modeline-active nil
-		      :background (face-attribute 'default :background)
-		      :overline (face-attribute 'default :foreground)
-		      :box nil
-		      :underline nil)
+		      :foreground "#FFFFFF"
+		      :background "#007ACC")
 
   (set-face-attribute 'nano-modeline-status nil
-		      :foreground (face-attribute 'default :foreground)
-		      :background (face-attribute 'default :background)
-		      :box t)
-  
+		      :foreground "#FFFFFF"
+		      :background "#16825D")
+
+    (set-face-attribute 'nano-modeline-inactive nil
+		      :foreground "#FFFFFF"
+		      :background (face-attribute 'default :background))
+    
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
 	   (treemacs-mode . hide-mode-line-mode))
@@ -469,13 +480,35 @@
 	 :map vterm-mode-map
 	 ([f9] . vterm-toggle)))
 
-(use-package indent-guide
+;; Highlight indent guides
+(use-package highlight-indent-guides
   :defer t
-  :hook (after-init . indent-guide-global-mode)
+  :diminish
+  :hook ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+  :init (setq highlight-indent-guides-method 'character
+              highlight-indent-guides-responsive 'top
+	      highlight-indent-guides-delay 0
+              highlight-indent-guides-suppress-auto-error t)
+  
   :config
-  (setq indent-guide-delay 0
-	indent-guide-character "|")
-  (set-face-background 'indent-guide-face (face-attribute 'default :background)))
+  (with-no-warnings
+    ;; Don't display first level of indentation
+    (defun my-indent-guides-for-all-but-first-column (level responsive display)
+      (unless (< level 1)
+        (highlight-indent-guides--highlighter-default level responsive display)))
+    (setq highlight-indent-guides-highlighter-function
+          #'my-indent-guides-for-all-but-first-column)
+
+    ;; Disable in `macrostep' expanding
+    (with-eval-after-load 'macrostep
+      (advice-add #'macrostep-expand
+                  :after (lambda (&rest _)
+                           (when highlight-indent-guides-mode
+                             (highlight-indent-guides-mode -1))))
+      (advice-add #'macrostep-collapse
+                  :after (lambda (&rest _)
+                           (when (derived-mode-p 'prog-mode 'yaml-mode)
+                             (highlight-indent-guides-mode 1)))))))
 
 ;; pixel-scroll-mode
 (use-package pixel-scroll
@@ -508,3 +541,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(highlight-indent-guides xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
