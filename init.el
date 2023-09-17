@@ -541,16 +541,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(highlight-indent-guides xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -87,3 +87,4 @@ var/
 workspace/
 racket-mode/
 opam-user-setup.el
+/quelpa
