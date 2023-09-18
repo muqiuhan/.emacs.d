@@ -20,22 +20,28 @@
 ## PROGRAMMING LANGUAGE SUPPORTED
 > eglot hook to prog-mode
 
-- Native support for C/C++ (eglot + clangd)
+- C/C++: eglot + clangd
 - OCaml: tuareg + merlin + ocamlformat + utop
+- Scala: eglot + metals
+- Rust: eglot + rustic
 - Racket: racket-mode + racket-xp-mode
 - Coq: Proof-General
-- Scala: (eglot + metals)
 - Agda: agda2-mode
 - Clojure: cider-mode
+
+### About OCaml environment
+The OCaml environment depends on `opam-user-setup.el`, which is generated to `.emacs.d` through `opam user-setup install`. 
+If the `(setq-default ocaml-environment t)`, you need to execute this command first, and then remove the `(load "opam-user-setup.el")` at the end of `init.el`.
 
 ## CUSTOMIZE
 ```elisp
 (setq-default ocaml-environment t)
 (setq-default fsharp-environment t)
-(setq-default racket-environment nil)
-(setq-default clojure-environment nil)
-(setq-default agda-environment nil)
+(setq-default racket-environment t)
+(setq-default rust-environment t)
+(setq-default clojure-environment t)
 (setq-default scala-environment t)
+(setq-default agda-environment nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))

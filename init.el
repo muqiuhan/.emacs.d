@@ -25,10 +25,11 @@
 ;; ----------------------- Generic Configuration -----------------------
 (setq-default ocaml-environment t)
 (setq-default fsharp-environment t)
-(setq-default racket-environment nil)
-(setq-default clojure-environment nil)
-(setq-default agda-environment nil)
+(setq-default racket-environment t)
 (setq-default scala-environment t)
+(setq-default rust-environment t)
+(setq-default clojure-environment t)
+(setq-default agda-environment nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
@@ -90,7 +91,6 @@
     (require-package 'treemacs-all-the-icons
 		     'eldoc-box)
   '())
-
 
 ;; ----------------------------------- Basic config -----------------------------------
 
@@ -394,7 +394,7 @@
 		 (load-file (let ((coding-system-for-read 'utf-8))
 			      (shell-command-to-string agda-mode-locate)))))))
 
-;; Proof Environment for Coq
+;; Coq
 (when coq-environment
   (require-package 'proof-general
 		   'company-coq)
@@ -406,10 +406,12 @@
       :defer t
       :hook (coq-mode . company-coq))))
 
-(use-package org-roam-ui
-  :bind ("C-c n u" . org-roam-ui-mode)
-  :init (when (featurep 'xwidget-internal)
-          (setq org-roam-ui-browser-function #'xwidget-webkit-browse-url)))
+(when rust-environment
+  (require-package 'rustic)
+  (use-package rustic
+    :defer t
+    :config
+    (setq rustic-lsp-client 'eglot)))
 
 ;; window numbering
 (use-package window-numbering
@@ -542,3 +544,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(rustic xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nyan-mode nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
