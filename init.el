@@ -75,6 +75,7 @@
 		 'window-numbering
 		 'magit
 		 'vscode-dark-plus-theme
+		 'projectile
                  'flymake-popon
 		 'beacon
 		 'rainbow-delimiters
@@ -139,7 +140,7 @@
   (setq corfu-auto t
 	corfu-popupinfo-delay '(0 . 0)
 	corfu-popupinfo-hide nil
-	corfu-auto-prefix 0
+	corfu-auto-prefix 3
 	corfu-quit-at-boundary t
 	corfu-quit-no-match t
 	corfu-preview-current t
@@ -246,6 +247,11 @@
       :hook (flymake-mode . flymake-popon-mode)
       :config
       (setq flymake-popon-delay 0.1))))
+
+;; Projectile
+(use-package projectile
+  :defer t
+  :bind ("C-x K" . projectile-kill-buffers))
 
 ;; line number
 (use-package display-line-numbers
@@ -550,7 +556,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rustic xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nyan-mode nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
+   '(projectile rustic xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nyan-mode nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
