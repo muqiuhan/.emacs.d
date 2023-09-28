@@ -24,24 +24,25 @@
 
 ;; ----------------------- Generic Configuration -----------------------
 (setq-default ocaml-environment t)
+(setq-default c++-environment t)
 (setq-default fsharp-environment t)
 (setq-default racket-environment t)
-(setq-default scala-environment t)
+(setq-default scala-environment nil)
 (setq-default rust-environment t)
-(setq-default clojure-environment t)
+(setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type '(bar . 3))
-(setq-default font "Berkeley Mono")
-(setq-default font-weight 'bold)
-(setq-default font-size 24)
+(setq-default cursor-type '(hbar . 2))
+(setq-default font "Cascadia Code")
+(setq-default font-weight 'semibold)
+(setq-default font-size 120)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'vscode-dark-plus)
+(setq-default theme 'doom-nord)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -67,14 +68,13 @@
 		 'markdown-mode
 		 'nano-modeline
 		 'eglot
-		 'highlight-indent-guides
 		 'vterm
 		 'vterm-toggle
 		 'which-key
 		 'hide-mode-line
 		 'window-numbering
 		 'magit
-		 'vscode-dark-plus-theme
+		 'doom-themes
 		 'projectile
                  'flymake-popon
 		 'beacon
@@ -90,8 +90,9 @@
 
 (if is-graphics
     (require-package 'treemacs-all-the-icons
+		     'highlight-indent-guides
 		     'eldoc-box)
-  '())
+  (require-package 'indent-guide))
 
 ;; ----------------------------------- Basic config -----------------------------------
 
@@ -110,9 +111,10 @@
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
-			:font (format "%s:pixelsize=%d" font english-size)
+			:font font
+			:height font-size
 			:weight font-weight)
-
+    
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
 			(font-spec
@@ -125,8 +127,8 @@
 (set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
 
 ;; Save your eyes!!!
-(if (string-equal "#000000" (face-attribute 'default :background))
-    (set-face-attribute 'default nil :background "#111111"))
+;; (if (string-equal "#000000" (face-attribute 'default :background))
+;;    (set-face-attribute 'default nil :background "#111111"))
 
 
 ;; ----------------------------------- config -----------------------------------
@@ -246,7 +248,7 @@
       :defer t
       :hook (flymake-mode . flymake-popon-mode)
       :config
-      (setq flymake-popon-delay 0.1))))
+      (setq flymake-popon-delay 0.5))))
 
 ;; Projectile
 (use-package projectile
@@ -258,6 +260,7 @@
   :defer t
   :config
   (set-face-attribute 'line-number nil
+		      :italic nil
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
@@ -313,16 +316,6 @@
          ("M-RET"       . treemacs-select-window)
          ("C-x t t"   . treemacs)))
 
-;; eldoc
-(when is-graphics
-  (use-package eldoc-box
-    :defer t
-    :hook (eldoc-mode . eldoc-box-hover-mode)
-    :config
-    (setq-default eldoc-box-offset '(-16 16 50))
-    (set-face-attribute 'eldoc-box-border nil :background "#444")
-    (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
-
 ;; Eglot
 (use-package eglot
   :defer t
@@ -330,6 +323,13 @@
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'snippet-mode)
                           (eglot-ensure))))
          ((markdown-mode yaml-mode yaml-ts-mode) . eglot-ensure)))
+
+(when c++-environment
+  (require-package 'clang-format)
+  (use-package cc-mode
+    :config
+    (define-key c++-mode-map (kbd "C-I") 'clang-format-buffer)
+    (define-key c-mode-map (kbd "C-I") 'clang-format-buffer)))
 
 ;; Racket
 (when racket-environment
@@ -399,6 +399,7 @@
 
 		 (load-file (let ((coding-system-for-read 'utf-8))
 			      (shell-command-to-string agda-mode-locate)))))))
+(setq-default agda2-program-name "~/.cabal/bin/agda")
 
 ;; Coq
 (when coq-environment
@@ -434,7 +435,7 @@
 ;; modeline
 (use-package nano-modeline
   :config
-  (setq nano-modeline-position #'nano-modeline-footer
+  (setq nano-modeline-position #'nano-modeline-header
 	nano-modeline-padding '(0 . 0))
 
   (use-package hide-mode-line
@@ -482,34 +483,38 @@
 	 ([f9] . vterm-toggle)))
 
 ;; Highlight indent guides
-(use-package highlight-indent-guides
-  :defer t
-  :diminish
-  :hook ((prog-mode yaml-mode) . highlight-indent-guides-mode)
-  :init (setq highlight-indent-guides-method 'character
-              highlight-indent-guides-responsive 'top
-	      highlight-indent-guides-delay 0
-              highlight-indent-guides-suppress-auto-error t)
-  
-  :config
-  (with-no-warnings
-    ;; Don't display first level of indentation
-    (defun my-indent-guides-for-all-but-first-column (level responsive display)
-      (unless (< level 1)
-        (highlight-indent-guides--highlighter-default level responsive display)))
-    (setq highlight-indent-guides-highlighter-function
-          #'my-indent-guides-for-all-but-first-column)
+(if is-graphics
+  (use-package highlight-indent-guides
+    :defer t
+    :diminish
+    :hook ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+    :init (setq highlight-indent-guides-method 'bitmap
+		highlight-indent-guides-responsive 'top
+		highlight-indent-guides-delay 0
+		highlight-indent-guides-suppress-auto-error t)
+    
+    :config
+    (with-no-warnings
+      ;; Don't display first level of indentation
+      (defun my-indent-guides-for-all-but-first-column (level responsive display)
+	(unless (< level 1)
+          (highlight-indent-guides--highlighter-default level responsive display)))
+      (setq highlight-indent-guides-highlighter-function
+            #'my-indent-guides-for-all-but-first-column)
 
-    ;; Disable in `macrostep' expanding
-    (with-eval-after-load 'macrostep
-      (advice-add #'macrostep-expand
-                  :after (lambda (&rest _)
-                           (when highlight-indent-guides-mode
-                             (highlight-indent-guides-mode -1))))
-      (advice-add #'macrostep-collapse
-                  :after (lambda (&rest _)
-                           (when (derived-mode-p 'prog-mode 'yaml-mode)
-                             (highlight-indent-guides-mode 1)))))))
+      ;; Disable in `macrostep' expanding
+      (with-eval-after-load 'macrostep
+	(advice-add #'macrostep-expand
+                    :after (lambda (&rest _)
+                             (when highlight-indent-guides-mode
+                               (highlight-indent-guides-mode -1))))
+	(advice-add #'macrostep-collapse
+                    :after (lambda (&rest _)
+                             (when (derived-mode-p 'prog-mode 'yaml-mode)
+                               (highlight-indent-guides-mode 1)))))))
+  (use-package indent-guide
+    :defer t
+    :hook (after-init . indent-guide-global-mode)))
 
 ;; pixel-scroll-mode
 (use-package pixel-scroll
@@ -547,19 +552,16 @@
 		    :box '(:line-width 2 :color "#282828")
 		    :background (face-attribute 'default :background)))
 
+;; eldoc
+(when is-graphics
+    (use-package eldoc-box
+      :defer t
+      :hook (eldoc-mode . eldoc-box-hover-mode)
+      :config
+      (setq-default eldoc-box-offset '(-16 16 50))
+      (set-face-attribute 'eldoc-box-border nil :background "#444")
+      (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(projectile rustic xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general ocamlformat nyan-mode nerd-icons nano-modeline markdown-mode magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon eldoc-box eglot-fsharp dune-format dune corfu-terminal cider cape beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
