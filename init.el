@@ -31,18 +31,19 @@
 (setq-default rust-environment t)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
+(setq-default evil nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type '(hbar . 2))
-(setq-default font "Cascadia Code")
-(setq-default font-weight 'semibold)
-(setq-default font-size 120)
+(setq-default cursor-type 'box)
+(setq-default font "Dank Mono")
+(setq-default font-weight 'bold)
+(setq-default font-size 125)
 (setq-default chinese-font "TsangerMingHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'doom-nord)
+(setq-default theme 'manoj-dark)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -90,7 +91,7 @@
 
 (if is-graphics
     (require-package 'treemacs-all-the-icons
-		     'highlight-indent-guides
+		     'ligature
 		     'eldoc-box)
   (require-package 'indent-guide))
 
@@ -111,9 +112,9 @@
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
-			:font font
-			:height font-size
-			:weight font-weight)
+			:font "Operator Mono"
+			:height 115
+			:weight 'regular)
     
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
@@ -121,7 +122,34 @@
 			 :family chinese
 			 :size chinese-size
 			 :weight chinese-font-weight))))
-  (set-font font chinese-font font-size chinese-font-size))
+  
+  (set-font font chinese-font font-size chinese-font-size)
+
+  (use-package ligature
+     :load-path "path-to-ligature-repo"
+     :config
+     ;; Enable the "www" ligature in every possible major mode
+     (ligature-set-ligatures 't '("www"))
+     ;; Enable traditional ligature support in eww-mode, if the
+     ;; `variable-pitch' face supports it
+     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+     ;; Enable all Cascadia Code ligatures in programming modes
+     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+					  ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+					  "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+					  "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+					  "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+					  "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+					  "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+					  "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+					  ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+					  "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+					  "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+					  "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+					  "\\\\" "://"))
+     ;; Enables ligature checks globally in all buffers. You can also do it
+     ;; per mode with `ligature-mode'.
+     (global-ligature-mode t)))
 
 (set-face-attribute 'font-lock-keyword-face nil :font (face-attribute 'default :font))
 (set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
@@ -283,6 +311,13 @@
   (use-package xclip
     :defer t
     :hook (after-init . xclip-mode)))
+
+;; Evil
+(when evil
+  (require-package 'evil)
+  (use-package evil
+    :defer t
+    :hook (after-init . evil-mode)))
 
 ;; treemacs
 (use-package treemacs
@@ -482,39 +517,10 @@
 	 :map vterm-mode-map
 	 ([f9] . vterm-toggle)))
 
-;; Highlight indent guides
-(if is-graphics
-  (use-package highlight-indent-guides
-    :defer t
-    :diminish
-    :hook ((prog-mode yaml-mode) . highlight-indent-guides-mode)
-    :init (setq highlight-indent-guides-method 'bitmap
-		highlight-indent-guides-responsive 'top
-		highlight-indent-guides-delay 0
-		highlight-indent-guides-suppress-auto-error t)
-    
-    :config
-    (with-no-warnings
-      ;; Don't display first level of indentation
-      (defun my-indent-guides-for-all-but-first-column (level responsive display)
-	(unless (< level 1)
-          (highlight-indent-guides--highlighter-default level responsive display)))
-      (setq highlight-indent-guides-highlighter-function
-            #'my-indent-guides-for-all-but-first-column)
-
-      ;; Disable in `macrostep' expanding
-      (with-eval-after-load 'macrostep
-	(advice-add #'macrostep-expand
-                    :after (lambda (&rest _)
-                             (when highlight-indent-guides-mode
-                               (highlight-indent-guides-mode -1))))
-	(advice-add #'macrostep-collapse
-                    :after (lambda (&rest _)
-                             (when (derived-mode-p 'prog-mode 'yaml-mode)
-                               (highlight-indent-guides-mode 1)))))))
-  (use-package indent-guide
-    :defer t
-    :hook (after-init . indent-guide-global-mode)))
+;; indent guides
+(use-package indent-guide
+  :defer t
+  :hook (after-init . indent-guide-global-mode))
 
 ;; pixel-scroll-mode
 (use-package pixel-scroll
@@ -546,11 +552,8 @@
 
 ;; hl-line-mode
 (use-package hl-line
-  :hook (prog-mode . hl-line-mode)
-  :config
-  (set-face-attribute 'hl-line nil
-		    :box '(:line-width 2 :color "#282828")
-		    :background (face-attribute 'default :background)))
+  ;defer t
+  :hook (prog-mode . hl-line-mode))
 
 ;; eldoc
 (when is-graphics
@@ -565,3 +568,18 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("f4d1b183465f2d29b7a2e9dbe87ccc20598e79738e5d29fc52ec8fb8c576fcfd" "badd1a5e20bd0c29f4fe863f3b480992c65ef1fa63951f59aa5d6b129a3f9c4c" "4b6cc3b60871e2f4f9a026a5c86df27905fb1b0e96277ff18a76a39ca53b82e1" "dbade2e946597b9cda3e61978b5fcc14fa3afa2d3c4391d477bdaeff8f5638c5" "9013233028d9798f901e5e8efb31841c24c12444d3b6e92580080505d56fd392" "38c0c668d8ac3841cb9608522ca116067177c92feeabc6f002a27249976d7434" "c1d5759fcb18b20fd95357dcd63ff90780283b14023422765d531330a3d3cec2" "02d422e5b99f54bd4516d4157060b874d14552fe613ea7047c4a5cfa1288cf4f" default))
+ '(package-selected-packages
+   '(ligature xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rustic riscv-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general projectile ocamlformat nyan-mode nerd-icons nano-modeline magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon evil eldoc-overlay eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cider cape beacon)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
