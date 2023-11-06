@@ -37,10 +37,10 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
 (setq-default cursor-type 'box)
-(setq-default font "Dank Mono")
+(setq-default font "SF Mono Ligatures")
 (setq-default font-weight 'bold)
-(setq-default font-size 125)
-(setq-default chinese-font "TsangerMingHei")
+(setq-default font-size 110)
+(setq-default chinese-font "Microsoft YaHei UI")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
 (setq-default theme 'manoj-dark)
@@ -51,8 +51,8 @@
 				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (setq-default url-proxy-services
               '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-                ("http" . "127.0.0.1:7890")
-                ("https" . "127.0.0.1:7890")))
+                ("http" . "127.0.0.1:20172")
+                ("https" . "127.0.0.1:20172")))
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
@@ -90,9 +90,11 @@
   (require-package 'xclip))
 
 (if is-graphics
-    (require-package 'treemacs-all-the-icons
-		     'ligature
-		     'eldoc-box)
+    (require-package
+     'all-the-icons-nerd-fonts
+     'treemacs-all-the-icons
+     'ligature
+     'eldoc-box)
   (require-package 'indent-guide))
 
 ;; ----------------------------------- Basic config -----------------------------------
@@ -112,9 +114,9 @@
 (when is-graphics
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
-			:font "Operator Mono"
-			:height 115
-			:weight 'regular)
+			:font font
+			:height font-size
+			:weight font-weight)
     
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
@@ -126,30 +128,30 @@
   (set-font font chinese-font font-size chinese-font-size)
 
   (use-package ligature
-     :load-path "path-to-ligature-repo"
-     :config
-     ;; Enable the "www" ligature in every possible major mode
-     (ligature-set-ligatures 't '("www"))
-     ;; Enable traditional ligature support in eww-mode, if the
-     ;; `variable-pitch' face supports it
-     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-     ;; Enable all Cascadia Code ligatures in programming modes
-     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-					  ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-					  "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-					  "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-					  "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-					  "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-					  "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-					  "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-					  ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-					  "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-					  "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-					  "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-					  "\\\\" "://"))
-     ;; Enables ligature checks globally in all buffers. You can also do it
-     ;; per mode with `ligature-mode'.
-     (global-ligature-mode t)))
+    :load-path "path-to-ligature-repo"
+    :config
+    ;; Enable the "www" ligature in every possible major mode
+    (ligature-set-ligatures 't '("www"))
+    ;; Enable traditional ligature support in eww-mode, if the
+    ;; `variable-pitch' face supports it
+    (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+    ;; Enable all Cascadia Code ligatures in programming modes
+    (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+					 ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+					 "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+					 "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+					 "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+					 "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+					 "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+					 "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+					 ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+					 "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+					 "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+					 "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+					 "\\\\" "://"))
+    ;; Enables ligature checks globally in all buffers. You can also do it
+    ;; per mode with `ligature-mode'.
+    (global-ligature-mode t)))
 
 (set-face-attribute 'font-lock-keyword-face nil :font (face-attribute 'default :font))
 (set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
@@ -552,34 +554,19 @@
 
 ;; hl-line-mode
 (use-package hl-line
-  ;defer t
+					;defer t
   :hook (prog-mode . hl-line-mode))
 
 ;; eldoc
 (when is-graphics
-    (use-package eldoc-box
-      :defer t
-      :hook (eldoc-mode . eldoc-box-hover-mode)
-      :config
-      (setq-default eldoc-box-offset '(-16 16 50))
-      (set-face-attribute 'eldoc-box-border nil :background "#444")
-      (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
+  (use-package eldoc-box
+    :defer t
+    :hook (eldoc-mode . eldoc-box-hover-mode)
+    :config
+    (setq-default eldoc-box-offset '(-16 16 50))
+    (set-face-attribute 'eldoc-box-border nil :background "#444")
+    (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("f4d1b183465f2d29b7a2e9dbe87ccc20598e79738e5d29fc52ec8fb8c576fcfd" "badd1a5e20bd0c29f4fe863f3b480992c65ef1fa63951f59aa5d6b129a3f9c4c" "4b6cc3b60871e2f4f9a026a5c86df27905fb1b0e96277ff18a76a39ca53b82e1" "dbade2e946597b9cda3e61978b5fcc14fa3afa2d3c4391d477bdaeff8f5638c5" "9013233028d9798f901e5e8efb31841c24c12444d3b6e92580080505d56fd392" "38c0c668d8ac3841cb9608522ca116067177c92feeabc6f002a27249976d7434" "c1d5759fcb18b20fd95357dcd63ff90780283b14023422765d531330a3d3cec2" "02d422e5b99f54bd4516d4157060b874d14552fe613ea7047c4a5cfa1288cf4f" default))
- '(package-selected-packages
-   '(ligature xclip window-numbering which-key vterm-toggle vscode-dark-plus-theme visual-fill-column utop treemacs-all-the-icons tao-theme scala-mode sbt-mode rustic riscv-mode rainbow-identifiers rainbow-delimiters racket-mode quelpa-use-package proof-general projectile ocamlformat nyan-mode nerd-icons nano-modeline magit lua-mode kind-icon indent-guide highlight-indent-guides hide-mode-line goto-line-preview go-translate flymake-popon evil eldoc-overlay eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cider cape beacon)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
