@@ -41,6 +41,7 @@
 (setq-default font-weight 'bold)
 (setq-default font-size 115)
 (setq-default font-ligature nil)
+(setq-default minimap nil)
 (setq-default chinese-font "Microsoft YaHei UI")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
@@ -107,6 +108,7 @@
 (tool-bar-mode -1)
 (fringe-mode -1)
 (scroll-bar-mode 1)
+(tab-bar-mode 1)
 
 (load-theme theme t)
 
@@ -280,6 +282,16 @@
 (use-package projectile
   :defer t
   :bind ("C-x K" . projectile-kill-buffers))
+
+(when (and is-graphics minimap)
+  (require-package 'minimap)
+  (use-package minimap
+    :config
+    (setq minimap-update-delay 0
+	  minimap-width-fraction 0
+	  minimap-hide-scroll-bar t)
+
+    :hook (after-init . minimap-mode)))
 
 ;; line number
 (use-package display-line-numbers
@@ -564,3 +576,5 @@
     (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
 (provide 'init)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; init.el ends here
