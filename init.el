@@ -27,7 +27,7 @@
 (setq-default c++-environment t)
 (setq-default fsharp-environment t)
 (setq-default racket-environment t)
-(setq-default scala-environment nil)
+(setq-default scala-environment t)
 (setq-default rust-environment t)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
@@ -36,14 +36,15 @@
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type 'box)
-(setq-default font "SF Mono Ligatures")
+(setq-default cursor-type 'bar)
+(setq-default font "Ricty Diminished Discord")
 (setq-default font-weight 'bold)
-(setq-default font-size 110)
+(setq-default font-size 115)
+(setq-default font-ligature nil)
 (setq-default chinese-font "Microsoft YaHei UI")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'manoj-dark)
+(setq-default theme 'modus-operandi)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -51,8 +52,8 @@
 				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (setq-default url-proxy-services
               '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-                ("http" . "127.0.0.1:20172")
-                ("https" . "127.0.0.1:20172")))
+                ("http" . "127.0.0.1:7890")
+                ("https" . "127.0.0.1:7890")))
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
@@ -105,7 +106,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (fringe-mode -1)
-(scroll-bar-mode -1)
+(scroll-bar-mode 1)
 
 (load-theme theme t)
 
@@ -130,12 +131,8 @@
   (use-package ligature
     :load-path "path-to-ligature-repo"
     :config
-    ;; Enable the "www" ligature in every possible major mode
     (ligature-set-ligatures 't '("www"))
-    ;; Enable traditional ligature support in eww-mode, if the
-    ;; `variable-pitch' face supports it
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-    ;; Enable all Cascadia Code ligatures in programming modes
     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
 					 ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
 					 "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
@@ -149,16 +146,15 @@
 					 "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
 					 "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
 					 "\\\\" "://"))
-    ;; Enables ligature checks globally in all buffers. You can also do it
-    ;; per mode with `ligature-mode'.
-    (global-ligature-mode t)))
+    (when font-ligature
+      (global-ligature-mode t))))
 
 (set-face-attribute 'font-lock-keyword-face nil :font (face-attribute 'default :font))
 (set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
 
 ;; Save your eyes!!!
-;; (if (string-equal "#000000" (face-attribute 'default :background))
-;;    (set-face-attribute 'default nil :background "#111111"))
+(if (string-equal "#000000" (face-attribute 'default :background))
+    (set-face-attribute 'default nil :background "#111111"))
 
 
 ;; ----------------------------------- config -----------------------------------
@@ -554,7 +550,7 @@
 
 ;; hl-line-mode
 (use-package hl-line
-					;defer t
+  :defer t
   :hook (prog-mode . hl-line-mode))
 
 ;; eldoc
@@ -568,5 +564,3 @@
     (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
 (provide 'init)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; init.el ends here
