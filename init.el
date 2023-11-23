@@ -45,7 +45,8 @@
 (setq-default chinese-font "Microsoft YaHei UI")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'modus-operandi)
+(setq-default light-theme 'modus-operandi)
+(setq-default dark-theme 'modus-vivendi)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -110,7 +111,25 @@
 (scroll-bar-mode 1)
 (tab-bar-mode 1)
 
-(load-theme theme t)
+(when is-x11
+  (defun theme--handle-dbus-event (a setting values)
+    "Handler for FreeDesktop theme changes."
+    (when (string= setting "ColorScheme")
+      (let ((scheme (car values)))
+        (cond
+         ((string-match-p "Dark" scheme)
+          (load-theme dark-theme t))
+         ((string-match-p "Light" scheme)
+          (load-theme light-theme t))
+         (t (message "I don't know how to handle scheme: %s" scheme))))))
+
+  (require 'dbus)
+  (dbus-register-signal :session
+                        "org.freedesktop.portal"
+                        "/org/freedesktop/portal/desktop"
+                        "org.freedesktop.impl.portal.Settings"
+                        "SettingChanged"
+                        #'theme--handle-dbus-event))
 
 (set-default 'truncate-lines t)
 
@@ -333,9 +352,9 @@
 (use-package treemacs
   :defer t
   :config
-  (setq treemacs-width 35
+  (setq treemacs-width 50
 	treemacs-indentation 2
-	treemacs-position 'left
+	treemacs-position 'right
 	treemacs-icon-tag-leaf "0")
 
   (dolist (face '(treemacs-root-face
