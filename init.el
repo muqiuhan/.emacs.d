@@ -111,7 +111,7 @@
 (scroll-bar-mode 1)
 (tab-bar-mode 1)
 
-(when is-x11
+(when (string= system-type "gnu/linux")
   (defun theme--handle-dbus-event (a setting values)
     "Handler for FreeDesktop theme changes."
     (when (string= setting "ColorScheme")
@@ -129,7 +129,18 @@
                         "/org/freedesktop/portal/desktop"
                         "org.freedesktop.impl.portal.Settings"
                         "SettingChanged"
-                        #'theme--handle-dbus-event))
+                        #'theme--handle-dbus-event)
+
+
+  (if (eq 1 (caar (dbus-ignore-errors
+                    (dbus-call-method
+                     :session
+                     "org.freedesktop.portal.Desktop"
+                     "/org/freedesktop/portal/desktop"
+                     "org.freedesktop.portal.Settings" "Read"
+                     "org.freedesktop.appearance" "color-scheme"))))
+      (load-theme dark-theme t)
+    (load-theme light-theme t)))
 
 (set-default 'truncate-lines t)
 
@@ -150,7 +161,6 @@
   (set-font font chinese-font font-size chinese-font-size)
 
   (use-package ligature
-    :load-path "path-to-ligature-repo"
     :config
     (ligature-set-ligatures 't '("www"))
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
