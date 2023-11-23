@@ -36,24 +36,29 @@ If the `(setq-default ocaml-environment t)`, you need to execute this command fi
 ## CUSTOMIZE
 ```elisp
 (setq-default ocaml-environment t)
+(setq-default c++-environment t)
 (setq-default fsharp-environment t)
 (setq-default racket-environment t)
-(setq-default rust-environment t)
-(setq-default clojure-environment t)
 (setq-default scala-environment t)
+(setq-default rust-environment t)
+(setq-default clojure-environment nil)
 (setq-default agda-environment nil)
+(setq-default evil nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type '(bar . 3))
-(setq-default font "Hack")
+(setq-default cursor-type 'bar)
+(setq-default font "Ricty Diminished Discord")
 (setq-default font-weight 'bold)
-(setq-default font-size 24)
-(setq-default chinese-font "TsangerMingHei")
+(setq-default font-size 115)
+(setq-default font-ligature nil)
+(setq-default minimap nil)
+(setq-default chinese-font "Microsoft YaHei UI")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default theme 'vscode-dark-plus)
+(setq-default light-theme 'modus-operandi)
+(setq-default dark-theme 'modus-vivendi)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -64,6 +69,7 @@ If the `(setq-default ocaml-environment t)`, you need to execute this command fi
                 ("http" . "127.0.0.1:7890")
                 ("https" . "127.0.0.1:7890")))
 ```
+
 
 ## KEY BINDING
 > This configuration uses Emacs native keys

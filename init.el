@@ -87,6 +87,7 @@
                  'corfu
                  'corfu-terminal
                  'cape
+		 'grip-mode
 		 'go-translate)
 
 (when is-x11
@@ -109,7 +110,8 @@
 (tool-bar-mode -1)
 (fringe-mode -1)
 (scroll-bar-mode 1)
-(tab-bar-mode 1)
+(tab-bar-mode -1)
+(global-tab-line-mode 1)
 
 (when (string= system-type "gnu/linux")
   (defun theme--handle-dbus-event (a setting values)
@@ -604,6 +606,31 @@
     (set-face-attribute 'eldoc-box-border nil :background "#444")
     (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
+;; When compiled with GTK, Emacs cannot recover from X disconnects.
+;; This is a GTK bug: https://gitlab.gnome.org/GNOME/gtk/issues/221
+;; For details, see etc/PROBLEMS.
+;;
+;; (use-package grip-mode
+;;   :ensure t
+;;   :config
+;;   (setq grip-binary-path "/home/muqiu/Applications/python3_venv/bin/grip")
+;;   :hook ((markdown-mode org-mode) . grip-mode))
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(delete-selection-mode nil)
+ '(package-selected-packages
+   '(grip-mode simple-httpd xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat nano-modeline minimap magit ligature kind-icon indent-guide hide-mode-line goto-line-preview go-translate go-mode flymake-popon eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cape beacon all-the-icons-nerd-fonts)))
