@@ -54,8 +54,8 @@
 				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (setq-default url-proxy-services
               '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-                ("http" . "127.0.0.1:7890")
-                ("https" . "127.0.0.1:7890")))
+                ("http" . "127.0.0.1:20172")
+                ("https" . "127.0.0.1:20172")))
 ;; ----------------------------------- Package config -----------------------------------
 
 (require 'package)
@@ -87,6 +87,7 @@
                  'corfu
                  'corfu-terminal
                  'cape
+		 'evil
 		 'grip-mode
 		 'go-translate)
 
@@ -99,7 +100,8 @@
      'treemacs-all-the-icons
      'ligature
      'eldoc-box)
-  (require-package 'indent-guide))
+  (require-package 'indent-guide
+		   'centered-cursor-mode))
 
 ;; ----------------------------------- Basic config -----------------------------------
 
@@ -109,9 +111,12 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (fringe-mode -1)
-(scroll-bar-mode 1)
+(scroll-bar-mode -1)
 (tab-bar-mode -1)
-(global-tab-line-mode 1)
+(blink-cursor-mode 0)
+
+(when is-graphics
+  (global-tab-line-mode 1))
 
 (when (string= system-type "gnu/linux")
   (defun theme--handle-dbus-event (a setting values)
@@ -188,7 +193,6 @@
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
     (set-face-attribute 'default nil :background "#111111"))
-
 
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
@@ -295,6 +299,16 @@
     (add-to-list 'completion-at-point-functions #'cape-keyword)
     (add-to-list 'completion-at-point-functions #'cape-abbrev)))
 
+;; Evil
+(use-package evil
+  :init
+  (evil-mode 1))
+
+;; Centered cursor
+(unless is-graphics
+  (use-package centered-cursor-mode
+    :hook (after-init . global-centered-cursor-mode)))
+
 ;; Flymake
 (use-package flymake
   :defer t
@@ -364,9 +378,9 @@
 (use-package treemacs
   :defer t
   :config
-  (setq treemacs-width 50
+  (setq treemacs-width 45
 	treemacs-indentation 2
-	treemacs-position 'right
+	treemacs-position 'left
 	treemacs-icon-tag-leaf "0")
 
   (dolist (face '(treemacs-root-face
@@ -633,4 +647,4 @@
  ;; If there is more than one, they won't work right.
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(grip-mode simple-httpd xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat nano-modeline minimap magit ligature kind-icon indent-guide hide-mode-line goto-line-preview go-translate go-mode flymake-popon eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cape beacon all-the-icons-nerd-fonts)))
+   '(centered-cursor-mode multiple-cursors grip-mode simple-httpd xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat nano-modeline minimap magit ligature kind-icon indent-guide hide-mode-line goto-line-preview go-translate go-mode flymake-popon eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cape beacon all-the-icons-nerd-fonts)))
