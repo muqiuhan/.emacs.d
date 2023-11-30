@@ -87,7 +87,6 @@
                  'corfu
                  'corfu-terminal
                  'cape
-		 'evil
 		 'grip-mode
 		 'go-translate)
 
@@ -300,9 +299,11 @@
     (add-to-list 'completion-at-point-functions #'cape-abbrev)))
 
 ;; Evil
-(use-package evil
-  :init
-  (evil-mode 1))
+(when evil
+  (require-package 'evil)
+  (use-package evil
+    :init
+    (evil-mode 1)))
 
 ;; Centered cursor
 (unless is-graphics
