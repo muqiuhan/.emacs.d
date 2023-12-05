@@ -80,7 +80,7 @@
 		 'magit
 		 'doom-themes
 		 'projectile
-                 'flymake-popon
+                 'sideline-flymake
 		 'beacon
 		 'rainbow-delimiters
 		 'goto-line-preview
@@ -317,12 +317,12 @@
   :init (setq flymake-fringe-indicator-position 'right-fringe)
   :config (setq elisp-flymake-byte-compile-load-path
                 (append elisp-flymake-byte-compile-load-path load-path))
-  (when is-graphics
-    (use-package flymake-popon
-      :defer t
-      :hook (flymake-mode . flymake-popon-mode)
-      :config
-      (setq flymake-popon-delay 0.5))))
+
+  (use-package sideline
+    :hook (flymake-mode . sideline-mode)
+    :init
+    (setq sideline-flymake-display-mode 'point)
+    (setq sideline-backends-right '(sideline-flymake))))
 
 ;; Projectile
 (use-package projectile
@@ -634,18 +634,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(centered-cursor-mode multiple-cursors grip-mode simple-httpd xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat nano-modeline minimap magit ligature kind-icon indent-guide hide-mode-line goto-line-preview go-translate go-mode flymake-popon eldoc-box eglot-fsharp dune-format dune doom-themes corfu-terminal clang-format cape beacon all-the-icons-nerd-fonts)))
