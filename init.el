@@ -161,6 +161,7 @@ Otherwise the startup will be very slow."
 (require 'init-elixir)
 (require 'init-web)
 (require 'init-ocaml)
+(require 'init-fsharp)
 (require 'init-scala)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
