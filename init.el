@@ -37,12 +37,12 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
 (setq-default cursor-type 'bar)
-(setq-default font "Ricty Diminished Discord")
+(setq-default font "Liga SFMono Nerd Font")
 (setq-default font-weight 'bold)
 (setq-default font-size 115)
 (setq-default font-ligature nil)
 (setq-default minimap nil)
-(setq-default chinese-font "Microsoft YaHei UI")
+(setq-default chinese-font "TsangerYunHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
 (setq-default light-theme 'modus-operandi)
@@ -448,11 +448,15 @@
 ;; F#
 (when fsharp-environment
   (require-package 'fsharp-mode
+		   'ob-fsharp
 		   'eglot-fsharp)
   
   (use-package fsharp-mode
     :defer t
-    :ensure t))
+    :ensure t
+    :config
+    (use-package eglot-fsharp)
+    (use-package ob-fsharp)))
 
 ;; Clojure
 (when clojure-environment
@@ -634,3 +638,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(kind-icon indent-guide ztree youdao-dictionary yasnippet-snippets yasnippet-capf yari yard-mode yaml-mode xclip window-numbering which-key-posframe web-mode vundo vterm-toggle vimrc-mode vertico-posframe v-mode utop typescript-mode treesit-auto treemacs-tab-bar treemacs-nerd-icons treemacs-magit treemacs-all-the-icons transient-posframe toc-org tldr tabspaces symbol-overlay swift-mode sudo-edit solaire-mode smart-region skewer-mode sideline-flymake scss-mode sbt-mode saveplace-pdf-view rustic rust-playground ruby-refactor rspec-mode rg restclient rbenv rainbow-mode rainbow-delimiters racket-mode quickrun protobuf-mode projectile pretty-hydra powershell popper pomidor php-mode persistent-scratch pdf-tools paradox page-break-lines ox-gfm overseer org-tree-slide org-timeline org-roam-ui org-rich-yank org-preview-html org-pomodoro org-modern org-mime org-fragtog orderless olivetti ocamlformat ob-rust ob-powershell ob-mermaid ob-go ob-fsharp nov nerd-icons-ibuffer nerd-icons-dired nerd-icons-corfu nerd-icons-completion nano-modeline mwim mocha mixed-pitch minions mingus mermaid-mode memory-usage markdown-toc marginalia macrostep lua-mode lsp-ui lsp-sourcekit lsp-pyright lsp-metals lsp-julia lsp-java live-py-mode list-environment link-hint ligature iscroll inf-ruby iedit ibuffer-project ialign hungry-delete hl-todo highlight-indent-guides highlight-defined hide-mode-line helpful haml-mode grip-mode goto-line-preview goto-chg goggles go-translate go-tag go-playground go-impl go-gen-test go-fill-struct go-dlv gnu-elpa-keyring-update git-timemachine git-modes git-messenger gcmh forge fish-mode fanyi fancy-narrow exec-path-from-shell eshell-z eshell-prompt-extras esh-help embark-consult emacsql-sqlite-builtin elixir-mode elfeed eldoc-box eglot-fsharp editorconfig easy-kill dune-format dune dumb-jump drag-stuff doom-themes doom-modeline dockerfile-mode docker disk-usage diredfl dired-rsync dired-quick-sort dired-git-info diminish diff-hl devdocs default-text-scale dashboard dart-mode dape daemons csv-mode corfu-terminal consult-yasnippet consult-lsp consult-flyspell consult-eglot coffee-mode cmake-mode clang-format ccls cask-mode cape cal-china-x browse-kill-ring browse-at-remote bongo beginend beacon avy-zap auto-dark atomic-chrome anzu all-the-icons-nerd-fonts aggressive-indent add-node-modules-path ace-pinyin)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
