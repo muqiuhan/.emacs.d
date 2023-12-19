@@ -34,6 +34,7 @@
   :defer t
   :interpreter ("scala" . scala-mode)
   :config
+  (use-package lsp-metals)
   (use-package sbt-mode
     :commands sbt-start sbt-command
     :config
