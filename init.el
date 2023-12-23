@@ -79,7 +79,6 @@
 		 'window-numbering
 		 'magit
 		 'solarized-theme
-		 'doom-themes
 		 'projectile
                  'sideline-flymake
 		 'beacon
@@ -125,7 +124,7 @@
         tab-bar-close-button-show nil
         tab-bar-tab-hints t)
 
-  (customize-set-variable 'tab-bar-select-tab-modifiers '(ctrl))
+  (customize-set-variable 'tab-bar-select-tab-modifiers '(super))
 
   (setq tab-bar-tab-name-function
         (lambda () (let* ((raw-tab-name (buffer-name (window-buffer (minibuffer-selected-window))))
@@ -567,8 +566,7 @@
 ;; modeline
 (use-package nano-modeline
   :config
-  (setq nano-modeline-position #'nano-modeline-header
-	nano-modeline-padding '(0 . 0))
+  (setq nano-modeline-position #'nano-modeline-footer)
 
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
@@ -664,18 +662,3 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("d89e15a34261019eec9072575d8a924185c27d3da64899905f8548cbd9491a36" "833ddce3314a4e28411edf3c6efde468f6f2616fc31e17a62587d6a9255f4633" "830877f4aab227556548dc0a28bf395d0abe0e3a0ab95455731c9ea5ab5fe4e1" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default))
- '(package-selected-packages
-   '(solarized-theme kind-icon indent-guide ztree youdao-dictionary yasnippet-snippets yasnippet-capf yari yard-mode yaml-mode xclip window-numbering which-key-posframe web-mode vundo vterm-toggle vimrc-mode vertico-posframe v-mode utop typescript-mode treesit-auto treemacs-tab-bar treemacs-nerd-icons treemacs-magit treemacs-all-the-icons transient-posframe toc-org tldr tabspaces symbol-overlay swift-mode sudo-edit solaire-mode smart-region skewer-mode sideline-flymake scss-mode sbt-mode saveplace-pdf-view rustic rust-playground ruby-refactor rspec-mode rg restclient rbenv rainbow-mode rainbow-delimiters racket-mode quickrun protobuf-mode projectile pretty-hydra powershell popper pomidor php-mode persistent-scratch pdf-tools paradox page-break-lines ox-gfm overseer org-tree-slide org-timeline org-roam-ui org-rich-yank org-preview-html org-pomodoro org-modern org-mime org-fragtog orderless olivetti ocamlformat ob-rust ob-powershell ob-mermaid ob-go ob-fsharp nov nerd-icons-ibuffer nerd-icons-dired nerd-icons-corfu nerd-icons-completion nano-modeline mwim mocha mixed-pitch minions mingus mermaid-mode memory-usage markdown-toc marginalia macrostep lua-mode lsp-ui lsp-sourcekit lsp-pyright lsp-metals lsp-julia lsp-java live-py-mode list-environment link-hint ligature iscroll inf-ruby iedit ibuffer-project ialign hungry-delete hl-todo highlight-indent-guides highlight-defined hide-mode-line helpful haml-mode grip-mode goto-line-preview goto-chg goggles go-translate go-tag go-playground go-impl go-gen-test go-fill-struct go-dlv gnu-elpa-keyring-update git-timemachine git-modes git-messenger gcmh forge fish-mode fanyi fancy-narrow exec-path-from-shell eshell-z eshell-prompt-extras esh-help embark-consult emacsql-sqlite-builtin elixir-mode elfeed eldoc-box eglot-fsharp editorconfig easy-kill dune-format dune dumb-jump drag-stuff doom-themes doom-modeline dockerfile-mode docker disk-usage diredfl dired-rsync dired-quick-sort dired-git-info diminish diff-hl devdocs default-text-scale dashboard dart-mode dape daemons csv-mode corfu-terminal consult-yasnippet consult-lsp consult-flyspell consult-eglot coffee-mode cmake-mode clang-format ccls cask-mode cape cal-china-x browse-kill-ring browse-at-remote bongo beginend beacon avy-zap auto-dark atomic-chrome anzu all-the-icons-nerd-fonts aggressive-indent add-node-modules-path ace-pinyin)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
