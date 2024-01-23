@@ -89,3 +89,4 @@ racket-mode/
 opam-user-setup.el
 /quelpa
 tabsession.el
+FsAutoComplete/

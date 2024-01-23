@@ -25,10 +25,10 @@
 ;; ----------------------- Generic Configuration -----------------------
 (setq-default ocaml-environment t)
 (setq-default c++-environment t)
-(setq-default fsharp-environment t)
-(setq-default racket-environment t)
-(setq-default scala-environment t)
-(setq-default rust-environment t)
+(setq-default fsharp-environment nil)
+(setq-default racket-environment nil)
+(setq-default scala-environment nil)
+(setq-default rust-environment nil)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default evil nil)
@@ -36,17 +36,17 @@
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0.2)
-(setq-default cursor-type 'bar)
-(setq-default font "JetbrainsMono Nerd Font")
-(setq-default font-weight 'extrabold)
-(setq-default font-size 115)
+(setq-default cursor-type 'box)
+(setq-default font "Jetbrains Mono")
+(setq-default font-weight 'bold)
+(setq-default font-size 110)
 (setq-default font-ligature t)
 (setq-default minimap nil)
 (setq-default chinese-font "TsangerYunHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default light-theme 'solarized-light)
-(setq-default dark-theme 'solarized-dark)
+(setq-default light-theme 'nil)
+(setq-default dark-theme 'nil)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -78,7 +78,6 @@
 		 'hide-mode-line
 		 'window-numbering
 		 'magit
-		 'solarized-theme
 		 'projectile
                  'sideline-flymake
 		 'beacon
@@ -181,8 +180,8 @@
                      "/org/freedesktop/portal/desktop"
                      "org.freedesktop.portal.Settings" "Read"
                      "org.freedesktop.appearance" "color-scheme"))))
-      (load-theme dark-theme t)
-    (load-theme light-theme t)))
+      (when dark-theme (load-theme dark-theme t))
+    (when light-theme (load-theme light-theme t))))
 
 (set-default 'truncate-lines t)
 
@@ -227,7 +226,9 @@
 
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
-    (set-face-attribute 'default nil :background "#111111"))
+    (progn
+      (set-face-attribute 'default nil :background "#111111")
+      (set-face-attribute 'default nil :foreground "#eedddd")))
 
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
@@ -417,7 +418,7 @@
   :config
   (setq treemacs-width 45
 	treemacs-indentation 2
-	treemacs-position 'left
+	treemacs-position 'right
 	treemacs-icon-tag-leaf "0")
 
   (dolist (face '(treemacs-root-face
@@ -461,7 +462,7 @@
 ;; Racket
 (when racket-environment
   (require-package 'racket-mode)
-  
+
   (use-package racket-mode
     :defer t
     :hook (racket-mode . racket-xp-mode)))
@@ -478,7 +479,7 @@
     :defer t
     :commands (ocamlformat-before-save)
     :config
-    (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+    ;; (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
     (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
 
 ;; F#
@@ -649,16 +650,7 @@
     (set-face-attribute 'eldoc-box-border nil :background "#444")
     (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
 
-;; When compiled with GTK, Emacs cannot recover from X disconnects.
-;; This is a GTK bug: https://gitlab.gnome.org/GNOME/gtk/issues/221
-;; For details, see etc/PROBLEMS.
-;;
-;; (use-package grip-mode
-;;   :ensure t
-;;   :config
-;;   (setq grip-binary-path "/home/muqiu/Applications/python3_venv/bin/grip")
-;;   :hook ((markdown-mode org-mode) . grip-mode))
 
 (provide 'init)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
