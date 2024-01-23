@@ -75,6 +75,7 @@
 		 'vterm
 		 'vterm-toggle
 		 'which-key
+		 'multiple-cursors
 		 'hide-mode-line
 		 'window-numbering
 		 'magit
@@ -360,6 +361,12 @@
     :init
     (setq sideline-flymake-display-mode 'point)
     (setq sideline-backends-right '(sideline-flymake))))
+
+;; multiple-cursors
+(use-package multiple-cursors
+  :init
+  (global-set-key (kbd "C-M-n") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-M-p") 'mc/mark-previous-like-this))
 
 ;; Projectile
 (use-package projectile
