@@ -45,8 +45,10 @@
 (setq-default chinese-font "TsangerYunHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default light-theme 'nil)
-(setq-default dark-theme 'nil)
+(setq-default light-theme nil)
+(setq-default dark-theme nil)
+(setq-default hl-line nil)
+(setq-default relative-line-number nil)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
 (setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -387,13 +389,19 @@
 (use-package display-line-numbers
   :defer t
   :config
+
+  (when relative-line-number (setq display-line-numbers 'relative))
+
+  ;; Retro!!!
   (set-face-attribute 'line-number nil
 		      :italic nil
+		      :background "#00a"
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
   (set-face-attribute 'line-number-current-line nil
 		      :italic nil
+		      :background "#00f"
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
@@ -576,6 +584,14 @@
   :config
   (setq nano-modeline-position #'nano-modeline-footer)
 
+  (set-face-attribute 'nano-modeline-active nil
+		      :background (face-attribute 'default :background)
+		      :foreground (face-attribute 'default :foreground))
+
+  (set-face-attribute 'nano-modeline-inactive nil
+		      :background (face-attribute 'default :background)
+		      :foreground (face-attribute 'default :foreground))
+
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
 	   (treemacs-mode . hide-mode-line-mode))
@@ -643,9 +659,10 @@
   (which-key-mode t))
 
 ;; hl-line-mode
-(use-package hl-line
-  :defer t
-  :hook (prog-mode . hl-line-mode))
+(when hl-line
+  (use-package hl-line
+    :defer t
+    :hook (prog-mode . hl-line-mode)))
 
 ;; eldoc
 (when is-graphics
