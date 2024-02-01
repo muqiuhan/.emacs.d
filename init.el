@@ -35,19 +35,20 @@
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 0)
 (setq-default cursor-type 'box)
-(setq-default font "Jetbrains Mono")
+(setq-default font "Liga SFMono Nerd Font")
 (setq-default font-weight 'bold)
-(setq-default font-size 110)
+(setq-default font-size 115)
 (setq-default font-ligature t)
 (setq-default minimap nil)
 (setq-default chinese-font "TsangerYunHei")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 31)
-(setq-default light-theme nil)
-(setq-default dark-theme nil)
+(setq-default light-theme 'autumn-light)
+(setq-default dark-theme 'modus-vivendi)
 (setq-default hl-line nil)
+(setq-default tab-bar nil)
 (setq-default relative-line-number nil)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
@@ -116,44 +117,45 @@
 (blink-cursor-mode 0)
 (tab-line-mode -1)
 
-(use-package tab-bar
-  :hook (window-setup . tab-bar-mode)
-  :config
-  (setq tab-bar-separator ""
-        tab-bar-new-tab-choice "*scratch*"
-        tab-bar-tab-name-truncated-max 20
-        tab-bar-auto-width nil
-        tab-bar-close-button-show nil
-        tab-bar-tab-hints t)
+(when tab-bar 
+  (use-package tab-bar
+    :hook (window-setup . tab-bar-mode)
+    :config
+    (setq tab-bar-separator ""
+	  tab-bar-new-tab-choice "*scratch*"
+	  tab-bar-tab-name-truncated-max 20
+	  tab-bar-auto-width nil
+	  tab-bar-close-button-show nil
+	  tab-bar-tab-hints t)
 
-  (customize-set-variable 'tab-bar-select-tab-modifiers '(super))
+    (customize-set-variable 'tab-bar-select-tab-modifiers '(super))
 
-  (setq tab-bar-tab-name-function
-        (lambda () (let* ((raw-tab-name (buffer-name (window-buffer (minibuffer-selected-window))))
-                     (count (length (window-list-1 nil 'nomini)))
-                     (truncated-tab-name (if (< (length raw-tab-name)
-                                                tab-bar-tab-name-truncated-max)
-                                             raw-tab-name
-                                           (truncate-string-to-width raw-tab-name
-                                                                     tab-bar-tab-name-truncated-max
-                                                                     nil nil tab-bar-tab-name-ellipsis))))
-                (if (> count 1)
-                    (concat truncated-tab-name "(" (number-to-string count) ")")
-                  truncated-tab-name))))
+    (setq tab-bar-tab-name-function
+          (lambda () (let* ((raw-tab-name (buffer-name (window-buffer (minibuffer-selected-window))))
+			    (count (length (window-list-1 nil 'nomini)))
+			    (truncated-tab-name (if (< (length raw-tab-name)
+                                                       tab-bar-tab-name-truncated-max)
+						    raw-tab-name
+						  (truncate-string-to-width raw-tab-name
+									    tab-bar-tab-name-truncated-max
+									    nil nil tab-bar-tab-name-ellipsis))))
+                       (if (> count 1)
+			   (concat truncated-tab-name "(" (number-to-string count) ")")
+			 truncated-tab-name))))
 
-  (setq tab-bar-tab-name-format-function
-        (lambda (tab i)
-          (let ((face (funcall tab-bar-tab-face-function tab)))
-            (concat
-             (propertize " " 'face face)
-             (propertize (number-to-string i) 'face `(:inherit ,face :weight ultra-bold :underline t))
-             (propertize (concat " " (alist-get 'name tab) " ") 'face face)))))
+    (setq tab-bar-tab-name-format-function
+          (lambda (tab i)
+            (let ((face (funcall tab-bar-tab-face-function tab)))
+              (concat
+               (propertize " " 'face face)
+               (propertize (number-to-string i) 'face `(:inherit ,face :weight ultra-bold :underline t))
+               (propertize (concat " " (alist-get 'name tab) " ") 'face face)))))
 
-  (tab-bar--update-tab-bar-lines)
+    (tab-bar--update-tab-bar-lines)
 
-  (when (daemonp)
-    (add-hook 'after-make-frame-functions
-              #'(lambda (&rest _) (force-mode-line-update)))))
+    (when (daemonp)
+      (add-hook 'after-make-frame-functions
+		#'(lambda (&rest _) (force-mode-line-update))))))
 
 (when (string= system-type "gnu/linux")
   (defun theme--handle-dbus-event (a setting values)
@@ -395,13 +397,19 @@
   ;; Retro!!!
   (set-face-attribute 'line-number nil
 		      :italic nil
-		      :background "#00a"
+		      :background (let ((bg (face-attribute 'default :background)))
+				    (if (string= bg "#000000")
+					"#00a"
+				      bg))
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
   (set-face-attribute 'line-number-current-line nil
 		      :italic nil
-		      :background "#00f"
+		      :background (let ((bg (face-attribute 'default :background)))
+				    (if (string= bg "#000000")
+					"#00a"
+				      bg))
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
@@ -665,16 +673,36 @@
     :hook (prog-mode . hl-line-mode)))
 
 ;; eldoc
-(when is-graphics
-  (use-package eldoc-box
-    :defer t
-    :hook (eldoc-mode . eldoc-box-hover-mode)
-    :config
-    (setq-default eldoc-box-offset '(-16 16 50))
-    (set-face-attribute 'eldoc-box-border nil :background "#444")
-    (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background))))
+(if is-graphics
+    (use-package eldoc-box
+      :defer t
+      :hook (eldoc-mode . eldoc-box-hover-mode)
+      :config
+      (setq-default eldoc-box-offset '(-16 16 50))
+      (set-face-attribute 'eldoc-box-border nil :background "#444")
+      (set-face-attribute 'eldoc-box-body nil :background (face-attribute 'default :background)))
+  (global-eldoc-mode -1))
 
+;; screenshot
+(use-package screenshot
+  :load-path "~/.config/emacs/lisp")
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("f5a7e07642decb17b03483af7c44e93353d2b128de403bf301651954c628c0ab" default))
+ '(delete-selection-mode nil)
+ '(package-selected-packages
+   '(autumn-light-theme evil xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons solarized-theme sideline-flymake scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat ob-fsharp nano-modeline multiple-cursors magit ligature kind-icon indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box eglot-fsharp dune-format dune corfu-terminal clang-format cider centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
