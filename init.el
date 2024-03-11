@@ -37,9 +37,9 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'box)
-(setq-default font "Liga SFMono Nerd Font")
+(setq-default font "Agave")
 (setq-default font-weight 'bold)
-(setq-default font-size 115)
+(setq-default font-size 125)
 (setq-default font-ligature t)
 (setq-default minimap nil)
 (setq-default chinese-font "TsangerYunHei")
@@ -74,6 +74,7 @@
 (require-package 'treemacs
 		 'markdown-mode
 		 'nano-modeline
+		 'autumn-light-theme
 		 'eglot
 		 'vterm
 		 'vterm-toggle
@@ -85,6 +86,7 @@
 		 'projectile
                  'sideline-flymake
 		 'beacon
+		 'indent-guide
 		 'rainbow-delimiters
 		 'goto-line-preview
                  'corfu
@@ -502,7 +504,7 @@
     :defer t
     :commands (ocamlformat-before-save)
     :config
-    ;; (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+    (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
     (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
 
 ;; F#
@@ -685,24 +687,8 @@
 
 ;; screenshot
 (use-package screenshot
-  :load-path "~/.config/emacs/lisp")
+  :load-path "~/.emacs.d/lisp/")
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("f5a7e07642decb17b03483af7c44e93353d2b128de403bf301651954c628c0ab" default))
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(autumn-light-theme evil xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons solarized-theme sideline-flymake scala-mode sbt-mode rustic rainbow-delimiters racket-mode projectile ocamlformat ob-fsharp nano-modeline multiple-cursors magit ligature kind-icon indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box eglot-fsharp dune-format dune corfu-terminal clang-format cider centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
