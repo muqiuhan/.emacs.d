@@ -28,23 +28,24 @@
 (setq-default fsharp-environment nil)
 (setq-default racket-environment nil)
 (setq-default scala-environment nil)
-(setq-default rust-environment nil)
+(setq-default rust-environment t)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default evil nil)
+(setq-default ement t)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'box)
-(setq-default font "Agave")
+(setq-default font "Menlo NF")
 (setq-default font-weight 'bold)
-(setq-default font-size 125)
+(setq-default font-size 115)
 (setq-default font-ligature t)
 (setq-default minimap nil)
-(setq-default chinese-font "TsangerYunHei")
+(setq-default chinese-font "MiSans")
 (setq-default chinese-font-weight 'bold)
-(setq-default chinese-font-size 31)
+(setq-default chinese-font-size 115)
 (setq-default light-theme 'autumn-light)
 (setq-default dark-theme 'modus-vivendi)
 (setq-default hl-line nil)
@@ -203,7 +204,7 @@
       (set-fontset-font (frame-parameter nil 'font) charset
 			(font-spec
 			 :family chinese
-			 :size chinese-size
+			 :height chinese-size
 			 :weight chinese-font-weight))))
   
   (set-font font chinese-font font-size chinese-font-size)
@@ -235,7 +236,7 @@
 (if (string-equal "#000000" (face-attribute 'default :background))
     (progn
       (set-face-attribute 'default nil :background "#111111")
-      (set-face-attribute 'default nil :foreground "#eedddd")))
+      (set-face-attribute 'default nil :foreground "#eeeeee")))
 
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
@@ -575,7 +576,8 @@
   (use-package rustic
     :defer t
     :config
-    (setq rustic-lsp-client 'eglot)))
+    (setq rustic-lsp-client 'eglot
+	  rustic-lsp-server "~/.cargo/bin/rust-analyzer")))
 
 ;; window numbering
 (use-package window-numbering
@@ -688,6 +690,15 @@
 ;; screenshot
 (use-package screenshot
   :load-path "~/.emacs.d/lisp/")
+
+;; Ement
+(when ement
+  (use-package ement
+    :hook (ement-mode .
+		      (lambda ()
+			(interactive)
+			(setq mode-line-format nil)
+			(indent-guide-mode -1)))))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
