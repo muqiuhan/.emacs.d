@@ -38,8 +38,8 @@
 (setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'box)
-(setq-default font "Menlo NF")
-(setq-default font-weight 'bold)
+(setq-default font "Ubuntu Sans Mono")
+(setq-default font-weight 'semibold)
 (setq-default font-size 115)
 (setq-default font-ligature t)
 (setq-default minimap nil)
@@ -197,7 +197,7 @@
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
 			:font font
-			:height font-size
+			:height 115
 			:weight font-weight)
     
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -444,7 +444,7 @@
   :config
   (setq treemacs-width 45
 	treemacs-indentation 2
-	treemacs-position 'right
+	treemacs-position 'left
 	treemacs-icon-tag-leaf "0")
 
   (dolist (face '(treemacs-root-face
@@ -572,12 +572,8 @@
       :hook (coq-mode . company-coq))))
 
 (when rust-environment
-  (require-package 'rustic)
-  (use-package rustic
-    :defer t
-    :config
-    (setq rustic-lsp-client 'eglot
-	  rustic-lsp-server "~/.cargo/bin/rust-analyzer")))
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs '((rust-ts-mode rust-mode) . ("rustup" "run" "stable" "rust-analyzer"))))
 
 ;; window numbering
 (use-package window-numbering
@@ -703,3 +699,17 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(delete-selection-mode nil)
+ '(package-selected-packages
+   '(xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile ocamlformat nano-modeline multiple-cursors magit ligature kind-icon indent-guide hide-mode-line grip-mode goto-line-preview go-translate ement eldoc-box dune-format dune corfu-terminal clang-format centered-cursor-mode cape beacon autumn-light-theme all-the-icons-nerd-fonts)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
