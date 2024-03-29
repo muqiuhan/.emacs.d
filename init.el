@@ -22,6 +22,26 @@
 ;;
 ;;; Code:
 
+;;; Startup optimizations
+;; Set garbage collection threshold
+
+(setq gc-cons-threshold-original gc-cons-threshold)
+(setq gc-cons-threshold (* 1024 1024 100))
+
+;; Set file-name-handler-alist
+(setq file-name-handler-alist-original file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+;; Set deferred timer to reset them
+(run-with-idle-timer
+ 5 nil
+ (lambda ()
+   (setq gc-cons-threshold gc-cons-threshold-original)
+   (setq file-name-handler-alist file-name-handler-alist-original)
+   (makunbound 'gc-cons-threshold-original)
+   (makunbound 'file-name-handler-alist-original)
+   (message "gc-cons-threshold and file-name-handler-alist restored")))
+
 ;; ----------------------- Generic Configuration -----------------------
 (setq-default ocaml-environment t)
 (setq-default c++-environment t)
@@ -32,21 +52,21 @@
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default evil nil)
-(setq-default ement t)
+(setq-default ement nil)
 (setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
-(setq-default gc-cons-threshold (* 50 1000 1000))
 (setq-default line-spacing 0)
-(setq-default cursor-type 'box)
+(setq-default cursor-type 'bar)
 (setq-default font "Ubuntu Sans Mono")
 (setq-default font-weight 'semibold)
 (setq-default font-size 115)
-(setq-default font-ligature t)
+(setq-default font-ligature nil)
 (setq-default minimap nil)
+(setq-default pixel-scroll nil)
 (setq-default chinese-font "MiSans")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 115)
-(setq-default light-theme 'autumn-light)
+(setq-default light-theme 'modus-operandi)
 (setq-default dark-theme 'modus-vivendi)
 (setq-default hl-line nil)
 (setq-default tab-bar nil)
@@ -75,7 +95,6 @@
 (require-package 'treemacs
 		 'markdown-mode
 		 'nano-modeline
-		 'autumn-light-theme
 		 'eglot
 		 'vterm
 		 'vterm-toggle
@@ -94,19 +113,16 @@
                  'corfu-terminal
                  'cape
 		 'grip-mode
+		 'all-the-icons-nerd-fonts
+		 'treemacs-all-the-icons
+		 'ligature
+		 'eldoc-box
+		 'indent-guide
+		 'centered-cursor-mode
 		 'go-translate)
 
 (when is-x11
   (require-package 'xclip))
-
-(if is-graphics
-    (require-package
-     'all-the-icons-nerd-fonts
-     'treemacs-all-the-icons
-     'ligature
-     'eldoc-box)
-  (require-package 'indent-guide
-		   'centered-cursor-mode))
 
 ;; ----------------------------------- Basic config -----------------------------------
 
@@ -232,15 +248,8 @@
 (set-face-attribute 'font-lock-keyword-face nil :font (face-attribute 'default :font))
 (set-face-attribute 'font-lock-function-name-face nil :font (face-attribute 'default :font))
 
-;; Save your eyes!!!
-(if (string-equal "#000000" (face-attribute 'default :background))
-    (progn
-      (set-face-attribute 'default nil :background "#111111")
-      (set-face-attribute 'default nil :foreground "#eeeeee")))
-
 ;; ----------------------------------- config -----------------------------------
 (use-package corfu
-  :defer t
   :bind ("M-/" . completion-at-point)
   :hook ((after-init . global-corfu-mode)
          (global-corfu-mode . corfu-popupinfo-mode))
@@ -334,7 +343,6 @@
 
   ;; Add extensions
   (use-package cape
-    :defer t
     :init
     (setq cape-dict-case-fold t)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
@@ -351,9 +359,8 @@
     (evil-mode 1)))
 
 ;; Centered cursor
-(unless is-graphics
-  (use-package centered-cursor-mode
-    :hook (after-init . global-centered-cursor-mode)))
+(use-package centered-cursor-mode
+  :hook (after-init . global-centered-cursor-mode))
 
 ;; Flymake
 (use-package flymake
@@ -400,19 +407,15 @@
   ;; Retro!!!
   (set-face-attribute 'line-number nil
 		      :italic nil
-		      :background (let ((bg (face-attribute 'default :background)))
-				    (if (string= bg "#000000")
-					"#00a"
-				      bg))
+		      :background "#00a"
+		      :foreground "#ccc"
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
   (set-face-attribute 'line-number-current-line nil
 		      :italic nil
-		      :background (let ((bg (face-attribute 'default :background)))
-				    (if (string= bg "#000000")
-					"#00a"
-				      bg))
+		      :background "#00f"
+		      :foreground "#fff"
 		      :font (face-attribute 'default :font)
 		      :weight (face-attribute 'default :weight))
 
@@ -428,14 +431,12 @@
 ;; xclip: easy to synchorize with the system clipboard
 (when is-x11
   (use-package xclip
-    :defer t
     :hook (after-init . xclip-mode)))
 
 ;; Evil
 (when evil
   (require-package 'evil)
   (use-package evil
-    :defer t
     :hook (after-init . evil-mode)))
 
 ;; treemacs
@@ -490,7 +491,6 @@
   (require-package 'racket-mode)
 
   (use-package racket-mode
-    :defer t
     :hook (racket-mode . racket-xp-mode)))
 
 ;; OCaml
@@ -502,10 +502,10 @@
 		   'dune)
 
   (use-package tuareg
-    :defer t
     :commands (ocamlformat-before-save)
-    :config
+    :init
     (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+    :config
     (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
 
 ;; F#
@@ -515,7 +515,6 @@
 		   'eglot-fsharp)
   
   (use-package fsharp-mode
-    :defer t
     :ensure t
     :config
     (use-package eglot-fsharp)
@@ -526,7 +525,6 @@
   (require-package 'cider)
 
   (use-package cider
-    :defer t
     :ensure t))
 
 ;; Clojure
@@ -535,7 +533,6 @@
 		   'sbt-mode)
 
   (use-package scala-mode
-    :defer t
     :interpreter ("scala" . scala-mode)
     :config
     (use-package sbt-mode
@@ -565,7 +562,6 @@
 		   'company-coq)
 
   (use-package proof-general
-    :defer t
     :init
     (use-package company-coq
       :defer t
@@ -590,7 +586,7 @@
 ;; modeline
 (use-package nano-modeline
   :config
-  (setq nano-modeline-position #'nano-modeline-footer)
+  (setq nano-modeline-position #'nano-modeline-header)
 
   (set-face-attribute 'nano-modeline-active nil
 		      :background (face-attribute 'default :background)
@@ -639,26 +635,26 @@
   :hook (after-init . indent-guide-global-mode))
 
 ;; pixel-scroll-mode
-(use-package pixel-scroll
-  :defer t
-  :hook (after-init . pixel-scroll-precision-mode)
-  :config
-  (setq pixel-scroll-precision-interpolate-page t)
+(when pixel-scroll
+  (use-package pixel-scroll
+    :hook (after-init . pixel-scroll-precision-mode)
+    :config
+    (setq pixel-scroll-precision-interpolate-page t)
 
-  (defun +pixel-scroll-interpolate-down (&optional lines)
-    (interactive)
-    (if lines
-	(pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
-      (pixel-scroll-interpolate-down)))
+    (defun +pixel-scroll-interpolate-down (&optional lines)
+      (interactive)
+      (if lines
+	  (pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
+	(pixel-scroll-interpolate-down)))
 
-  (defun +pixel-scroll-interpolate-up (&optional lines)
-    (interactive)
-    (if lines
-	(pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
-    (pixel-scroll-interpolate-up))
+    (defun +pixel-scroll-interpolate-up (&optional lines)
+      (interactive)
+      (if lines
+	  (pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
+      (pixel-scroll-interpolate-up))
 
-  (defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
-  (defalias 'scroll-down-command '+pixel-scroll-interpolate-up))
+    (defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
+    (defalias 'scroll-down-command '+pixel-scroll-interpolate-up)))
 
 ;; Which key
 (use-package which-key
@@ -669,7 +665,6 @@
 ;; hl-line-mode
 (when hl-line
   (use-package hl-line
-    :defer t
     :hook (prog-mode . hl-line-mode)))
 
 ;; eldoc
@@ -696,20 +691,12 @@
 			(setq mode-line-format nil)
 			(indent-guide-mode -1)))))
 
+;; Save your eyes!!!
+(if (string-equal "#000000" (face-attribute 'default :background))
+    (progn
+      (set-face-attribute 'default nil :background "#111111")
+      (set-face-attribute 'default nil :foreground "#eeeeee")))
+
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(xclip window-numbering which-key vterm-toggle utop treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile ocamlformat nano-modeline multiple-cursors magit ligature kind-icon indent-guide hide-mode-line grip-mode goto-line-preview go-translate ement eldoc-box dune-format dune corfu-terminal clang-format centered-cursor-mode cape beacon autumn-light-theme all-the-icons-nerd-fonts)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;; init.el ends here
