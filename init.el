@@ -112,7 +112,7 @@
                  'corfu
                  'corfu-terminal
                  'cape
-		 'grip-mode
+		 'markdown-soma
 		 'all-the-icons-nerd-fonts
 		 'treemacs-all-the-icons
 		 'ligature
@@ -569,6 +569,7 @@
       :defer t
       :hook (coq-mode . company-coq))))
 
+;; Rust
 (when rust-environment
   (require 'eglot)
   (add-to-list 'eglot-server-programs '((rust-ts-mode rust-mode) . ("rustup" "run" "stable" "rust-analyzer"))))
@@ -696,6 +697,15 @@
 			(setq mode-line-format nil)
 			(indent-guide-mode -1)))))
 
+;; Markdown
+(use-package markdown-soma
+  :config
+  (setq markdown-soma--render-buffer-hooks
+	'(after-revert-hook
+	  after-save-hook
+	  after-change-functions
+	  post-command-hook)))
+
 ;; Save your eyes!!!
 (if (string-equal "#000000" (face-attribute 'default :background))
     (progn
@@ -713,7 +723,7 @@
  '(custom-safe-themes
    '("48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d" default))
  '(package-selected-packages
-   '(telephone-line doom-themes vc-msg kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
+   '(markdown-soma telephone-line doom-themes vc-msg kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

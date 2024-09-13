@@ -6,15 +6,14 @@
 
 ![Static Badge](https://img.shields.io/badge/Emacs29.4-8A2BE2)
 
-![demo1.png](./.github/Screenshot_20230917_100842.png)
-![demo2.png](./.github/Screenshot_20230917_101013.png)
+![demo1.png](./.github/screenshot.png)
 
 </div>
 
 ## RECOMMEND BUILD CONFIGURE
 > If you are very familiar with configure options or know exactly what kind of Emacs you need to build, then feel free to :)
 
-- Emacs 29.1 and later: ``./configure --with-all --with-treesitter``
+- Emacs 29.4 and later: ``./configure --with-all --with-treesitter``
 - Other" ``./configure --with-all``
 
 ## PROGRAMMING LANGUAGE SUPPORTED
@@ -32,6 +31,9 @@
 ### About OCaml environment
 The OCaml environment depends on `opam-user-setup.el`, which is generated to `.emacs.d` through `opam user-setup install`. 
 If the `(setq-default ocaml-environment t)`, you need to execute this command first, and then remove the `(load "opam-user-setup.el")` at the end of `init.el`.
+
+### About Markdown support
+This configuration uses [markdown-soma](https://github.com/jasonm23/markdown-soma) to provide markdown preview support, so you first need to configure [markdown-soma](https://github.com/jasonm23/markdown-soma) according to the document, otherwise you cannot use the preview.
 
 ## CUSTOMIZE
 ```elisp
