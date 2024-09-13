@@ -607,15 +607,14 @@
 
 ;; Translate
 (use-package go-translate
-  :bind ("C-c y" . gts-do-translate)
+  :bind ("C-c y" . gt-do-translate)
   :config
-  (setq gts-translate-list '(("en" "zh")))
+  (setq gt-langs '(en zh))
 
-  (setq gts-default-translator
-	(gts-translator
-	 :picker (gts-prompt-picker)
-	 :engines (list (gts-google-engine) (gts-google-rpc-engine))
-	 :render (gts-buffer-render))))
+  (setq gt-default-translator
+	(gt-translator
+	 :engines (list (gt-google-engine) (gt-google-rpc-engine))
+	 :render (gt-buffer-render))))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
