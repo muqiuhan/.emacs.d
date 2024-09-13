@@ -127,14 +127,15 @@
 ;; ----------------------------------- Basic config -----------------------------------
 
 (toggle-frame-maximized)
-
 (global-auto-revert-mode 1)
 (menu-bar-mode -1)
-(tool-bar-mode -1)
-(fringe-mode -1)
-(scroll-bar-mode -1)
 (blink-cursor-mode 0)
-(tab-line-mode -1)
+
+(when is-graphics
+  (tool-bar-mode -1)
+  (fringe-mode -1)
+  (scroll-bar-mode -1)
+  (tab-line-mode -1))
 
 (when tab-bar 
   (use-package tab-bar
