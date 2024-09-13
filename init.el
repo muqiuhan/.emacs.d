@@ -58,11 +58,10 @@
 (setq-default line-spacing 0)
 (setq-default cursor-type 'bar)
 (setq-default font "FrankMono")
-(setq-default font-weight 'semibold)
+(setq-default font-weight 'bold)
 (setq-default font-size 115)
 (setq-default font-ligature nil)
 (setq-default minimap nil)
-(setq-default pixel-scroll nil)
 (setq-default chinese-font "MiSans")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 115)
@@ -94,7 +93,7 @@
 
 (require-package 'treemacs
 		 'markdown-mode
-		 'nano-modeline
+		 'telephone-line
 		 'eglot
 		 'vterm
 		 'vterm-toggle
@@ -361,8 +360,9 @@
     (evil-mode 1)))
 
 ;; Centered cursor
-(use-package centered-cursor-mode
-  :hook (after-init . global-centered-cursor-mode))
+(unless is-graphics
+  (use-package centered-cursor-mode
+    :hook (after-init . global-centered-cursor-mode)))
 
 ;; Flymake
 (use-package flymake
@@ -586,25 +586,23 @@
   (global-set-key [remap goto-line] 'goto-line-preview))
 
 ;; modeline
-(use-package nano-modeline
+(use-package telephone-line
   :config
-  (setq nano-modeline-position #'nano-modeline-header)
+  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+      telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+      telephone-line-primary-right-separator 'telephone-line-cubed-right
+      telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
-  (set-face-attribute 'nano-modeline-active nil
-		      :background (face-attribute 'default :background)
-		      :foreground (face-attribute 'default :foreground))
-
-  (set-face-attribute 'nano-modeline-inactive nil
-		      :background (face-attribute 'default :background)
-		      :foreground (face-attribute 'default :foreground))
-
+  (setq telephone-line-height 24
+      telephone-line-evil-use-short-tag t)
+  
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
 	   (treemacs-mode . hide-mode-line-mode))
     :init
     (setq-default mode-line-format nil))
 
-  (nano-modeline-prog-mode t))
+  (telephone-line-mode 1))
 
 ;; Translate
 (use-package go-translate
@@ -636,7 +634,7 @@
   :hook (after-init . indent-guide-global-mode))
 
 ;; pixel-scroll-mode
-(when pixel-scroll
+(when is-graphics
   (use-package pixel-scroll
     :hook (after-init . pixel-scroll-precision-mode)
     :config
@@ -655,7 +653,13 @@
       (pixel-scroll-interpolate-up))
 
     (defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
-    (defalias 'scroll-down-command '+pixel-scroll-interpolate-up)))
+    (defalias 'scroll-down-command '+pixel-scroll-interpolate-up))
+  :init
+  (setq redisplay-dont-pause t
+	scroll-margin 1
+	scroll-step 1
+	scroll-conservatively 10000
+	scroll-preserve-screen-position 1))
 
 ;; Which key
 (use-package which-key
@@ -709,7 +713,7 @@
  '(custom-safe-themes
    '("48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d" default))
  '(package-selected-packages
-   '(doom-themes vc-msg kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
+   '(telephone-line doom-themes vc-msg kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
