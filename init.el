@@ -68,7 +68,7 @@
 (setq-default chinese-font-size 115)
 (setq-default light-theme 'modus-operandi)
 (setq-default dark-theme 'modus-vivendi)
-(setq-default hl-line nil)
+(setq-default hl-line t)
 (setq-default tab-bar nil)
 (setq-default relative-line-number nil)
 (setq-default is-graphics (display-graphic-p))
@@ -98,6 +98,7 @@
 		 'eglot
 		 'vterm
 		 'vterm-toggle
+		 'vc-msg
 		 'which-key
 		 'multiple-cursors
 		 'hide-mode-line
@@ -699,14 +700,16 @@
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; init.el ends here
+;;; init.el ends here.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d" default))
  '(package-selected-packages
-   '(kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
+   '(doom-themes vc-msg kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
