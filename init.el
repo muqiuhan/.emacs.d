@@ -43,12 +43,12 @@
    (message "gc-cons-threshold and file-name-handler-alist restored")))
 
 ;; ----------------------- Generic Configuration -----------------------
-(setq-default ocaml-environment t)
+(setq-default ocaml-environment nil)
 (setq-default c++-environment t)
 (setq-default fsharp-environment nil)
 (setq-default racket-environment nil)
 (setq-default scala-environment nil)
-(setq-default rust-environment t)
+(setq-default rust-environment nil)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default evil nil)
@@ -57,7 +57,7 @@
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'bar)
-(setq-default font "Ubuntu Sans Mono")
+(setq-default font "FrankMono")
 (setq-default font-weight 'semibold)
 (setq-default font-size 115)
 (setq-default font-ligature nil)
@@ -701,3 +701,16 @@
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(kind-icon dune dune-format ocamlformat utop clang-format xclip window-numbering which-key vterm-toggle treemacs-all-the-icons sideline-flymake rainbow-delimiters projectile nano-modeline multiple-cursors markdown-mode magit ligature indent-guide hide-mode-line grip-mode goto-line-preview go-translate eldoc-box corfu-terminal centered-cursor-mode cape beacon all-the-icons-nerd-fonts)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -4,7 +4,7 @@
 
 *A minimalism, lightweight, fast configuration for GNU/Emacs*
 
-![Static Badge](https://img.shields.io/badge/Emacs29.1-8A2BE2)
+![Static Badge](https://img.shields.io/badge/Emacs29.4-8A2BE2)
 
 ![demo1.png](./.github/Screenshot_20230917_100842.png)
 ![demo2.png](./.github/Screenshot_20230917_101013.png)
