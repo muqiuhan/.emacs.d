@@ -43,8 +43,8 @@
    (message "gc-cons-threshold and file-name-handler-alist restored")))
 
 ;; ----------------------- Generic Configuration -----------------------
-(setq-default ocaml-environment nil)
-(setq-default c++-environment t)
+(setq-default ocaml-environment t)
+(setq-default c++-environment nil)
 (setq-default fsharp-environment nil)
 (setq-default racket-environment nil)
 (setq-default scala-environment nil)
@@ -53,28 +53,29 @@
 (setq-default agda-environment nil)
 (setq-default evil nil)
 (setq-default ement nil)
-(setq-default coq-environment nil)
+(setq-default coq-environment t)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'bar)
 (setq-default font "FrankMono")
 (setq-default font-weight 'bold)
-(setq-default font-size 115)
-(setq-default font-ligature nil)
+(setq-default font-size 105)
+(setq-default font-ligature t)
 (setq-default minimap nil)
-(setq-default chinese-font "MiSans")
+(setq-default chinese-font "FrankMono")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 115)
-(setq-default light-theme 'modus-operandi)
-(setq-default dark-theme 'modus-vivendi)
+(setq-default light-theme 'doom-nord)
+(setq-default dark-theme 'doom-nord)
 (setq-default hl-line t)
 (setq-default tab-bar nil)
+(setq-default display-line-numbers-retro nil)
 (setq-default relative-line-number nil)
 (setq-default is-graphics (display-graphic-p))
 (setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
-(setq-default package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-				 ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-				 ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(setq package-archives '(("gnu" . "https://mirrors.ustc.edu.cn/elpa/gnu/")
+                         ("melpa" . "https://mirrors.ustc.edu.cn/elpa/melpa/")
+                         ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 (setq-default url-proxy-services
               '(("no_proxy" . "^\\(localhost\\|10.*\\)")
                 ("http" . "127.0.0.1:20172")
@@ -97,6 +98,7 @@
 		 'eglot
 		 'vterm
 		 'vterm-toggle
+		 'doom-themes
 		 'vc-msg
 		 'which-key
 		 'multiple-cursors
@@ -214,7 +216,7 @@
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute 'default nil
 			:font font
-			:height 115
+			:height font-size
 			:weight font-weight)
     
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -407,19 +409,20 @@
   (when relative-line-number (setq display-line-numbers 'relative))
 
   ;; Retro!!!
-  (set-face-attribute 'line-number nil
-		      :italic nil
-		      :background "#00a"
-		      :foreground "#ccc"
-		      :font (face-attribute 'default :font)
-		      :weight (face-attribute 'default :weight))
+  (when display-line-numbers-retro
+    (set-face-attribute 'line-number nil
+			:italic nil
+			:background "#00a"
+			:foreground "#ccc"
+			:font (face-attribute 'default :font)
+			:weight (face-attribute 'default :weight))
 
-  (set-face-attribute 'line-number-current-line nil
-		      :italic nil
-		      :background "#00f"
-		      :foreground "#fff"
-		      :font (face-attribute 'default :font)
-		      :weight (face-attribute 'default :weight))
+    (set-face-attribute 'line-number-current-line nil
+			:italic nil
+			:background "#00f"
+			:foreground "#fff"
+			:font (face-attribute 'default :font)
+			:weight (face-attribute 'default :weight)))
 
   :hook (prog-mode . display-line-numbers-mode))
 
@@ -565,6 +568,8 @@
 
   (use-package proof-general
     :init
+    (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+    
     (use-package company-coq
       :defer t
       :hook (coq-mode . company-coq))))
@@ -624,10 +629,8 @@
 ;; vterm
 (use-package vterm
   :defer t
-  :bind (([f9] . vterm-toggle)
-	 :map vterm-mode-map ([f9] . vterm-toggle))
-  :config
-  (setq vterm-shell "/bin/bash"))
+  :bind (("C-`" . vterm-toggle)
+	 :map vterm-mode-map ([f9] . vterm-toggle)))
 
 ;; indent guides
 (use-package indent-guide
@@ -701,12 +704,6 @@
 	  after-save-hook
 	  after-change-functions
 	  post-command-hook)))
-
-;; Save your eyes!!!
-(if (string-equal "#000000" (face-attribute 'default :background))
-    (progn
-      (set-face-attribute 'default nil :background "#111111")
-      (set-face-attribute 'default nil :foreground "#eeeeee")))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
