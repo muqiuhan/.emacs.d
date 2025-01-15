@@ -43,30 +43,31 @@
    (message "gc-cons-threshold and file-name-handler-alist restored")))
 
 ;; ----------------------- Generic Configuration -----------------------
-(setq-default ocaml-environment t)
+(setq-default ocaml-environment nil)
 (setq-default c++-environment nil)
 (setq-default fsharp-environment nil)
 (setq-default racket-environment nil)
 (setq-default scala-environment nil)
+(setq-default rescript-environment t)
 (setq-default rust-environment nil)
 (setq-default clojure-environment nil)
 (setq-default agda-environment nil)
 (setq-default evil nil)
 (setq-default ement nil)
-(setq-default coq-environment t)
+(setq-default coq-environment nil)
 (setq-default backup-directory-alist `(("." . "~/.saves")))
 (setq-default line-spacing 0)
 (setq-default cursor-type 'bar)
 (setq-default font "FrankMono")
 (setq-default font-weight 'bold)
-(setq-default font-size 105)
+(setq-default font-size 115)
 (setq-default font-ligature t)
 (setq-default minimap nil)
 (setq-default chinese-font "FrankMono")
 (setq-default chinese-font-weight 'bold)
 (setq-default chinese-font-size 115)
-(setq-default light-theme 'doom-nord)
-(setq-default dark-theme 'doom-nord)
+(setq-default light-theme 'modus-operandi)
+(setq-default dark-theme 'modus-vivendi)
 (setq-default hl-line t)
 (setq-default tab-bar nil)
 (setq-default display-line-numbers-retro nil)
@@ -106,6 +107,7 @@
 		 'window-numbering
 		 'magit
 		 'projectile
+		 'rescript-mode
                  'sideline-flymake
 		 'beacon
 		 'indent-guide
@@ -200,15 +202,17 @@
                         #'theme--handle-dbus-event)
 
 
-  (if (eq 1 (caar (dbus-ignore-errors
+  (if (and is-graphics (eq 1 (caar (dbus-ignore-errors
                     (dbus-call-method
                      :session
                      "org.freedesktop.portal.Desktop"
                      "/org/freedesktop/portal/desktop"
                      "org.freedesktop.portal.Settings" "Read"
-                     "org.freedesktop.appearance" "color-scheme"))))
-      (when dark-theme (load-theme dark-theme t))
-    (when light-theme (load-theme light-theme t))))
+                     "org.freedesktop.appearance" "color-scheme")))))
+      (progn
+       (when dark-theme (load-theme dark-theme t))
+       (when light-theme (load-theme light-theme t)))
+    (load-theme dark-theme t)))
 
 (set-default 'truncate-lines t)
 
@@ -512,6 +516,15 @@
     (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
     :config
     (define-key tuareg-mode-map (kbd "C-I") 'ocamlformat-before-save)))
+
+;; Rescript
+(use-package rescript-mode
+  :defer t
+  :hook ((rescript-mode . (lambda () (electric-indent-local-mode -1))))
+  :config
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs
+         '(rescript-mode . ("rescript-language-server" "--stdio"))))
 
 ;; F#
 (when fsharp-environment
