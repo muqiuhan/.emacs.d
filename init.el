@@ -203,15 +203,15 @@
 
 
   (if (and is-graphics (eq 1 (caar (dbus-ignore-errors
-                    (dbus-call-method
-                     :session
-                     "org.freedesktop.portal.Desktop"
-                     "/org/freedesktop/portal/desktop"
-                     "org.freedesktop.portal.Settings" "Read"
-                     "org.freedesktop.appearance" "color-scheme")))))
-      (progn
-       (when dark-theme (load-theme dark-theme t))
-       (when light-theme (load-theme light-theme t)))
+				     (dbus-call-method
+				      :session
+				      "org.freedesktop.portal.Desktop"
+				      "/org/freedesktop/portal/desktop"
+				      "org.freedesktop.portal.Settings" "Read"
+				      "org.freedesktop.appearance" "color-scheme")))))
+      (if dark-theme
+	  (load-theme dark-theme t)
+	(when light-theme (load-theme light-theme t)))
     (load-theme dark-theme t)))
 
 (set-default 'truncate-lines t)
@@ -524,7 +524,7 @@
   :config
   (require 'eglot)
   (add-to-list 'eglot-server-programs
-         '(rescript-mode . ("rescript-language-server" "--stdio"))))
+               '(rescript-mode . ("rescript-language-server" "--stdio"))))
 
 ;; F#
 (when fsharp-environment
@@ -608,12 +608,12 @@
 (use-package telephone-line
   :config
   (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-      telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-      telephone-line-primary-right-separator 'telephone-line-cubed-right
-      telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+	telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+	telephone-line-primary-right-separator 'telephone-line-cubed-right
+	telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
   (setq telephone-line-height 24
-      telephone-line-evil-use-short-tag t)
+	telephone-line-evil-use-short-tag t)
   
   (use-package hide-mode-line
     :hook ((completion-list-mode-hook . hide-mode-line-mode)
