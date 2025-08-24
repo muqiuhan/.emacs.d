@@ -22,10 +22,19 @@
 
 o- RECOMMEND BUILD CONFIGURE
 
-If you are very familiar with configure options or know exactly what kind of Emacs you need to build, then feel free to :)
-
-- Emacs 29.1 and later: ``./configure --with-all --with-treesitter``
-- Other" ``./configure --with-all``
+$ ./configure --with-native-compilation=aot \
+              --with-tree-sitter \
+              --with-gif \
+              --with-png \
+              --with-jpeg \
+              --with-rsvg \
+              --with-tiff \
+              --with-imagemagick \
+              --with-x-toolkit=lucid \
+              --with-json \
+              --with-mailutils \
+              --with-pgtk \
+			  --with-all
 
 o- PROGRAMMING LANGUAGE SUPPORTED
 
@@ -42,55 +51,7 @@ eglot hook to prog-mode
 - Rescript: rescript-mode
 - F#: fsharp-mode + ob-fsharp + eglot-fsharp
 
-o- About OCaml environment
+o- NOTE: OCaml environment
 
 The OCaml environment depends on `opam-user-setup.el`, which is generated to `.emacs.d` through `opam user-setup install`. 
 If the `(setq-default ocaml-environment t)`, you need to execute this command first, and then remove the `(load "opam-user-setup.el")` at the end of `init.el`.
-
-o- CUSTOMIZE
-
-(setq-default ocaml-environment nil)
-(setq-default c++-environment nil)
-(setq-default fsharp-environment nil)
-(setq-default racket-environment nil)
-(setq-default scala-environment nil)
-(setq-default rescript-environment t)
-(setq-default rust-environment nil)
-(setq-default clojure-environment nil)
-(setq-default agda-environment nil)
-(setq-default evil nil)
-(setq-default ement nil)
-(setq-default coq-environment nil)
-(setq-default backup-directory-alist `(("." . "~/.saves")))
-(setq-default line-spacing 0)
-(setq-default cursor-type 'bar)
-(setq-default font "FrankMono")
-(setq-default font-weight 'bold)
-(setq-default font-size 115)
-(setq-default font-ligature t)
-(setq-default minimap nil)
-(setq-default chinese-font "FrankMono")
-(setq-default chinese-font-weight 'bold)
-(setq-default chinese-font-size 115)
-(setq-default light-theme 'modus-operandi)
-(setq-default dark-theme 'modus-vivendi)
-(setq-default hl-line t)
-(setq-default tab-bar nil)
-(setq-default display-line-numbers-retro nil)
-(setq-default relative-line-number nil)
-(setq-default is-graphics (display-graphic-p))
-(setq-default is-x11 (string-equal "x11" (getenv "XDG_SESSION_TYPE")))
-(setq package-archives '(("gnu" . "https://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("melpa" . "https://mirrors.ustc.edu.cn/elpa/melpa/")
-                         ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
-(setq-default url-proxy-services
-              '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-                ("http" . "127.0.0.1:20172")
-                ("https" . "127.0.0.1:20172")))
-
-o- KEY BINDING
-> This configuration uses Emacs native keys
-
-- Vterm: `[F9]`
-- Translator: `C-c y`
-- Treemacs: `C-x t t`
